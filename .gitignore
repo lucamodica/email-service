@@ -1,0 +1,8 @@
+# IntelliJ things
+.idea
+*/target
+*.iml
+
+# Eclipse things
+*/.classpath
+*/.project
