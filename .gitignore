@@ -6,3 +6,5 @@
 # Eclipse things
 */.classpath
 */.project
+.DS_Store
+*/.DS_Store
