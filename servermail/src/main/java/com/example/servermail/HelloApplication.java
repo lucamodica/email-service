@@ -1,4 +1,4 @@
-package com.example.lightningmail;
+package com.example.servermail;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

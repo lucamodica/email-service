@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>LightningMail</artifactId>
+    <artifactId>servermail</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>LightningMail</name>
+    <name>servermail</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -64,7 +64,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.example.lightningmail/com.example.lightningmail.MailApplication</mainClass>
+                            <mainClass>com.example.servermail/com.example.servermail.HelloApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

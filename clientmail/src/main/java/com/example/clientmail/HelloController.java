@@ -1,4 +1,4 @@
-package com.example.lightningmail;
+package com.example.clientmail;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
