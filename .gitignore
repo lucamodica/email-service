@@ -1,7 +1,7 @@
 # IntelliJ things
 .idea
-target
-build
+*/target
+*/build
 *.iml
 
 # Eclipse things
