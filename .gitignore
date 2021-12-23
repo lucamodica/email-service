@@ -1,0 +1,11 @@
+# IntelliJ things
+.idea
+target
+build
+*.iml
+
+# Eclipse things
+*/.classpath
+*/.project
+.DS_Store
+*/.DS_Store
