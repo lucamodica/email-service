@@ -1,5 +1,6 @@
-package com.example.clientmail;
+package com.projprogiii.clientmail;
 
+import com.projprogiii.lib.model.Mail;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ public class ClientApplication extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
+        Mail.hellofromMail();
     }
 
     public static void main(String[] args) {

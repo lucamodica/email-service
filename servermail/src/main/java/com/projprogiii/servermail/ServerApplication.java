@@ -1,4 +1,4 @@
-package com.example.servermail;
+package com.projprogiii.servermail;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
