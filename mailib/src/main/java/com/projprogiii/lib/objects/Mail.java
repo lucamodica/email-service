@@ -1,16 +1,14 @@
-package com.projprogiii.lib.model;
+package com.projprogiii.lib.objects;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Mail implements Serializable {
-    private String sender;
-    private List<String> receivers;
-    private String subject;
-    private String text;
-
-    private Mail() {}
+    private final String sender;
+    private final List<String> receivers;
+    private final String subject;
+    private final String text;
 
     /**
      * Costruttore della classe.
@@ -20,8 +18,6 @@ public class Mail implements Serializable {
      * @param subject    oggetto della mail
      * @param text       testo della mail
      */
-
-
     public Mail(String sender, List<String> receivers, String subject, String text) {
         this.sender = sender;
         this.subject = subject;

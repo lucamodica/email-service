@@ -1,6 +1,6 @@
 package com.projprogiii.clientmail;
 
-import com.projprogiii.lib.model.Mail;
+import com.projprogiii.lib.objects.Mail;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -15,7 +15,6 @@ import java.util.Random;
 /**
  * Classe Client, conterrà la lista di mail che sarà il model
  */
-
 public class ClientModel {
     private final ListProperty<Mail> inbox;
     private final ObservableList<Mail> inboxContent;
@@ -27,7 +26,6 @@ public class ClientModel {
      * @param emailAddress   indirizzo email
      *
      */
-
     public ClientModel(String emailAddress) {
         this.inboxContent = FXCollections.observableList(new LinkedList<>());
         this.inbox = new SimpleListProperty<>();
@@ -52,11 +50,7 @@ public class ClientModel {
         return emailAddress;
     }
 
-    /**
-     *
-     * @return   elimina l'email specificata
-     *
-     */
+    
     public void deleteEmail(Mail email) {
         inboxContent.remove(email);
     }

@@ -1,6 +1,6 @@
 package com.projprogiii.clientmail;
 
-import com.projprogiii.lib.model.Mail;
+import com.projprogiii.lib.objects.Mail;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -34,8 +34,10 @@ public class ClientController {
 
     @FXML
     public void initialize(){
+
         if (this.model != null)
             throw new IllegalStateException("Model can only be initialized once");
+
         //istanza nuovo client
         model = new ClientModel("studente@unito.it");
         model.generateRandomEmails(10);
