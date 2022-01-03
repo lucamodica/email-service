@@ -7,16 +7,17 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class ClientApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(ClientApplication.class.getResource("customlayout-client.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        URL clientUrl = ClientApplication.class.getResource("customlayout-client.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(clientUrl);
+        Scene scene = new Scene(fxmlLoader.load(), 1920, 1080);
+        stage.setTitle("Email client");
         stage.setScene(scene);
         stage.show();
-        Mail.hellofromMail();
     }
 
     public static void main(String[] args) {

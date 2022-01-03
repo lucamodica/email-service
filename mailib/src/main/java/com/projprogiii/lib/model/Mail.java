@@ -1,54 +1,56 @@
 package com.projprogiii.lib.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Mail implements Serializable {
     private String sender;
-    private String receiver;
+    private List<String> receivers;
+    private String subject;
     private String text;
 
-    public Mail(String sender, String receiver, String text) {
+    private Mail() {}
+
+    /**
+     * Costruttore della classe.
+     *
+     * @param sender     email del mittente
+     * @param receivers  emails dei destinatari
+     * @param subject    oggetto della mail
+     * @param text       testo della mail
+     */
+
+
+    public Mail(String sender, List<String> receivers, String subject, String text) {
         this.sender = sender;
-        this.receiver = receiver;
+        this.subject = subject;
         this.text = text;
+        this.receivers = new ArrayList<>(receivers);
     }
 
     public String getSender() {
         return sender;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public List<String> getReceivers() {
+        return receivers;
     }
 
-    public String getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
+    public String getSubject() {
+        return subject;
     }
 
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
-
-    public static void hellofromMail(){
-        System.out.println("HELLOOOO");
-    }
-
+    /**
+     * @return      stringa composta dagli indirizzi e-mail del mittente più destinatari
+     */
     @Override
-    public java.lang.String toString() {
-        return "Mail{" +
-                "sender='" + sender + '\'' +
-                ", receiver='" + receiver + '\'' +
-                ", text='" + text + '\'' +
-                '}';
+    public String toString() {
+        return String.join(" - ", List.of(this.sender,this.subject));
     }
 }
 

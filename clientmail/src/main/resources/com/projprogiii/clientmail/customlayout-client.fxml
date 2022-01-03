@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="722.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.prog3.lab.week7.ui.ClientController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="722.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.projprogiii.clientmail.ClientController">
    <center>
       <SplitPane dividerPositions="0.36785119378123265" prefHeight="638.0" prefWidth="595.0" BorderPane.alignment="CENTER">
          <items>
