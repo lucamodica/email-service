@@ -84,7 +84,8 @@
                         </Button>
                         <SplitMenuButton fx:id="replyBtn" mnemonicParsing="false" prefHeight="40.0" styleClass="split-menu-btn, split-menu-btn-primary" text="Reply">
                            <items>
-                              <MenuItem fx:id="replyAllBtn" text="Reply all" />
+                              <MenuItem fx:id="replyAllBtn" text="All" />
+                              <MenuItem fx:id="replyOneBtn" text="One" />
                            </items>
       
                            <tooltip>
