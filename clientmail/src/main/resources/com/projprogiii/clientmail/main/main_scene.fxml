@@ -24,7 +24,7 @@
    <top>
       <HBox prefHeight="71.0" prefWidth="722.0" BorderPane.alignment="CENTER">
          <children>
-            <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="rounded-button, btn" text="➕ Compose" textAlignment="CENTER">
+            <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="rounded-button, btn" text="  Compose" textAlignment="CENTER">
                <tooltip>
                   <Tooltip styleClass="tooltip-default" text="Compose a new email" />
                </tooltip>

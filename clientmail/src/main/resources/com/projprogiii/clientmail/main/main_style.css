@@ -8,4 +8,8 @@
     -fx-background-color: -fx-body-color;
     -fx-background-insets: 0px;
     -fx-padding: 0px;
+    -fx-background-image: url('edit-2-line.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: left center;
+
 }
