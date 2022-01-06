@@ -2,14 +2,19 @@ package com.projprogiii.clientmail;
 
 import com.projprogiii.lib.objects.Mail;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 
 import java.util.List;
 
-public class ClientController {
+public class MainController {
+    public BorderPane pnlReadMessage;
+    public BorderPane pnlEmailList;
+    public Button deleteBtn;
+    public Button forwardBtn;
+    public SplitMenuButton replyBtn;
+    public MenuItem replyAllBtn;
     @FXML
     private Label lblFrom;
 

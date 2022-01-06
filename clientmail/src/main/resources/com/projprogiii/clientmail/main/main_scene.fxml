@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Point3D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitMenuButton?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -14,35 +18,94 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="722.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projprogiii.clientmail.ClientController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="543.0" prefWidth="722.0" stylesheets="@main_style.css" xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projprogiii.clientmail.MainController">
+   <top>
+      <HBox prefHeight="71.0" prefWidth="722.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="rounded-button, btn" text="➕ Compose" textAlignment="CENTER">
+               <tooltip>
+                  <Tooltip styleClass="tooltip-default" text="Compose a new email" />
+               </tooltip>
+               <HBox.margin>
+                  <Insets left="20.0" top="15.0" />
+               </HBox.margin>
+            </Button>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="71.0" prefWidth="162.0" text="Welcome back, " textAlignment="JUSTIFY">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblUsername" alignment="CENTER" prefHeight="71.0" prefWidth="200.0" text=" account@example.com " textAlignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="71.0" prefWidth="150.0" text="Have fun!">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </top>
    <center>
       <SplitPane dividerPositions="0.36785119378123265" prefHeight="638.0" prefWidth="595.0" BorderPane.alignment="CENTER">
          <items>
             <BorderPane fx:id="pnlEmailList" prefHeight="200.0" prefWidth="200.0">
                <top>
-                  <HBox prefHeight="77.0" prefWidth="261.0" BorderPane.alignment="CENTER">
+                  <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="77.0" prefWidth="261.0" BorderPane.alignment="CENTER">
                      <padding>
                         <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
                      </padding>
                      <children>
-                        <Button fx:id="btnDelete" mnemonicParsing="false" onMouseClicked="#onDeleteButtonClick" prefHeight="40.0" prefWidth="75.0" text="Delete">
+                        <Button fx:id="deleteBtn" mnemonicParsing="false" onMouseClicked="#onDeleteButtonClick" prefHeight="40.0" prefWidth="75.0" styleClass="btn, btn-danger" text="Delete">
+                           <tooltip>
+                              <Tooltip styleClass="tooltip-danger" text="Delete the selected email" />
+                           </tooltip>
                            <HBox.margin>
-                              <Insets left="10.0" top="5.0" />
+                              <Insets left="10.0" right="30.0" top="5.0" />
                            </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="75.0" text="Reply">
+                        <Button fx:id="forwardBtn" mnemonicParsing="false" onMouseClicked="#onDeleteButtonClick" prefHeight="40.0" prefWidth="75.0" styleClass="btn, btn-success" text="Forward">
+                           <tooltip>
+                              <Tooltip styleClass="tooltip-success" text="Delete the selected email" />
+                           </tooltip>
                            <HBox.margin>
-                              <Insets left="90.0" right="5.0" top="5.0" />
+                              <Insets right="30.0" top="5.0" />
                            </HBox.margin>
+                           <rotationAxis>
+                              <Point3D />
+                           </rotationAxis>
                         </Button>
+                        <SplitMenuButton fx:id="replyBtn" mnemonicParsing="false" prefHeight="40.0" styleClass="split-menu-btn, split-menu-btn-primary" text="Reply">
+                           <items>
+                              <MenuItem fx:id="replyAllBtn" text="Reply all" />
+                           </items>
+      
+                           <tooltip>
+                              <Tooltip styleClass="tooltip-primary" text="Reply to the selected email" />
+                           </tooltip>
+
+                           <HBox.margin>
+                              <Insets right="10.0" top="5.0" />
+                           </HBox.margin>
+                        </SplitMenuButton>
                      </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
                   </HBox>
                </top>
                <center>
                   <ListView fx:id="lstEmails" prefHeight="432.0" prefWidth="261.0" BorderPane.alignment="CENTER" />
                </center>
             </BorderPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+            <StackPane prefHeight="470.0" prefWidth="503.0">
                <children>
                   <BorderPane fx:id="pnlReadMessage" prefHeight="200.0" prefWidth="200.0">
                      <top>
@@ -57,9 +120,10 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label text="From:" />
-                              <Label text="To:" GridPane.rowIndex="1" />
-                              <Label text="Object:" GridPane.rowIndex="2" />
+                              <Label styleClass="lbl, lbl-default" text="From:" />
+                              <Label styleClass="lbl, lbl-default" text="To:" GridPane.rowIndex="1" />
+                              <Label styleClass="lbl, lbl-default" text="Object:" GridPane.rowIndex="2" />
+
                               <Label fx:id="lblFrom" text="Sender" GridPane.columnIndex="1" />
                               <Label fx:id="lblTo" text="Receiver/s" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <Label fx:id="lblSubject" text="Object" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -78,33 +142,4 @@
          </items>
       </SplitPane>
    </center>
-   <top>
-      <HBox prefHeight="71.0" prefWidth="722.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" text="Compose" textAlignment="CENTER">
-               <HBox.margin>
-                  <Insets left="20.0" top="15.0" />
-               </HBox.margin>
-            </Button>
-            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="71.0" prefWidth="162.0" text="Welcome back, " textAlignment="JUSTIFY">
-               <HBox.margin>
-                  <Insets left="20.0" />
-               </HBox.margin>
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblUsername" alignment="CENTER" prefHeight="71.0" prefWidth="200.0" text=" account@example.com " textAlignment="CENTER">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="71.0" prefWidth="150.0" text="Have a nice day!">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-         </children>
-      </HBox>
-   </top>
 </BorderPane>

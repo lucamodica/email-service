@@ -1,0 +1,11 @@
+
+.rounded-button {
+    -fx-background-radius: 5em;
+    -fx-min-width: 100px;
+    -fx-min-height: 50px;
+    -fx-max-width: 100px;
+    -fx-max-height: 50px;
+    -fx-background-color: -fx-body-color;
+    -fx-background-insets: 0px;
+    -fx-padding: 0px;
+}
