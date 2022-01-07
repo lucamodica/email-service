@@ -6,7 +6,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.web.HTMLEditor?>
 
-<AnchorPane prefHeight="482.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+
+
+<AnchorPane prefHeight="482.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Label layoutX="9.0" layoutY="23.0" text="Sender:" AnchorPane.leftAnchor="4.0" />
         <Label layoutX="4.0" layoutY="65.0" text="Recipient:" AnchorPane.leftAnchor="4.0" />

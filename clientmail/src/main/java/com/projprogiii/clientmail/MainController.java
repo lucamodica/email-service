@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.web.WebView;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class MainController {
     private Label lblUsername;
 
     @FXML
-    private TextArea txtEmailContent;
+    private WebView txtEmailContent;
 
     @FXML
     private ListView<Mail> lstEmails;
@@ -86,7 +87,7 @@ public class MainController {
             lblFrom.setText(email.getSender());
             lblTo.setText(String.join(", ", email.getReceivers()));
             lblSubject.setText(email.getSubject());
-            txtEmailContent.setText(email.getText());
+            txtEmailContent.getEngine().loadContent(email.getText());
         }
     }
 

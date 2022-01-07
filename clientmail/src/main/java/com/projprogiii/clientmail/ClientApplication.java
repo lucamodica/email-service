@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
-
+import javafx.scene.web.WebView;
 import java.io.IOException;
 
 public class ClientApplication extends Application {
