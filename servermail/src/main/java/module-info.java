@@ -5,6 +5,7 @@ module servermail {
         requires org.controlsfx.controls;
             requires com.dlsc.formsfx;
                     requires org.kordamp.bootstrapfx.core;
+
     requires mailib;
         
     opens com.projprogiii.servermail to javafx.fxml;

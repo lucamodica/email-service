@@ -78,5 +78,6 @@ public class ClientModel {
                     texts[r.nextInt(texts.length)]);
             inboxContent.add(email);
         }
+
     }
 }

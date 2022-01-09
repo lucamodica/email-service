@@ -12,4 +12,6 @@ module clientmail {
 
     opens com.projprogiii.clientmail to javafx.fxml;
     exports com.projprogiii.clientmail;
+    exports com.projprogiii.clientmail.controller;
+    opens com.projprogiii.clientmail.controller to javafx.fxml;
 }

@@ -20,7 +20,7 @@
 <?import javafx.scene.web.WebView?>
 <?import org.kordamp.bootstrapfx.scene.layout.Panel?>
 
-<Panel maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="722.0" styleClass="panel panel-default" stylesheets="@main_style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projprogiii.clientmail.MainController">
+<Panel maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="722.0" styleClass="panel panel-default" stylesheets="@main_style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projprogiii.clientmail.controller.MainController">
    <top>
       <HBox prefHeight="71.0" prefWidth="722.0" BorderPane.alignment="CENTER">
          <children>

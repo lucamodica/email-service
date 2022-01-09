@@ -3,6 +3,7 @@
 */target
 */build
 *.iml
+*.log
 
 # Eclipse things
 */.classpath

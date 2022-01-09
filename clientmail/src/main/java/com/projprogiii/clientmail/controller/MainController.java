@@ -1,5 +1,6 @@
-package com.projprogiii.clientmail;
+package com.projprogiii.clientmail.controller;
 
+import com.projprogiii.clientmail.ClientModel;
 import com.projprogiii.lib.objects.Mail;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
