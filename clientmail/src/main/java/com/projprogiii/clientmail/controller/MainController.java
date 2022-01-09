@@ -1,7 +1,7 @@
 package com.projprogiii.clientmail.controller;
 
-import com.projprogiii.clientmail.ClientModel;
-import com.projprogiii.lib.objects.Mail;
+import com.projprogiii.clientmail.model.Model;
+import com.projprogiii.lib.objects.Email;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -33,11 +33,11 @@ public class MainController {
     private WebView txtEmailContent;
 
     @FXML
-    private ListView<Mail> lstEmails;
+    private ListView<Email> lstEmails;
 
-    private ClientModel model;
-    private Mail selectedEmail;
-    private Mail emptyEmail;
+    private Model model;
+    private Email selectedEmail;
+    private Email emptyEmail;
 
     @FXML
     public void initialize(){
@@ -46,7 +46,7 @@ public class MainController {
             throw new IllegalStateException("Model can only be initialized once");
 
         //istanza nuovo client
-        model = new ClientModel("studente@unito.it");
+        model = new Model("studente@unito.it");
         model.generateRandomEmails(10);
 
         selectedEmail = null;
@@ -56,8 +56,7 @@ public class MainController {
         lstEmails.setOnMouseClicked(this::showSelectedEmail);
         lblUsername.textProperty().bind(model.emailAddressProperty());
 
-        emptyEmail = new Mail("", List.of(""), "", "");
-
+        emptyEmail = new Email("", List.of(""), "", "", false);
         updateDetailView(emptyEmail);
     }
 
@@ -74,7 +73,7 @@ public class MainController {
      * Mostra la mail selezionata nella vista
      */
     protected void showSelectedEmail(MouseEvent mouseEvent) {
-        Mail email = lstEmails.getSelectionModel().getSelectedItem();
+        Email email = lstEmails.getSelectionModel().getSelectedItem();
 
         selectedEmail = email;
         updateDetailView(email);
@@ -83,12 +82,12 @@ public class MainController {
     /**
      * Aggiorna la vista con la mail selezionata
      */
-    protected void updateDetailView(Mail email) {
+    protected void updateDetailView(Email email) {
         if(email != null) {
-            lblFrom.setText(email.getSender());
-            lblTo.setText(String.join(", ", email.getReceivers()));
-            lblSubject.setText(email.getSubject());
-            txtEmailContent.getEngine().loadContent(email.getText());
+            lblFrom.setText(email.sender());
+            lblTo.setText(String.join(", ", email.receivers()));
+            lblSubject.setText(email.subject());
+            txtEmailContent.getEngine().loadContent(email.text());
         }
     }
 

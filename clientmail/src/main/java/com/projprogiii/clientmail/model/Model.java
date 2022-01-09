@@ -1,6 +1,8 @@
-package com.projprogiii.clientmail;
+package com.projprogiii.clientmail.model;
 
-import com.projprogiii.lib.objects.Mail;
+import com.projprogiii.clientmail.model.components.Client;
+import com.projprogiii.clientmail.model.components.ConfigManager;
+import com.projprogiii.lib.objects.Email;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -15,10 +17,12 @@ import java.util.Random;
 /**
  * Classe Client, conterrà la lista di mail che sarà il model
  */
-public class ClientModel {
-    private final ListProperty<Mail> inbox;
-    private final ObservableList<Mail> inboxContent;
+public class Model {
+    private final ListProperty<Email> inbox;
+    private final ObservableList<Email> inboxContent;
     private final StringProperty emailAddress;
+    private final Client client;
+    private final ConfigManager configManager;
 
     /**
      * Costruttore della classe.
@@ -26,18 +30,22 @@ public class ClientModel {
      * @param emailAddress   indirizzo email
      *
      */
-    public ClientModel(String emailAddress) {
+    public Model(String emailAddress) {
         this.inboxContent = FXCollections.observableList(new LinkedList<>());
         this.inbox = new SimpleListProperty<>();
         this.inbox.set(inboxContent);
         this.emailAddress = new SimpleStringProperty(emailAddress);
+
+        //TODO: test only, to be deleted
+        client = null;
+        configManager = null;
     }
 
     /**
      * @return      lista di email
      *
      */
-    public ListProperty<Mail> inboxProperty() {
+    public ListProperty<Email> inboxProperty() {
         return inbox;
     }
 
@@ -51,7 +59,7 @@ public class ClientModel {
     }
 
     
-    public void deleteEmail(Mail email) {
+    public void deleteEmail(Email email) {
         inboxContent.remove(email);
     }
 
@@ -71,11 +79,12 @@ public class ClientModel {
         };
         Random r = new Random();
         for (int i=0; i<n; i++) {
-            Mail email = new Mail(
+            Email email = new Email(
                     people[r.nextInt(people.length)],
                     List.of(people[r.nextInt(people.length)]),
                     subjects[r.nextInt(subjects.length)],
-                    texts[r.nextInt(texts.length)]);
+                    texts[r.nextInt(texts.length)],
+                    false);
             inboxContent.add(email);
         }
 
