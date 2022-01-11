@@ -3,10 +3,13 @@
 */target
 */build
 *.iml
-*.log
 
 # Eclipse things
 */.classpath
 */.project
 .DS_Store
 */.DS_Store
+
+#Others
+*.log
+*.txt

@@ -34,12 +34,12 @@ public class Model {
             "Ho sempre pensato valesse 42, tu sai di cosa parlo"
     };
 
+
     /**
      * Class constructor and getInstance function.
      */
-    private static Model model;
     private Model() {
-        client = new Client("luca.modica@unito.it");
+        client = Client.getInstance("luca.modica@unito.it");
 
         this.inboxContent = FXCollections.observableList(new ArrayList<>());
         this.inbox = new SimpleListProperty<>();
@@ -48,10 +48,7 @@ public class Model {
         this.emailAddress = new SimpleStringProperty(client.getUser().emailAddress());
     }
     public static Model getInstance(){
-        if(model == null){
-            model = new Model();
-        }
-        return model;
+        return new Model();
     }
 
     public Client getClient() {

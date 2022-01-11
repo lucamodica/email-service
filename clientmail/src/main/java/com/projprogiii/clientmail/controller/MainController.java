@@ -1,7 +1,7 @@
 package com.projprogiii.clientmail.controller;
 
 import com.projprogiii.clientmail.ClientApplication;
-import com.projprogiii.clientmail.model.Model;
+import com.projprogiii.clientmail.scene.SceneName;
 import com.projprogiii.lib.objects.Email;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -12,42 +12,38 @@ import javafx.scene.web.WebView;
 import java.io.IOException;
 import java.util.List;
 
-
 public class MainController extends Controller {
 
-    public BorderPane pnlReadMessage;
-    public BorderPane pnlEmailList;
-    public Button deleteBtn;
-    public Button forwardBtn;
-    public SplitMenuButton replyBtn;
-    public MenuItem replyAllBtn;
+    @FXML
+    private ListView<Email> emailsLst;
+
+    @FXML
+    private Label fromLbl;
+    @FXML
+    private Label toLbl;
+    @FXML
+    private Label subjectLbl;
+    @FXML
+    private Label usernameLbl;
+    @FXML
+    private Label DateLbl;
+    @FXML
+    private WebView emailContentTxt;
 
     @FXML
     public Button composeBtn;
-
     @FXML
-    private Label lblFrom;
-
+    private Button deleteBtn;
     @FXML
-    private Label lblTo;
-
+    private Button forwardBtn;
     @FXML
-    private Label lblSubject;
-
+    private SplitMenuButton replyBtn;
     @FXML
-    private Label lblUsername;
-
-    @FXML
-    private WebView txtEmailContent;
-
-    @FXML
-    private Label lblDate;
-
-    @FXML
-    private ListView<Email> lstEmails;
+    private MenuItem replyAllBtn;
 
     private Email selectedEmail;
     private Email emptyEmail;
+
 
     @FXML
     public void initialize(){
@@ -58,9 +54,9 @@ public class MainController extends Controller {
         selectedEmail = null;
 
         //binding tra lstEmails e inboxProperty
-        lstEmails.itemsProperty().bind(model.inboxProperty());
-        lstEmails.setOnMouseClicked(this::showSelectedEmail);
-        lblUsername.textProperty().bind(model.emailAddressProperty());
+        emailsLst.itemsProperty().bind(model.inboxProperty());
+        emailsLst.setOnMouseClicked(this::showSelectedEmail);
+        usernameLbl.textProperty().bind(model.emailAddressProperty());
 
         //TODO: test addEmail, to be deleted
         composeBtn.setOnMouseClicked(this::switchToCompose);
@@ -70,19 +66,19 @@ public class MainController extends Controller {
     }
 
     /**
-     * Elimina la mail selezionata
+     * Delete the selected email
      */
     @FXML
-    protected void onDeleteButtonClick() {
+    private void onDeleteButtonClick() {
         model.deleteEmail(selectedEmail);
         updateDetailView(emptyEmail);
     }
 
     /**
-     * Mostra la mail selezionata nella vista
+     * Show the mail in the view
      */
-    protected void showSelectedEmail(MouseEvent mouseEvent) {
-        Email email = lstEmails.getSelectionModel().getSelectedItem();
+    private void showSelectedEmail(MouseEvent mouseEvent) {
+        Email email = emailsLst.getSelectionModel().getSelectedItem();
         if (email != null) {
             email.setToRead(false);
         }
@@ -90,32 +86,26 @@ public class MainController extends Controller {
         selectedEmail = email;
         updateDetailView(email);
     }
+    /**
+     * Update the view with the selected email
+     */
+    private void updateDetailView(Email email) {
+        if(email != null) {
+            fromLbl.setText(email.getSender());
+            toLbl.setText(String.join(", ", email.getReceivers()));
+            subjectLbl.setText(email.getSubject());
+            emailContentTxt.getEngine().loadContent(email.getText());
+            DateLbl.setText(email.dateToString());
+        }
+    }
 
     //TODO: listener test only, to be deleted
     private void addNewEmail(MouseEvent mouseEvent){
         model.addRandomEmail();
     }
-
     //TODO: listener test only, to be deleted
     private void switchToCompose(MouseEvent mouseEvent) {
-        try{
-            ClientApplication.switchSceneTo("compose");
-        } catch (IOException e){
-            e.printStackTrace();
-            System.out.println("Cannot switch to the compose window!");
-        }
+        ClientApplication.sceneController.switchTo(SceneName.COMPOSE.toString());
     }
 
-    /**
-     * Aggiorna la vista con la mail selezionata
-     */
-    protected void updateDetailView(Email email) {
-        if(email != null) {
-            lblFrom.setText(email.getSender());
-            lblTo.setText(String.join(", ", email.getReceivers()));
-            lblSubject.setText(email.getSubject());
-            txtEmailContent.getEngine().loadContent(email.getText());
-            lblDate.setText(email.dateToString());
-        }
-    }
 }

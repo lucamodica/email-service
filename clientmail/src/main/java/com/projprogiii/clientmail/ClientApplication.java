@@ -1,11 +1,13 @@
 package com.projprogiii.clientmail;
 
 import com.projprogiii.clientmail.model.Model;
+import com.projprogiii.clientmail.scene.SceneController;
+import com.projprogiii.clientmail.scene.SceneName;
 import com.projprogiii.lib.objects.User;
 import com.projprogiii.lib.utilities.Util;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
@@ -14,17 +16,21 @@ import java.io.*;
 public class ClientApplication extends Application {
 
     public static Model model;
-
-    //A Stage object to keep track of it ad change its
-    //scene once is necessary
-    private static Stage currentStage;
+    public static SceneController sceneController;
 
     @Override
     public void start(Stage stage) throws IOException {
 
-        currentStage = stage;
+        Scene scene = new Scene(new Pane(), 1280, 720);
+        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+        sceneController = SceneController.getInstance(scene);
+        sceneController.addScene(SceneName.MAIN.toString());
+        sceneController.addScene(SceneName.COMPOSE.toString());
+
         stage.setTitle("ClientMail");
-        switchSceneTo("main");
+        sceneController.switchTo("main");
+        stage.setScene(scene);
+        stage.show();
 
         //TODO: Email file writing test only. To be deleted
         try{
@@ -52,18 +58,6 @@ public class ClientApplication extends Application {
             System.out.println(e);
         }
 
-    }
-
-    public static void switchSceneTo(String sceneName) throws IOException {
-
-        String path = sceneName + '/' + sceneName + "_scene.fxml";
-        FXMLLoader fxmlLoader = new FXMLLoader(ClientApplication.class.getResource(path));
-
-        Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
-        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-
-        currentStage.setScene(scene);
-        currentStage.show();
     }
 
     public static void main(String[] args) {

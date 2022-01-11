@@ -22,7 +22,8 @@
 <?import javafx.scene.web.WebView?>
 <?import org.kordamp.bootstrapfx.scene.layout.Panel?>
 
-<Panel maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="722.0" styleClass="panel panel-default" stylesheets="@main_style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projprogiii.clientmail.controller.MainController">
+<Panel maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="722.0"
+       styleClass="panel panel-default" stylesheets="@main_style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projprogiii.clientmail.controller.MainController">
    <top>
       <HBox prefHeight="71.0" prefWidth="722.0" BorderPane.alignment="CENTER">
          <children>
@@ -50,7 +51,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="lblUsername" alignment="CENTER" prefHeight="71.0" prefWidth="200.0" text=" account@example.com " textAlignment="CENTER">
+            <Label fx:id="usernameLbl" alignment="CENTER" prefHeight="71.0" prefWidth="200.0" text=" account@example.com " textAlignment="CENTER">
                <font>
                   <Font size="18.0" />
                </font>
@@ -112,12 +113,12 @@
                   </HBox>
                </top>
                <center>
-                  <ListView fx:id="lstEmails" prefHeight="432.0" prefWidth="261.0" BorderPane.alignment="CENTER" />
+                  <ListView fx:id="emailsLst" prefHeight="432.0" prefWidth="261.0" BorderPane.alignment="CENTER" />
                </center>
             </Panel>
             <StackPane prefHeight="470.0" prefWidth="503.0">
                <children>
-                  <Panel fx:id="pnlReadMessage" prefHeight="200.0" prefWidth="200.0" styleClass="panel panel-default">
+                  <Panel prefHeight="200.0" prefWidth="200.0" styleClass="panel panel-default">
                      <top>
                         <GridPane prefHeight="78.0" prefWidth="452.0" BorderPane.alignment="CENTER">
                            <columnConstraints>
@@ -136,10 +137,10 @@
                               <Label styleClass="lbl, lbl-default" text="Object:" GridPane.rowIndex="2" />
                               <Label styleClass="lbl, lbl-default" text="Date: " GridPane.rowIndex="3" />
 
-                              <Label fx:id="lblFrom" text="Sender" GridPane.columnIndex="1" />
-                              <Label fx:id="lblTo" text="Receiver/s" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label fx:id="lblSubject" text="Object" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <Label fx:id="lblDate" text="Date" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label fx:id="fromLbl" text="Sender" GridPane.columnIndex="1" />
+                              <Label fx:id="toLbl" text="Receiver/s" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="subjectLbl" text="Object" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label fx:id="DateLbl" text="Date" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                            </children>
                            <padding>
                               <Insets left="12.0" right="12.0" />
@@ -149,7 +150,7 @@
                      <center>
                         <AnchorPane styleClass="web-view" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="125.0">
                            <children>
-                              <WebView fx:id="txtEmailContent" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0" />
+                              <WebView fx:id="emailContentTxt" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0" />
                            </children>
                         </AnchorPane>
                      </center>

@@ -7,14 +7,17 @@ public class Client {
     private User user;
     private final ConfigManager configManager;
 
-    public Client() {
+    private Client() {
         this.configManager = null;
     }
-
-    public Client(String emailAddress) {
+    private Client(String emailAddress) {
         this.configManager = null;
         this.user = new User(emailAddress);
     }
+    public static Client getInstance(String emailAddress){
+        return new Client(emailAddress);
+    }
+
 
     public User getUser(){ return user; }
 }
