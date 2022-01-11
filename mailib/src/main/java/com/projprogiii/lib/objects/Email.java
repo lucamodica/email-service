@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class Email implements Serializable {
+public class Email implements Serializable, Comparable{
 
     private final String sender;
     private final List<String> receivers;
@@ -85,6 +85,12 @@ public class Email implements Serializable {
     @Override
     public String toString() {
         return String.join(" - ", List.of(this.sender, this.subject));
+    }
+
+
+    @Override
+    public int compareTo(Object o) {
+        return this.date.compareTo((Date)o);
     }
 }
 
