@@ -4,23 +4,23 @@ import java.io.Serializable;
 import java.util.Objects;
 
 
-public record User(String email) implements Serializable {
+public record User(String emailAddress) implements Serializable {
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(email, user.email);
+        return Objects.equals(emailAddress, user.emailAddress);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(email);
+        return Objects.hash(emailAddress);
     }
 
     @Override
     public String toString() {
-        return email;
+        return emailAddress;
     }
 }

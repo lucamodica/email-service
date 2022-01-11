@@ -1,5 +1,6 @@
 package com.projprogiii.clientmail.controller;
 
+import com.projprogiii.clientmail.ClientApplication;
 import com.projprogiii.clientmail.model.Model;
 import com.projprogiii.lib.objects.Email;
 import javafx.fxml.FXML;
@@ -8,9 +9,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebView;
 
+import java.io.IOException;
 import java.util.List;
 
-public class MainController {
+
+public class MainController extends Controller {
 
     public BorderPane pnlReadMessage;
     public BorderPane pnlEmailList;
@@ -18,6 +21,10 @@ public class MainController {
     public Button forwardBtn;
     public SplitMenuButton replyBtn;
     public MenuItem replyAllBtn;
+
+    @FXML
+    public Button composeBtn;
+
     @FXML
     private Label lblFrom;
 
@@ -39,18 +46,13 @@ public class MainController {
     @FXML
     private ListView<Email> lstEmails;
 
-    private Model model;
     private Email selectedEmail;
     private Email emptyEmail;
 
     @FXML
     public void initialize(){
 
-        if (this.model != null)
-            throw new IllegalStateException("Model can only be initialized once");
-
         //istanza nuovo client
-        model = new Model("studente@unito.it");
         model.generateRandomEmails(10);
 
         selectedEmail = null;
@@ -59,6 +61,9 @@ public class MainController {
         lstEmails.itemsProperty().bind(model.inboxProperty());
         lstEmails.setOnMouseClicked(this::showSelectedEmail);
         lblUsername.textProperty().bind(model.emailAddressProperty());
+
+        //TODO: test addEmail, to be deleted
+        composeBtn.setOnMouseClicked(this::switchToCompose);
 
         emptyEmail = new Email("", List.of(""), "", "", null);
         updateDetailView(emptyEmail);
@@ -78,9 +83,27 @@ public class MainController {
      */
     protected void showSelectedEmail(MouseEvent mouseEvent) {
         Email email = lstEmails.getSelectionModel().getSelectedItem();
+        if (email != null) {
+            email.setToRead(false);
+        }
 
         selectedEmail = email;
         updateDetailView(email);
+    }
+
+    //TODO: listener test only, to be deleted
+    private void addNewEmail(MouseEvent mouseEvent){
+        model.addRandomEmail();
+    }
+
+    //TODO: listener test only, to be deleted
+    private void switchToCompose(MouseEvent mouseEvent) {
+        try{
+            ClientApplication.switchSceneTo("compose");
+        } catch (IOException e){
+            e.printStackTrace();
+            System.out.println("Cannot switch to the compose window!");
+        }
     }
 
     /**
@@ -93,7 +116,6 @@ public class MainController {
             lblSubject.setText(email.getSubject());
             txtEmailContent.getEngine().loadContent(email.getText());
             lblDate.setText(email.dateToString());
-
         }
     }
 }

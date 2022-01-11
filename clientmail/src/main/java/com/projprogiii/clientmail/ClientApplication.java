@@ -1,5 +1,6 @@
 package com.projprogiii.clientmail;
 
+import com.projprogiii.clientmail.model.Model;
 import com.projprogiii.lib.objects.User;
 import com.projprogiii.lib.utilities.Util;
 import javafx.application.Application;
@@ -12,24 +13,25 @@ import java.io.*;
 
 public class ClientApplication extends Application {
 
+    public static Model model;
+
+    //A Stage object to keep track of it ad change its
+    //scene once is necessary
+    private static Stage currentStage;
+
     @Override
     public void start(Stage stage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                ClientApplication.class.getResource("main/main_scene.fxml")
-        );
-
-        Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
+        currentStage = stage;
         stage.setTitle("ClientMail");
-        stage.setScene(scene);
-        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-        stage.show();
+        switchSceneTo("main");
 
+        //TODO: Email file writing test only. To be deleted
         try{
 
             //Creating the object
             User user = new User("luca.modica@unito.it");
-            System.out.println(Util.validateEmail(user.email()));
+            System.out.println(Util.validateEmail(user.emailAddress()));
 
             //Creating stream and writing the object
             FileOutputStream fout = new FileOutputStream("f.txt");
@@ -50,21 +52,22 @@ public class ClientApplication extends Application {
             System.out.println(e);
         }
 
+    }
 
+    public static void switchSceneTo(String sceneName) throws IOException {
 
+        String path = sceneName + '/' + sceneName + "_scene.fxml";
+        FXMLLoader fxmlLoader = new FXMLLoader(ClientApplication.class.getResource(path));
 
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
+        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
 
-
-
-
-
-
-
-
-
+        currentStage.setScene(scene);
+        currentStage.show();
     }
 
     public static void main(String[] args) {
+        model = Model.getInstance();
         launch();
     }
 }
