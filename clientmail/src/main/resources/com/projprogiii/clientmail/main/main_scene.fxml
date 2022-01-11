@@ -9,6 +9,8 @@
 <?import javafx.scene.control.SplitMenuButton?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -24,20 +26,20 @@
    <top>
       <HBox prefHeight="71.0" prefWidth="722.0" BorderPane.alignment="CENTER">
          <children>
-            <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="rounded-button, btn" text="  Compose" textAlignment="CENTER">
+            <ImageView fitHeight="50.0" fitWidth="61.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@user.png" />
+               </image>
+               <HBox.margin>
+                  <Insets left="5.0" top="10.0" />
+               </HBox.margin>
+            </ImageView>
+            <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="rounded-button, btn" textAlignment="CENTER">
                <tooltip>
                   <Tooltip styleClass="tooltip-default" text="Compose a new email" />
                </tooltip>
                <HBox.margin>
-                  <Insets left="20.0" top="15.0" />
-               </HBox.margin>
-            </Button>
-            <Button mnemonicParsing="false" styleClass="refresh-button">
-               <tooltip>
-                  <Tooltip styleClass="tooltip-default" text="Refresh the mailbox" />
-               </tooltip>
-               <HBox.margin>
-                  <Insets left="15.0" top="15.0" />
+                  <Insets left="15.0" top="10.0" />
                </HBox.margin>
             </Button>
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="71.0" prefWidth="162.0" text="Welcome back, " textAlignment="JUSTIFY">
