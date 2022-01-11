@@ -15,7 +15,7 @@ public class Email implements Serializable {
     private final String subject;
     private final String text;
     private boolean isToRead;
-    private String date;
+    private Date date;
 
 
     public Email(String sender, List<String> receivers,
@@ -24,14 +24,14 @@ public class Email implements Serializable {
         this.subject = subject;
         this.text = text;
         this.receivers = new ArrayList<>(receivers);
-        this.date = "";
+        this.date = new Date();
         this.isToRead = false;
     }
 
     public Email(String sender, List<String> receivers, String subject,
                  String text, Date date) {
         this(sender, receivers, subject, text);
-        this.date = Util.formatDate(date);
+        this.date = date;
         this.isToRead = false;
     }
 
@@ -53,13 +53,14 @@ public class Email implements Serializable {
     public String getText() {
         return text;
     }
-    public String getDate() {
-        return date;
-    }
+    public Date getDate() { return date; }
     public boolean getIsToRead() {
         return isToRead;
     }
-
+    public String dateToString(){
+        if (this.date == null) return "";
+        return Util.formatDate(this.date);
+    }
     public void setToRead(boolean b){
         this.isToRead = b;
     }

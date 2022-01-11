@@ -60,7 +60,7 @@ public class MainController {
         lstEmails.setOnMouseClicked(this::showSelectedEmail);
         lblUsername.textProperty().bind(model.emailAddressProperty());
 
-        emptyEmail = new Email("", List.of(""), "", "");
+        emptyEmail = new Email("", List.of(""), "", "", null);
         updateDetailView(emptyEmail);
     }
 
@@ -92,7 +92,7 @@ public class MainController {
             lblTo.setText(String.join(", ", email.getReceivers()));
             lblSubject.setText(email.getSubject());
             txtEmailContent.getEngine().loadContent(email.getText());
-            lblDate.setText(email.getDate());
+            lblDate.setText(email.dateToString());
 
         }
     }
