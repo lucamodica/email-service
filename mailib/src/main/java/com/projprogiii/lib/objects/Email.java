@@ -1,24 +1,67 @@
 package com.projprogiii.lib.objects;
 
+import com.projprogiii.lib.utilities.Util;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public record Email(String sender, List<String> receivers, String subject,
-                    String text, boolean isToRead) implements Serializable {
+public class Email implements Serializable {
 
-    public Email(String sender, List<String> receivers, String subject,
-                 String text, boolean isToRead) {
+    private final String sender;
+    private final List<String> receivers;
+    private final String subject;
+    private final String text;
+    private boolean isToRead;
+    private String date;
+
+
+    public Email(String sender, List<String> receivers,
+                 String subject, String text){
         this.sender = sender;
         this.subject = subject;
         this.text = text;
         this.receivers = new ArrayList<>(receivers);
+        this.date = "";
+        this.isToRead = false;
+    }
+
+    public Email(String sender, List<String> receivers, String subject,
+                 String text, Date date) {
+        this(sender, receivers, subject, text);
+        this.date = Util.formatDate(date);
+        this.isToRead = false;
+    }
+
+    public Email(String sender, List<String> receivers, String subject,
+                 String text, Date date, boolean isToRead) {
+        this(sender, receivers, subject, text, date);
         this.isToRead = isToRead;
     }
 
-    public Email setToRead(boolean b){
-        return new Email(sender, receivers, subject, text, b);
+    public String getSender() {
+        return sender;
+    }
+    public List<String> getReceivers() {
+        return receivers;
+    }
+    public String getSubject() {
+        return subject;
+    }
+    public String getText() {
+        return text;
+    }
+    public String getDate() {
+        return date;
+    }
+    public boolean getIsToRead() {
+        return isToRead;
+    }
+
+    public void setToRead(boolean b){
+        this.isToRead = b;
     }
 
     @Override

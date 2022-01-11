@@ -10,12 +10,10 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
- * Classe Client, conterrà la lista di mail che sarà il model
+ * Model class
  */
 public class Model {
     private final ListProperty<Email> inbox;
@@ -24,14 +22,16 @@ public class Model {
     private final Client client;
     private final ConfigManager configManager;
 
+
+
     /**
-     * Costruttore della classe.
+     * Class constructor.
      *
      * @param emailAddress   indirizzo email
      *
      */
     public Model(String emailAddress) {
-        this.inboxContent = FXCollections.observableList(new LinkedList<>());
+        this.inboxContent = FXCollections.observableList(new ArrayList<>());
         this.inbox = new SimpleListProperty<>();
         this.inbox.set(inboxContent);
         this.emailAddress = new SimpleStringProperty(emailAddress);
@@ -84,7 +84,7 @@ public class Model {
                     List.of(people[r.nextInt(people.length)]),
                     subjects[r.nextInt(subjects.length)],
                     texts[r.nextInt(texts.length)],
-                    false);
+                    new Date());
             inboxContent.add(email);
         }
 

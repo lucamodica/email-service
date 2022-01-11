@@ -11,6 +11,7 @@ import javafx.scene.web.WebView;
 import java.util.List;
 
 public class MainController {
+
     public BorderPane pnlReadMessage;
     public BorderPane pnlEmailList;
     public Button deleteBtn;
@@ -31,6 +32,9 @@ public class MainController {
 
     @FXML
     private WebView txtEmailContent;
+
+    @FXML
+    private Label lblDate;
 
     @FXML
     private ListView<Email> lstEmails;
@@ -56,7 +60,7 @@ public class MainController {
         lstEmails.setOnMouseClicked(this::showSelectedEmail);
         lblUsername.textProperty().bind(model.emailAddressProperty());
 
-        emptyEmail = new Email("", List.of(""), "", "", false);
+        emptyEmail = new Email("", List.of(""), "", "");
         updateDetailView(emptyEmail);
     }
 
@@ -84,11 +88,12 @@ public class MainController {
      */
     protected void updateDetailView(Email email) {
         if(email != null) {
-            lblFrom.setText(email.sender());
-            lblTo.setText(String.join(", ", email.receivers()));
-            lblSubject.setText(email.subject());
-            txtEmailContent.getEngine().loadContent(email.text());
+            lblFrom.setText(email.getSender());
+            lblTo.setText(String.join(", ", email.getReceivers()));
+            lblSubject.setText(email.getSubject());
+            txtEmailContent.getEngine().loadContent(email.getText());
+            lblDate.setText(email.getDate());
+
         }
     }
-
 }

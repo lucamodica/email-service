@@ -22,7 +22,7 @@
     -fx-background-color: -fx-body-color;
     -fx-background-insets: 0px;
     -fx-padding: 0px;
-    -fx-background-image: url('refresh.png');
+    -fx-background-image: url('img.png');
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }

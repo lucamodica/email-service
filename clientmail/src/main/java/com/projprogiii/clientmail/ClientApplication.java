@@ -8,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
-import java.io.IOException;
+import java.io.*;
 
 public class ClientApplication extends Application {
 
@@ -25,9 +25,43 @@ public class ClientApplication extends Application {
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.show();
 
+        try{
 
-        User user = new User("luca.modica@unito.it");
-        System.out.println(Util.validateEmail(user.email()));
+            //Creating the object
+            User user = new User("luca.modica@unito.it");
+            System.out.println(Util.validateEmail(user.email()));
+
+            //Creating stream and writing the object
+            FileOutputStream fout = new FileOutputStream("f.txt");
+            ObjectOutputStream out = new ObjectOutputStream(fout);
+            out.writeObject(user);
+            out.flush();
+
+            FileInputStream fin = new FileInputStream("f.txt");
+            ObjectInputStream in = new ObjectInputStream(fin);
+
+            User a = (User) in.readObject();
+            System.out.println(a);
+
+            //closing the stream
+            out.close();
+            System.out.println("success");
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     public static void main(String[] args) {

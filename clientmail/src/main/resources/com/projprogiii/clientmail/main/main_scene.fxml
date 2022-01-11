@@ -94,7 +94,7 @@
                            <items>
                               <MenuItem fx:id="replyAllBtn" text="Reply all" />
                            </items>
-      
+
                            <tooltip>
                               <Tooltip styleClass="tooltip-primary" text="Reply to the selected email" />
                            </tooltip>
@@ -118,23 +118,26 @@
                   <Panel fx:id="pnlReadMessage" prefHeight="200.0" prefWidth="200.0" styleClass="panel panel-default">
                      <top>
                         <GridPane prefHeight="78.0" prefWidth="452.0" BorderPane.alignment="CENTER">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="221.2000732421875" minWidth="10.0" prefWidth="90.4000244140625" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="389.199951171875" minWidth="10.0" prefWidth="362.3999755859375" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="221.2000732421875" minWidth="10.0" prefWidth="90.4000244140625" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="389.199951171875" minWidth="10.0" prefWidth="362.3999755859375" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
                            <children>
                               <Label styleClass="lbl, lbl-default" text="From:" />
                               <Label styleClass="lbl, lbl-default" text="To:" GridPane.rowIndex="1" />
                               <Label styleClass="lbl, lbl-default" text="Object:" GridPane.rowIndex="2" />
+                              <Label styleClass="lbl, lbl-default" text="Date: " GridPane.rowIndex="3" />
 
                               <Label fx:id="lblFrom" text="Sender" GridPane.columnIndex="1" />
                               <Label fx:id="lblTo" text="Receiver/s" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <Label fx:id="lblSubject" text="Object" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label fx:id="lblDate" text="Date" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                            </children>
                            <padding>
                               <Insets left="12.0" right="12.0" />
@@ -142,11 +145,9 @@
                         </GridPane>
                      </top>
                      <center>
-                        <AnchorPane styleClass="web-view" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0"
-                                    AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="125.0">
+                        <AnchorPane styleClass="web-view" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="125.0">
                            <children>
-                              <WebView fx:id="txtEmailContent" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0"
-                                       AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0"/>
+                              <WebView fx:id="txtEmailContent" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0" />
                            </children>
                         </AnchorPane>
                      </center>
