@@ -39,7 +39,7 @@ public class Model {
      * Class constructor and getInstance function.
      */
     private Model() {
-        client = Client.getInstance("luca.modica@unito.it");
+        client = Client.getInstance();
 
         this.inboxContent = FXCollections.observableList(new ArrayList<>());
         this.inbox = new SimpleListProperty<>();

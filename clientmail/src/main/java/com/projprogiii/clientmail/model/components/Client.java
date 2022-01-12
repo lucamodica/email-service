@@ -10,6 +10,7 @@ public class Client {
 
     private Client() {
         this.configManager = null;
+        this.user = new User("luca.modica@unito.it");
     }
     private Client(String emailAddress) {
         this.configManager = null;
@@ -17,6 +18,9 @@ public class Client {
     }
     public static Client getInstance(String emailAddress){
         return new Client(emailAddress);
+    }
+    public static Client getInstance(){
+        return new Client();
     }
 
     public User getUser(){ return user; }
