@@ -15,7 +15,6 @@ public class Client {
         this.configManager = null;
         this.user = new User(emailAddress);
     }
-
     public static Client getInstance(String emailAddress){
         return new Client(emailAddress);
     }
@@ -26,7 +25,7 @@ public class Client {
         //TODO implement sending email communication to server
     }
 
-    public void deleteEmailClient(Email email){
+    public void deleteEmail(Email email){
         //TODO send command to server in order to delete specific email from db
     }
 }

@@ -2,23 +2,32 @@ package com.projprogiii.clientmail.controller;
 
 import com.projprogiii.clientmail.ClientApplication;
 import com.projprogiii.clientmail.scene.SceneName;
+import com.projprogiii.clientmail.utils.AlertManager;
+import com.projprogiii.clientmail.utils.AlertText;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.utilities.Util;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.TextFlow;
 import javafx.scene.web.HTMLEditor;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class ComposeController extends Controller {
 
     @FXML
+    private TextFlow warnAlert;
+    @FXML
     private TextField senderTextField;
     @FXML
-    private TextField recipientTextField;
+    private TextField recipientsTextField;
     @FXML
     private TextField objectTextField;
     @FXML
@@ -38,7 +47,7 @@ public class ComposeController extends Controller {
     @FXML
     private void onCancelButtonClick(MouseEvent mouseEvent) {
         //clearing all fields
-        recipientTextField.clear();
+        recipientsTextField.clear();
         objectTextField.clear();
         messageEditor.setHtmlText("");
 
@@ -47,20 +56,19 @@ public class ComposeController extends Controller {
 
     @FXML
     private void onSendButtonClick(MouseEvent mouseEvent) {
-        boolean badAdress = false;
-        ArrayList<String> recipentsArray = new ArrayList<>(Arrays.asList(recipientTextField.getText().split("\\s*,\\s*")));
-        for (String adress : recipentsArray) {
-            if (!Util.validateEmail(adress)){
-                badAdress = true;
-            }
-        }
-        if (!badAdress){
-            Email email = new Email(senderTextField.getText(), recipentsArray, objectTextField.getText(), messageEditor.getHtmlText());
+
+        String[] recipentsArray = recipientsTextField.getText().split("\\s*,\\s*");
+        System.out.println(Arrays.toString(recipentsArray));
+        if (Arrays.stream(recipentsArray).allMatch(Util::validateEmail)){
+            Email email = new Email(senderTextField.getText(),
+                    new ArrayList<>(List.of(recipentsArray)),
+                    objectTextField.getText(), messageEditor.getHtmlText());
+
             model.getClient().sendEmail(email);
             model.addEmail(email);
 
             //clearing all fields
-            recipientTextField.clear();
+            recipientsTextField.clear();
             objectTextField.clear();
             messageEditor.setHtmlText("");
 
@@ -68,6 +76,9 @@ public class ComposeController extends Controller {
         } else {
             //TODO better input error management and error alert
             System.out.println("ERRORE NELL'INSERIMENTO DELL'indirizzo MAIL, per favore ricontrollare");
+            AlertManager.showTemporizedAlert(warnAlert, AlertText.INVALID_RECIPIENTS, 2);
         }
     }
+
+
 }
