@@ -9,7 +9,7 @@ public class Client {
     private final ConfigManager configManager;
 
     private Client() {
-        this.configManager = null;
+        this.configManager = ConfigManager.getInstance();
         this.user = new User("luca.modica@unito.it");
     }
     private Client(String emailAddress) {
