@@ -22,6 +22,10 @@ public class Client {
 
     public User getUser(){ return user; }
 
+    public void sendEmail(Email email){
+        //TODO implement sending email communication to server
+    }
+
     public void deleteEmailClient(Email email){
         //TODO send command to server in order to delete specific email from db
     }

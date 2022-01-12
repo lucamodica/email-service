@@ -3,20 +3,20 @@ package com.projprogiii.clientmail.controller;
 import com.projprogiii.clientmail.ClientApplication;
 import com.projprogiii.clientmail.scene.SceneName;
 import com.projprogiii.lib.objects.Email;
+import com.projprogiii.lib.utilities.Util;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.web.HTMLEditor;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class ComposeController extends Controller {
 
+    @FXML
+    private TextField senderTextField;
     @FXML
     private TextField recipientTextField;
     @FXML
@@ -27,19 +27,12 @@ public class ComposeController extends Controller {
     private Button sendBtn;
     @FXML
     private Button cancelBtn;
-    @FXML
-    private Label lblsenderEmailAdress;
 
 
     @FXML
     public void initialize(){
-        lblsenderEmailAdress.setText(model.getClient().getUser().emailAddress());
-        recipientTextField = new TextField();
-        objectTextField = new TextField();
-        messageEditor = new HTMLEditor();
-
-
-
+        senderTextField.setEditable(false);
+        senderTextField.setText(model.getClient().getUser().emailAddress());
     }
 
     @FXML
@@ -49,20 +42,21 @@ public class ComposeController extends Controller {
 
     @FXML
     private void onSendButtonClick(MouseEvent mouseEvent) {
-        /*List<String> recipentsArray = Arrays.asList(recipientTextField.getText().split("\\s*,\\s*"));
-        System.out.println("in");
-        String obj = (String)objectTextField.getText();
-        System.out.println(lblsenderEmailAdress.getText());
-        System.out.println(obj);
-        System.out.println(recipentsArray);
-        System.out.println(messageEditor.getHtmlText());*/
-
-        System.out.println("inCompose");
-
-
-        //Email email = new Email(lblsenderEmailAdress.getText(), recipentsArray, objectTextField.getText(), messageEditor.getHtmlText());
-        //model.addEmail(email);
-        //TODO implement sending email communication
-        //ClientApplication.sceneController.switchTo(SceneName.MAIN.toString());
+        boolean badAdress = false;
+        ArrayList<String> recipentsArray = new ArrayList<>(Arrays.asList(recipientTextField.getText().split("\\s*,\\s*")));
+        for (String adress : recipentsArray) {
+            if (!Util.validateEmail(adress)){
+                badAdress = true;
+            }
+        }
+        if (!badAdress){
+            Email email = new Email(senderTextField.getText(), recipentsArray, objectTextField.getText(), messageEditor.getHtmlText());
+            model.getClient().sendEmail(email);
+            model.addEmail(email);
+            ClientApplication.sceneController.switchTo(SceneName.MAIN.toString());
+        } else {
+            //TODO better input error management and error alert
+            System.out.println("ERRORE NELL'INSERIMENTO DELL'indirizzo MAIL, per favore ricontrollare");
+        }
     }
 }

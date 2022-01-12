@@ -64,7 +64,12 @@ public class Model {
      *
      */
     public StringProperty emailAddressProperty() { return emailAddress; }
-    
+
+    public void addEmail(Email email){
+        inboxContent.add(email);
+        inboxContent.sort(null);
+    }
+
     public void deleteEmail(Email email) { inboxContent.remove(email); }
 
     //TODO: test only, to be deleted
@@ -73,9 +78,7 @@ public class Model {
         inboxContent.sort(null);
     }
 
-    public void addEmail(Email email){
-        inboxContent.add(email);
-    }
+
     /**
      *genera emailAddress random da aggiungere alla lista di emailAddress, ese verranno mostrate nella ui
      */

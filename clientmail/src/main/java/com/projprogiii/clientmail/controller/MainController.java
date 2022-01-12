@@ -6,17 +6,14 @@ import com.projprogiii.lib.objects.Email;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebView;
 
-import java.io.IOException;
 import java.util.List;
 
 public class MainController extends Controller {
 
     @FXML
     private ListView<Email> emailsLst;
-
     @FXML
     private Label fromLbl;
     @FXML
