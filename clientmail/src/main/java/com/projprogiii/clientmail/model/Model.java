@@ -47,41 +47,35 @@ public class Model {
 
         this.emailAddress = new SimpleStringProperty(client.getUser().emailAddress());
     }
-    public static Model getInstance(){
-        return new Model();
-    }
 
-    public Client getClient() {
-        return client;
-    }
+    public static Model getInstance(){ return new Model(); }
+
+    public Client getClient() { return client; }
 
     /**
      * @return lista di emailAddress
      *
      */
-    public ListProperty<Email> inboxProperty() {
-        return inbox;
-    }
+    public ListProperty<Email> inboxProperty() { return inbox; }
 
     /**
      *
      * @return indirizzo emailAddress della casella postale
      *
      */
-    public StringProperty emailAddressProperty() {
-        return emailAddress;
-    }
-
+    public StringProperty emailAddressProperty() { return emailAddress; }
     
-    public void deleteEmail(Email email) {
-        inboxContent.remove(email);
-    }
+    public void deleteEmail(Email email) { inboxContent.remove(email); }
 
+    //TODO: test only, to be deleted
     public void addRandomEmail() {
         inboxContent.add(generateRandomEmail());
         inboxContent.sort(null);
     }
 
+    public void addEmail(Email email){
+        inboxContent.add(email);
+    }
     /**
      *genera emailAddress random da aggiungere alla lista di emailAddress, ese verranno mostrate nella ui
      */
@@ -95,11 +89,12 @@ public class Model {
                     subjects[r.nextInt(subjects.length)],
                     texts[r.nextInt(texts.length)],
                     new Date());
-            inboxContent.add(email);
+            this.addEmail(email);
         }
         inboxContent.sort(null);
     }
 
+    //TODO: test only, to be deleted
     public Email generateRandomEmail(){
         Random r = new Random();
         return new Email(

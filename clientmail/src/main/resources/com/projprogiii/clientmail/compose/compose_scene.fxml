@@ -10,19 +10,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.web.HTMLEditor?>
 
-<AnchorPane prefHeight="482.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.projprogiii.clientmail.controller.ComposeController">
+<AnchorPane prefHeight="482.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projprogiii.clientmail.controller.ComposeController">
     <children>
         <Label layoutX="9.0" layoutY="23.0" text="Sender:" AnchorPane.leftAnchor="4.0" />
         <Label layoutX="4.0" layoutY="65.0" text="Recipient:" AnchorPane.leftAnchor="4.0" />
         <Label layoutX="12.0" layoutY="111.0" prefHeight="17.0" prefWidth="46.0" text="Object:" AnchorPane.leftAnchor="4.0" />
-      <TextField fx:id="senderTextField" layoutX="63.0" layoutY="18.0" prefHeight="25.0" prefWidth="540.0" AnchorPane.leftAnchor="62.0" AnchorPane.rightAnchor="13.0" />
         <TextField fx:id="recipientTextField" layoutX="62.0" layoutY="61.0" prefHeight="25.0" prefWidth="540.0" AnchorPane.leftAnchor="62.0" AnchorPane.rightAnchor="13.0" />
         <TextField fx:id="objectTextField" layoutX="62.0" layoutY="107.0" prefHeight="25.0" prefWidth="540.0" AnchorPane.leftAnchor="62.0" AnchorPane.rightAnchor="13.0" />
         <HTMLEditor fx:id="messageEditor" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body                         contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" layoutX="10.0" layoutY="168.0" prefHeight="228.0" prefWidth="586.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="168.0" />
       <HBox layoutX="445.0" layoutY="419.0" prefHeight="49.0" prefWidth="172.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="445.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="419.0">
          <children>
-            <Button fx:id="cancelBtn" onMouseClicked="#onCancelButtonClick" mnemonicParsing="false" prefHeight="49.0" prefWidth="77.0" text="Cancel">
+            <Button fx:id="cancelBtn" mnemonicParsing="false" onMouseClicked="#onCancelButtonClick" prefHeight="49.0" prefWidth="77.0" text="Cancel">
                <styleClass>
                   <String fx:value="btn" />
                   <String fx:value="btn-danger" />
@@ -35,7 +33,7 @@
                   <Insets right="10.0" />
                </HBox.margin>
             </Button>
-              <Button fx:id="sendBtn" mnemonicParsing="false" prefHeight="49.0" prefWidth="77.0" text="Send">
+              <Button fx:id="sendBtn" mnemonicParsing="false" onMouseClicked="#onSendButtonClick" prefHeight="49.0" prefWidth="77.0" text="Send">
                   <styleClass>
                       <String fx:value="btn" />
                       <String fx:value="btn-success" />
@@ -47,6 +45,7 @@
               </Button>
          </children>
       </HBox>
+      <Label fx:id="lblsenderEmailAdress" layoutX="70.0" layoutY="19.0" prefHeight="26.0" prefWidth="534.0" text="senderEmailAdress" />
 
     </children>
 </AnchorPane>
