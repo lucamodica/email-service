@@ -1,27 +1,42 @@
 package com.projprogiii.clientmail.model.components;
 
+import com.projprogiii.clientmail.model.components.configmanager.ConfigManager;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.User;
+import com.projprogiii.lib.utilities.Util;
+
+import static java.lang.System.exit;
 
 public class Client {
 
     private User user;
-    private final ConfigManager configManager;
+    private String serverHost;
+    private String serverPort;
 
     private Client() {
-        this.configManager = ConfigManager.getInstance();
-        this.user = new User("luca.modica@unito.it");
-    }
-    private Client(String emailAddress) {
-        this.configManager = null;
-        this.user = new User(emailAddress);
-    }
-    public static Client getInstance(String emailAddress){
-        return new Client(emailAddress);
+        ConfigManager configManager = ConfigManager.getInstance();
+
+        try{
+
+            String emailAddress = configManager.readProperty("user.emailAddress");
+            if (Util.validateEmail(emailAddress)){
+                this.user = new User(emailAddress);
+            }
+            else {
+                throw new IllegalArgumentException();
+            }
+            serverHost = configManager.readProperty("user.server_host");
+            serverPort = configManager.readProperty("user.server_port");
+
+        } catch (IllegalArgumentException e){
+            System.out.println("Illegal emailAddress value! Change it in user.properties file.");
+            exit(1);
+        }
     }
     public static Client getInstance(){
         return new Client();
     }
+
 
     public User getUser(){ return user; }
 
