@@ -40,8 +40,13 @@
             </tooltip>
         </Button>
 
-        <TextFlow fx:id="warnAlert" visible="false" layoutX="830.0" layoutY="660.0" prefHeight="43.0" prefWidth="243.0" styleClass="alert, alert-danger" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+        <TextFlow fx:id="warnAlert" layoutX="830.0" layoutY="660.0" prefHeight="43.0" prefWidth="243.0" visible="false" styleClass="alert, alert-danger" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
             <Text text="" wrappingWidth="249.82421875" />
+        </TextFlow>
+        <TextFlow fx:id="msgSentAlert" visible="false" styleClass="alert alert-success" layoutX="250.0" layoutY="190.0" prefHeight="40.0" prefWidth="205.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Message sent with success" />
+            </children>
         </TextFlow>
 
     </children>
