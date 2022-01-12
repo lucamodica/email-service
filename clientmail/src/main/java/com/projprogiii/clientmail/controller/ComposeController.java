@@ -37,6 +37,11 @@ public class ComposeController extends Controller {
 
     @FXML
     private void onCancelButtonClick(MouseEvent mouseEvent) {
+        //clearing all fields
+        recipientTextField.clear();
+        objectTextField.clear();
+        messageEditor.setHtmlText("");
+
         ClientApplication.sceneController.switchTo(SceneName.MAIN.toString());
     }
 
@@ -53,6 +58,12 @@ public class ComposeController extends Controller {
             Email email = new Email(senderTextField.getText(), recipentsArray, objectTextField.getText(), messageEditor.getHtmlText());
             model.getClient().sendEmail(email);
             model.addEmail(email);
+
+            //clearing all fields
+            recipientTextField.clear();
+            objectTextField.clear();
+            messageEditor.setHtmlText("");
+
             ClientApplication.sceneController.switchTo(SceneName.MAIN.toString());
         } else {
             //TODO better input error management and error alert
