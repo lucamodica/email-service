@@ -13,3 +13,6 @@
 #Others
 *.log
 *.txt
+
+#Config files
+*/src/main/java/com/projprogiii/*/model/components/*.properties
