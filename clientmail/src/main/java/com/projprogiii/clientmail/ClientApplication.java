@@ -57,7 +57,6 @@ public class ClientApplication extends Application {
         }catch(Exception e){
             System.out.println(e);
         }
-
     }
 
     public static void main(String[] args) {
