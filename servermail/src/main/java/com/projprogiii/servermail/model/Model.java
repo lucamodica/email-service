@@ -1,42 +1,37 @@
 package com.projprogiii.servermail.model;
 
-import com.projprogiii.lib.objects.Email;
-import com.projprogiii.servermail.model.server.Server;
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.MapProperty;
-import javafx.beans.property.SimpleMapProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import org.controlsfx.control.PropertySheet;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Collections;
+import java.util.LinkedList;
 
 
 public class Model {
 
-    private Server server;
-
-    private MapProperty<String, String> log;
-    private ObservableMap<String, String> logContent;
-
+    private ListProperty<String> log;
+    private ObservableList<String> logContent;
 
     /**
      * Class constructor and getInstance function.
      */
     private Model(){
-        this.server = Server.getInstance();
-
-        this.logContent = FXCollections.observableMap(new ConcurrentHashMap<>());
-        this.log = new SimpleMapProperty<>();
+        this.logContent = FXCollections.observableList(Collections.
+                synchronizedList(new LinkedList<>()));
+        this.log = new SimpleListProperty<>();
         this.log.set(logContent);
     }
     public static Model getInstance(){
         return new Model();
     }
 
-    public MapProperty<String, String> logProperty() {
+    public ListProperty<String> logProperty() {
         return log;
+    }
+
+    public void addLog(String logText){
+        logContent.add(logText);
     }
 }

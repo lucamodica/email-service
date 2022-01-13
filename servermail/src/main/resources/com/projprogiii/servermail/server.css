@@ -1,4 +1,9 @@
-.server_log {
+
+.server_log_view,
+.single_log,
+.single_log:cell-selection,
+.single_log:selected,
+.single_log:focused {
     -fx-background-color: black;
     -fx-text-fill: white;
 }

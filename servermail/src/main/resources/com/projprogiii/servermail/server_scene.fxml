@@ -8,10 +8,10 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1" stylesheets="server.css"
+            xmlns:fx="http://javafx.com/fxml/1" stylesheets="@server.css"
             fx:controller="com.projprogiii.servermail.controller.ServerController">
    <children>
-      <ListView fx:id="logLst" styleClass="server_log" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0" />
+      <ListView fx:id="logLst" styleClass="server_log_view" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0" />
       <Label layoutX="20.0" layoutY="12.0" text="Active server">
          <font>
             <Font name="System Italic" size="17.0" />
