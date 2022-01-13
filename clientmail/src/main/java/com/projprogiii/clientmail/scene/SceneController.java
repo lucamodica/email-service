@@ -1,6 +1,7 @@
 package com.projprogiii.clientmail.scene;
 
 import com.projprogiii.clientmail.ClientApplication;
+import com.projprogiii.clientmail.controller.Controller;
 import com.projprogiii.clientmail.utils.AlertManager;
 import com.projprogiii.clientmail.utils.AlertText;
 import javafx.fxml.FXML;
@@ -14,8 +15,9 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class SceneController {
+    private record ClientWindow(Pane pane, Controller controller) {}
 
-    private final HashMap<String, Pane> sceneMap;
+    private final HashMap<SceneName, ClientWindow> sceneMap;
     private final Scene main;
 
     private SceneController(Scene main){
@@ -26,14 +28,20 @@ public class SceneController {
         return new SceneController(main);
     }
 
-    public void addScene(String name) throws IOException {
-        String path = name + '/' + name + "_scene.fxml";
-        sceneMap.put(name, FXMLLoader.load(Objects.requireNonNull
-                (ClientApplication.class.getResource(path)))
-        );
+    public void addScene(SceneName name) throws IOException {
+        String path = name.toString() + '/' + name + "_scene.fxml";
+
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull
+                (ClientApplication.class.getResource(path)));
+        sceneMap.put(name, new ClientWindow(loader.load(), loader.getController()));
     }
 
-    public void switchTo(String name){
-        main.setRoot(sceneMap.get(name));
+    public Controller getController(SceneName name){
+        return sceneMap.get(name).controller();
     }
+
+    public void switchTo(SceneName name){
+        main.setRoot(sceneMap.get(name).pane());
+    }
+
 }

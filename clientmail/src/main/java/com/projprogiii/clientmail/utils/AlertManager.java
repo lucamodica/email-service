@@ -1,5 +1,8 @@
 package com.projprogiii.clientmail.utils;
 
+import com.projprogiii.clientmail.ClientApplication;
+import com.projprogiii.clientmail.controller.MainController;
+import com.projprogiii.clientmail.scene.SceneName;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.text.Text;
@@ -23,5 +26,12 @@ public class AlertManager {
     public static void showTemporizedAlert(TextFlow alert, AlertText text, int duration){
         showAlert(alert, text);
         hideAlert(alert, duration);
+    }
+
+    public static void showSuccessSendMessage(AlertText text, int duration){
+        ClientApplication.sceneController.switchTo(SceneName.MAIN);
+        MainController controller = (MainController) ClientApplication.sceneController.
+                getController(SceneName.MAIN);
+        showTemporizedAlert(controller.getSuccessAlert(), text, duration);
     }
 }

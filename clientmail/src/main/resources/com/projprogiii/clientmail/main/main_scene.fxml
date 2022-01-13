@@ -152,9 +152,14 @@
                         <AnchorPane styleClass="web-view" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="125.0">
                            <children>
                               <WebView fx:id="emailContentTxt" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0" />
-                              <TextFlow fx:id="msgDeletedAlert" visible="false" styleClass="alert, alert-danger" layoutX="245.0" layoutY="324.0" prefHeight="40.0" prefWidth="205.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                              <TextFlow fx:id="dangerAlert" layoutX="245.0" layoutY="324.0" prefHeight="40.0" prefWidth="205.0" styleClass="alert, alert-danger" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Message deleted with success" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" />
+                                 </children>
+                              </TextFlow>
+                              <TextFlow fx:id="successAlert" layoutX="246.0" layoutY="351.0" prefHeight="40.0" prefWidth="205.0" styleClass="alert, alert-success" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" />
                                  </children>
                               </TextFlow>
                            </children>

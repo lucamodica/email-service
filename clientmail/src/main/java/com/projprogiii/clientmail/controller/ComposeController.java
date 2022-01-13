@@ -45,7 +45,7 @@ public class ComposeController extends Controller {
         objectTextField.clear();
         messageEditor.setHtmlText("");
 
-        ClientApplication.sceneController.switchTo(SceneName.MAIN.toString());
+        ClientApplication.sceneController.switchTo(SceneName.MAIN);
     }
 
     @FXML
@@ -65,9 +65,7 @@ public class ComposeController extends Controller {
             objectTextField.clear();
             messageEditor.setHtmlText("");
 
-            //TODO da valutare come procedere per conferma
-            //msgSentAlert.setVisible(true);
-            //ClientApplication.sceneController.switchTo(SceneName.MAIN.toString());
+            AlertManager.showSuccessSendMessage(AlertText.MESSAGE_SENT, 2);
         } else {
             AlertManager.showTemporizedAlert(warnAlert, AlertText.INVALID_RECIPIENTS, 2);
         }
