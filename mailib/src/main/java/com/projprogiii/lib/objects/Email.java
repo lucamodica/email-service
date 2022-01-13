@@ -10,13 +10,13 @@ import java.util.Objects;
 
 public class Email implements Serializable, Comparable<Email>{
 
+    private final int mailId;
     private final String sender;
     private final List<String> receivers;
     private final String subject;
     private final String text;
     private boolean isToRead;
     private Date date;
-
 
     public Email(String sender, List<String> receivers,
                  String subject, String text){
@@ -26,6 +26,7 @@ public class Email implements Serializable, Comparable<Email>{
         this.receivers = new ArrayList<>(receivers);
         this.date = new Date();
         this.isToRead = false;
+        this.mailId = this.hashCode();
     }
 
     public Email(String sender, List<String> receivers, String subject,
