@@ -63,8 +63,6 @@ public class MainController extends Controller {
         usernameLbl.textProperty().bind(model.emailAddressProperty());
 
         //TODO: test addEmail, to be deleted
-        composeBtn.setOnMouseClicked(this::switchToCompose);
-
         emptyEmail = new Email("", List.of(""), "", "", null);
         updateDetailView(emptyEmail);
     }
@@ -78,6 +76,13 @@ public class MainController extends Controller {
      */
     @FXML
     private void onDeleteButtonClick() {
+        model.deleteEmail(selectedEmail);
+        updateDetailView(emptyEmail);
+        AlertManager.showTemporizedAlert(dangerAlert, AlertText.MESSAGE_DELETED, 2);
+    }
+
+    @FXML
+    private void onForwardButtonClick() {
         model.deleteEmail(selectedEmail);
         updateDetailView(emptyEmail);
         AlertManager.showTemporizedAlert(dangerAlert, AlertText.MESSAGE_DELETED, 2);
@@ -113,8 +118,11 @@ public class MainController extends Controller {
         model.addRandomEmail();
     }
     //TODO: listener test only, to be deleted
-    private void switchToCompose(MouseEvent mouseEvent) {
+    private void onComposeButtonClick() {
         ClientApplication.sceneController.switchTo(SceneName.COMPOSE);
     }
 
+    private void switchToForward(MouseEvent mouseEvent) {
+        ClientApplication.sceneController.switchTo(SceneName.COMPOSE);
+    }
 }
