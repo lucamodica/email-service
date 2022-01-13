@@ -31,15 +31,30 @@ public class ComposeController extends Controller {
     @FXML
     private HTMLEditor messageEditor;
 
-
     @FXML
     public void initialize(){
         senderTextField.setEditable(false);
         senderTextField.setText(model.getClient().getUser().emailAddress());
     }
 
+    public TextField getSenderTextField() {
+        return senderTextField;
+    }
+
+    public TextField getRecipientsTextField() {
+        return recipientsTextField;
+    }
+
+    public TextField getObjectTextField() {
+        return objectTextField;
+    }
+
+    public HTMLEditor getMessageEditor() {
+        return messageEditor;
+    }
+
     @FXML
-    private void onCancelButtonClick(MouseEvent mouseEvent) {
+    private void onCancelButtonClick() {
         //clearing all fields
         recipientsTextField.clear();
         objectTextField.clear();
@@ -49,7 +64,7 @@ public class ComposeController extends Controller {
     }
 
     @FXML
-    private void onSendButtonClick(MouseEvent mouseEvent) {
+    private void onSendButtonClick() {
 
         String[] recipentsArray = recipientsTextField.getText().split("\\s*,\\s*");
         if (Arrays.stream(recipentsArray).allMatch(Util::validateEmail)){

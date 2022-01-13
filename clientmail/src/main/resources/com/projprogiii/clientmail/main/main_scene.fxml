@@ -36,7 +36,7 @@
                   <Insets left="5.0" top="10.0" />
                </HBox.margin>
             </ImageView>
-            <Button fx:id="composeBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" styleClass="rounded-button, btn" textAlignment="CENTER">
+            <Button fx:id="composeBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseClicked="#onComposeButtonClick" prefHeight="40.0" prefWidth="95.0" styleClass="rounded-button, btn" textAlignment="CENTER">
                <tooltip>
                   <Tooltip styleClass="tooltip-default" text="Compose a new email" />
                </tooltip>
@@ -94,9 +94,9 @@
                               <Point3D />
                            </rotationAxis>
                         </Button>
-                        <SplitMenuButton fx:id="replyBtn" mnemonicParsing="false" prefHeight="40.0" styleClass="split-menu-btn, split-menu-btn-primary" text="Reply">
+                        <SplitMenuButton fx:id="replyBtn" mnemonicParsing="false" onMouseClicked="#onReplyButtonClick" prefHeight="40.0" styleClass="split-menu-btn, split-menu-btn-primary" text="Reply">
                            <items>
-                              <MenuItem fx:id="replyAllBtn" text="Reply all" />
+                              <MenuItem fx:id="replyAllBtn" onAction="#onReplyAllButtonClick" text="Reply all" />
                            </items>
 
                            <tooltip>

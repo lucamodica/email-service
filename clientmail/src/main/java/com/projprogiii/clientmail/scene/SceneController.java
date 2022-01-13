@@ -2,14 +2,9 @@ package com.projprogiii.clientmail.scene;
 
 import com.projprogiii.clientmail.ClientApplication;
 import com.projprogiii.clientmail.controller.Controller;
-import com.projprogiii.clientmail.utils.AlertManager;
-import com.projprogiii.clientmail.utils.AlertText;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.TextFlow;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;

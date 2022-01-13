@@ -5,6 +5,7 @@ import com.projprogiii.clientmail.scene.SceneName;
 import com.projprogiii.clientmail.utils.AlertManager;
 import com.projprogiii.clientmail.utils.AlertText;
 import com.projprogiii.lib.objects.Email;
+import com.projprogiii.lib.utilities.Util;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -32,14 +33,7 @@ public class MainController extends Controller {
     @FXML
     public Button composeBtn;
     @FXML
-    private Button deleteBtn;
-    @FXML
-    private Button forwardBtn;
-    @FXML
     private SplitMenuButton replyBtn;
-    @FXML
-    private MenuItem replyAllBtn;
-
     @FXML
     private TextFlow dangerAlert;
     @FXML
@@ -51,7 +45,6 @@ public class MainController extends Controller {
 
     @FXML
     public void initialize(){
-
         //istanza nuovo client
         model.generateRandomEmails(10);
 
@@ -67,8 +60,11 @@ public class MainController extends Controller {
         updateDetailView(emptyEmail);
     }
 
-    public TextFlow getSuccessAlert() {
-        return successAlert;
+    public TextFlow getSuccessAlert() { return successAlert; }
+
+    @FXML
+    private void onComposeButtonClick() {
+        ClientApplication.sceneController.switchTo(SceneName.COMPOSE);
     }
 
     /**
@@ -83,9 +79,40 @@ public class MainController extends Controller {
 
     @FXML
     private void onForwardButtonClick() {
-        model.deleteEmail(selectedEmail);
-        updateDetailView(emptyEmail);
-        AlertManager.showTemporizedAlert(dangerAlert, AlertText.MESSAGE_DELETED, 2);
+        fieldsSetter("",
+                "Forward: " + selectedEmail.getSubject(),
+                selectedEmail.getText());
+    }
+
+    @FXML
+    private void onReplyButtonClick() {
+        fieldsSetter(selectedEmail.getSender(),
+                "Reply: " + selectedEmail.getSubject(),
+                "");
+    }
+
+    @FXML
+    private void onReplyAllButtonClick() {
+        replyBtn.hide();
+
+        List<String> list = selectedEmail.getReceivers();
+        list.remove(model.getClient().getUser().emailAddress());
+
+        fieldsSetter(selectedEmail.getSender() + Util.receiversToString(list),
+                "ReplyAll: " + selectedEmail.getSubject(),
+                "");
+    }
+
+    @FXML
+    private void fieldsSetter(String receivers, String object, String htmltext){
+        ClientApplication.sceneController.switchTo(SceneName.COMPOSE);
+        ComposeController controller = (ComposeController) ClientApplication.sceneController.
+                getController(SceneName.COMPOSE);
+
+        controller.getSenderTextField().setText(model.getClient().getUser().emailAddress());
+        controller.getRecipientsTextField().setText(receivers);
+        controller.getObjectTextField().setText(object);
+        controller.getMessageEditor().setHtmlText(htmltext);
     }
 
     /**
@@ -116,10 +143,6 @@ public class MainController extends Controller {
     //TODO: listener test only, to be deleted
     private void addNewEmail(MouseEvent mouseEvent){
         model.addRandomEmail();
-    }
-    //TODO: listener test only, to be deleted
-    private void onComposeButtonClick() {
-        ClientApplication.sceneController.switchTo(SceneName.COMPOSE);
     }
 
     private void switchToForward(MouseEvent mouseEvent) {
