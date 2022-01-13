@@ -24,11 +24,11 @@ public class ClientApplication extends Application {
         Scene scene = new Scene(new Pane(), 1280, 720);
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         sceneController = SceneController.getInstance(scene);
-        sceneController.addScene(SceneName.MAIN.toString());
-        sceneController.addScene(SceneName.COMPOSE.toString());
+        sceneController.addScene(SceneName.MAIN);
+        sceneController.addScene(SceneName.COMPOSE);
 
         stage.setTitle("ClientMail");
-        sceneController.switchTo("main");
+        sceneController.switchTo(SceneName.MAIN);
         stage.setScene(scene);
         stage.show();
 

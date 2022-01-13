@@ -2,10 +2,13 @@ package com.projprogiii.clientmail.controller;
 
 import com.projprogiii.clientmail.ClientApplication;
 import com.projprogiii.clientmail.scene.SceneName;
+import com.projprogiii.clientmail.utils.AlertManager;
+import com.projprogiii.clientmail.utils.AlertText;
 import com.projprogiii.lib.objects.Email;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebView;
 
 import java.util.List;
@@ -26,7 +29,6 @@ public class MainController extends Controller {
     private Label DateLbl;
     @FXML
     private WebView emailContentTxt;
-
     @FXML
     public Button composeBtn;
     @FXML
@@ -37,6 +39,11 @@ public class MainController extends Controller {
     private SplitMenuButton replyBtn;
     @FXML
     private MenuItem replyAllBtn;
+
+    @FXML
+    private TextFlow dangerAlert;
+    @FXML
+    private TextFlow successAlert;
 
     private Email selectedEmail;
     private Email emptyEmail;
@@ -62,6 +69,10 @@ public class MainController extends Controller {
         updateDetailView(emptyEmail);
     }
 
+    public TextFlow getSuccessAlert() {
+        return successAlert;
+    }
+
     /**
      * Delete the selected email
      */
@@ -69,6 +80,7 @@ public class MainController extends Controller {
     private void onDeleteButtonClick() {
         model.deleteEmail(selectedEmail);
         updateDetailView(emptyEmail);
+        AlertManager.showTemporizedAlert(dangerAlert, AlertText.MESSAGE_DELETED, 2);
     }
 
     /**
@@ -102,7 +114,7 @@ public class MainController extends Controller {
     }
     //TODO: listener test only, to be deleted
     private void switchToCompose(MouseEvent mouseEvent) {
-        ClientApplication.sceneController.switchTo(SceneName.COMPOSE.toString());
+        ClientApplication.sceneController.switchTo(SceneName.COMPOSE);
     }
 
 }
