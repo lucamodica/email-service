@@ -1,4 +1,4 @@
-package com.projprogiii.servermail.model.components;
+package com.projprogiii.servermail.model.server.config;
 
 import java.io.*;
 import java.util.Properties;
@@ -27,7 +27,7 @@ public class ConfigManager {
 
     private void createPropertiesFile(File path) throws IOException {
         prop.setProperty("server.timeout", "5");
-        prop.setProperty("server.threadNumber", "5");
+        prop.setProperty("server.threads_number", "5");
         prop.setProperty("server.server_port", "42069");
 
         prop.store(new FileOutputStream(path),  null);

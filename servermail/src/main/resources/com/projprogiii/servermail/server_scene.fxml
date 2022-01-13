@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1" stylesheets="server.css"
+            fx:controller="com.projprogiii.servermail.controller.ServerController">
+   <children>
+      <ListView fx:id="logLst" styleClass="server_log" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0" />
+      <Label layoutX="20.0" layoutY="12.0" text="Active server">
+         <font>
+            <Font name="System Italic" size="17.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="34.0" fitWidth="36.0" layoutX="124.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@server-line.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

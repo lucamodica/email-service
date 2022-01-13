@@ -20,13 +20,13 @@ public class Email implements Serializable, Comparable<Email>{
 
     public Email(String sender, List<String> receivers,
                  String subject, String text){
+        this.mailId = this.hashCode();
         this.sender = sender;
         this.subject = subject;
         this.text = text;
         this.receivers = new ArrayList<>(receivers);
         this.date = new Date();
         this.isToRead = false;
-        this.mailId = this.hashCode();
     }
 
     public Email(String sender, List<String> receivers, String subject,

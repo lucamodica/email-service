@@ -6,6 +6,10 @@ import java.util.Objects;
 
 public record User(String emailAddress) implements Serializable {
 
+    public User {
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
