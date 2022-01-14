@@ -1,11 +1,11 @@
 package com.projprogiii.clientmail.controller;
 
-import com.projprogiii.clientmail.ClientApplication;
+import com.projprogiii.clientmail.ClientApp;
 import com.projprogiii.clientmail.scene.SceneName;
 import com.projprogiii.clientmail.utils.AlertManager;
 import com.projprogiii.clientmail.utils.AlertText;
 import com.projprogiii.lib.objects.Email;
-import com.projprogiii.lib.utilities.Util;
+import com.projprogiii.lib.utils.CommonUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -64,7 +64,7 @@ public class MainController extends Controller {
 
     @FXML
     private void onComposeButtonClick() {
-        ClientApplication.sceneController.switchTo(SceneName.COMPOSE);
+        ClientApp.sceneController.switchTo(SceneName.COMPOSE);
     }
 
     /**
@@ -98,15 +98,15 @@ public class MainController extends Controller {
         List<String> list = selectedEmail.getReceivers();
         list.remove(model.getClient().getUser().emailAddress());
 
-        fieldsSetter(selectedEmail.getSender() + Util.receiversToString(list),
+        fieldsSetter(selectedEmail.getSender() + CommonUtil.receiversToString(list),
                 "ReplyAll: " + selectedEmail.getSubject(),
                 "");
     }
 
     @FXML
     private void fieldsSetter(String receivers, String object, String htmltext){
-        ClientApplication.sceneController.switchTo(SceneName.COMPOSE);
-        ComposeController controller = (ComposeController) ClientApplication.sceneController.
+        ClientApp.sceneController.switchTo(SceneName.COMPOSE);
+        ComposeController controller = (ComposeController) ClientApp.sceneController.
                 getController(SceneName.COMPOSE);
 
         controller.getSenderTextField().setText(model.getClient().getUser().emailAddress());
@@ -146,6 +146,6 @@ public class MainController extends Controller {
     }
 
     private void switchToForward(MouseEvent mouseEvent) {
-        ClientApplication.sceneController.switchTo(SceneName.COMPOSE);
+        ClientApp.sceneController.switchTo(SceneName.COMPOSE);
     }
 }

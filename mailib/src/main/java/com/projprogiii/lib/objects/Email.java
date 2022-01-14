@@ -1,6 +1,6 @@
 package com.projprogiii.lib.objects;
 
-import com.projprogiii.lib.utilities.Util;
+import com.projprogiii.lib.utils.CommonUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,6 +42,10 @@ public class Email implements Serializable, Comparable<Email>{
         this.isToRead = isToRead;
     }
 
+    public int getMailId() {
+        return mailId;
+    }
+
     public String getSender() {
         return sender;
     }
@@ -56,16 +60,11 @@ public class Email implements Serializable, Comparable<Email>{
     }
 
     public Date getDate() { return date; }
-    public boolean getIsToRead() {
-        return isToRead;
-    }
-    public String dateToString(){
-        if (this.date == null) return "";
-        return Util.formatDate(this.date);
-    }
-
     public void setToRead(boolean b){
         this.isToRead = b;
+    }
+    public boolean isToRead() {
+        return isToRead;
     }
 
     @Override
@@ -89,6 +88,11 @@ public class Email implements Serializable, Comparable<Email>{
     public String toString() {
         return String.join(" - ", List.of(this.sender, this.subject));
     }
+    public String dateToString(){
+        if (this.date == null) return "";
+        return CommonUtil.formatDate(this.date);
+    }
+
 
     @Override
     public int compareTo(Email email) {

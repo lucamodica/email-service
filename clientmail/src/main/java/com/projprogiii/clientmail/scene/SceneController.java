@@ -1,6 +1,6 @@
 package com.projprogiii.clientmail.scene;
 
-import com.projprogiii.clientmail.ClientApplication;
+import com.projprogiii.clientmail.ClientApp;
 import com.projprogiii.clientmail.controller.Controller;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,7 +27,7 @@ public class SceneController {
         String path = name.toString() + '/' + name + "_scene.fxml";
 
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull
-                (ClientApplication.class.getResource(path)));
+                (ClientApp.class.getResource(path)));
         sceneMap.put(name, new ClientWindow(loader.load(), loader.getController()));
     }
 

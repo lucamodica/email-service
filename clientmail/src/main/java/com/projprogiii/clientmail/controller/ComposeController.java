@@ -1,15 +1,14 @@
 package com.projprogiii.clientmail.controller;
 
-import com.projprogiii.clientmail.ClientApplication;
+import com.projprogiii.clientmail.ClientApp;
 import com.projprogiii.clientmail.scene.SceneName;
 import com.projprogiii.clientmail.utils.AlertManager;
 import com.projprogiii.clientmail.utils.AlertText;
 import com.projprogiii.lib.objects.Email;
-import com.projprogiii.lib.utilities.Util;
+import com.projprogiii.lib.utils.CommonUtil;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.TextFlow;
 import javafx.scene.web.HTMLEditor;
 import java.util.ArrayList;
@@ -60,14 +59,14 @@ public class ComposeController extends Controller {
         objectTextField.clear();
         messageEditor.setHtmlText("");
 
-        ClientApplication.sceneController.switchTo(SceneName.MAIN);
+        ClientApp.sceneController.switchTo(SceneName.MAIN);
     }
 
     @FXML
     private void onSendButtonClick() {
 
         String[] recipentsArray = recipientsTextField.getText().split("\\s*,\\s*");
-        if (Arrays.stream(recipentsArray).allMatch(Util::validateEmail)){
+        if (Arrays.stream(recipentsArray).allMatch(CommonUtil::validateEmail)){
             Email email = new Email(senderTextField.getText(),
                     new ArrayList<>(List.of(recipentsArray)),
                     objectTextField.getText(), messageEditor.getHtmlText());

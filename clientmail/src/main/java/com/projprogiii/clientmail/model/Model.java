@@ -1,6 +1,6 @@
 package com.projprogiii.clientmail.model;
 
-import com.projprogiii.clientmail.model.components.Client;
+import com.projprogiii.clientmail.model.client.Client;
 import com.projprogiii.lib.objects.Email;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -41,7 +41,8 @@ public class Model {
     private Model() {
         client = Client.getInstance();
 
-        this.inboxContent = FXCollections.observableList(new ArrayList<>());
+        this.inboxContent = FXCollections.observableList(Collections.
+                synchronizedList(new ArrayList<>()));
         this.inbox = new SimpleListProperty<>();
         this.inbox.set(inboxContent);
 

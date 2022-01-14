@@ -1,4 +1,4 @@
-package com.projprogiii.clientmail.model.components.configmanager;
+package com.projprogiii.clientmail.model.client.config;
 
 import java.io.*;
 import java.util.Properties;

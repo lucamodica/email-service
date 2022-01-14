@@ -1,6 +1,6 @@
 package com.projprogiii.clientmail.utils;
 
-import com.projprogiii.clientmail.ClientApplication;
+import com.projprogiii.clientmail.ClientApp;
 import com.projprogiii.clientmail.controller.MainController;
 import com.projprogiii.clientmail.scene.SceneName;
 import javafx.animation.KeyFrame;
@@ -29,8 +29,8 @@ public class AlertManager {
     }
 
     public static void showSuccessSendMessage(AlertText text, int duration){
-        ClientApplication.sceneController.switchTo(SceneName.MAIN);
-        MainController controller = (MainController) ClientApplication.sceneController.
+        ClientApp.sceneController.switchTo(SceneName.MAIN);
+        MainController controller = (MainController) ClientApp.sceneController.
                 getController(SceneName.MAIN);
         showTemporizedAlert(controller.getSuccessAlert(), text, duration);
     }

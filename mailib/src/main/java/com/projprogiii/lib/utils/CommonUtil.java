@@ -1,11 +1,11 @@
-package com.projprogiii.lib.utilities;
+package com.projprogiii.lib.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class Util {
+public class CommonUtil {
 
     public static boolean validateEmail(String email){
         return Pattern.matches("^(.+)@unito.it", email);
@@ -17,10 +17,11 @@ public class Util {
     }
 
     public static String receiversToString(List<String> list) {
-        String s = new String();
+        StringBuilder s = new StringBuilder();
         for (String adress: list ) {
-            s = s + ", " + adress;
+            s.append(", ").append(adress);
         }
-        return s;
+        return s.toString();
     }
+
 }

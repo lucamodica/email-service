@@ -1,9 +1,9 @@
-package com.projprogiii.clientmail.model.components;
+package com.projprogiii.clientmail.model.client;
 
-import com.projprogiii.clientmail.model.components.configmanager.ConfigManager;
+import com.projprogiii.clientmail.model.client.config.ConfigManager;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.User;
-import com.projprogiii.lib.utilities.Util;
+import com.projprogiii.lib.utils.CommonUtil;
 
 import static java.lang.System.exit;
 
@@ -19,7 +19,7 @@ public class Client {
         try{
 
             String emailAddress = configManager.readProperty("user.emailAddress");
-            if (Util.validateEmail(emailAddress)){
+            if (CommonUtil.validateEmail(emailAddress)){
                 this.user = new User(emailAddress);
             }
             else {
