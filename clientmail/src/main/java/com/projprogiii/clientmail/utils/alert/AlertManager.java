@@ -1,4 +1,4 @@
-package com.projprogiii.clientmail.utils;
+package com.projprogiii.clientmail.utils.alert;
 
 import com.projprogiii.clientmail.ClientApp;
 import com.projprogiii.clientmail.controller.MainController;

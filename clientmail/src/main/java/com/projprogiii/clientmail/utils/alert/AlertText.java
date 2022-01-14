@@ -1,10 +1,10 @@
-package com.projprogiii.clientmail.utils;
+package com.projprogiii.clientmail.utils.alert;
 
 public enum AlertText {
     INVALID_RECIPIENTS("Error inserting recipents, please check syntax and make " +
             "sure that the domain is '@unito.it'!"),
-    MESSAGE_SENT("Message sent with success!"),
-    MESSAGE_DELETED("Message deleted with success!");
+    MESSAGE_SENT("Email sent with success!"),
+    MESSAGE_DELETED("Email deleted with success!");
 
     public final String text;
 

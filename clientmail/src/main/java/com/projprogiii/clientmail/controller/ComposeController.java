@@ -2,8 +2,8 @@ package com.projprogiii.clientmail.controller;
 
 import com.projprogiii.clientmail.ClientApp;
 import com.projprogiii.clientmail.scene.SceneName;
-import com.projprogiii.clientmail.utils.AlertManager;
-import com.projprogiii.clientmail.utils.AlertText;
+import com.projprogiii.clientmail.utils.alert.AlertManager;
+import com.projprogiii.clientmail.utils.alert.AlertText;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.utils.CommonUtil;
 
