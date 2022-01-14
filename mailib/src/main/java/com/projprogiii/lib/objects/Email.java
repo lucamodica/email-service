@@ -3,10 +3,8 @@ package com.projprogiii.lib.objects;
 import com.projprogiii.lib.utils.CommonUtil;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class Email implements Serializable, Comparable<Email>{
 
@@ -28,14 +26,12 @@ public class Email implements Serializable, Comparable<Email>{
         this.date = new Date();
         this.isToRead = false;
     }
-
     public Email(String sender, List<String> receivers, String subject,
                  String text, Date date) {
         this(sender, receivers, subject, text);
         this.date = date;
         this.isToRead = false;
     }
-
     public Email(String sender, List<String> receivers, String subject,
                  String text, Date date, boolean isToRead) {
         this(sender, receivers, subject, text, date);
@@ -67,6 +63,14 @@ public class Email implements Serializable, Comparable<Email>{
         return isToRead;
     }
 
+    public static boolean isEmpty(Email email){
+        return email.sender.equals("") &&
+                Arrays.stream(email.receivers.toArray()).
+                        allMatch(receiver -> receiver.equals("")) &&
+                email.subject.equals("") &&
+                email.text.equals("");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,15 +79,11 @@ public class Email implements Serializable, Comparable<Email>{
         return Objects.equals(sender, email.sender) && Objects.equals(receivers, email.receivers)
                 && Objects.equals(subject, email.subject) && Objects.equals(text, email.text);
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(sender, receivers, subject, text);
     }
 
-    /**
-     * @return sender - subject
-     */
     @Override
     public String toString() {
         return String.join(" - ", List.of(this.sender, this.subject));
@@ -92,7 +92,6 @@ public class Email implements Serializable, Comparable<Email>{
         if (this.date == null) return "";
         return CommonUtil.formatDate(this.date);
     }
-
 
     @Override
     public int compareTo(Email email) {

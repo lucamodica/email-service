@@ -23,7 +23,8 @@ public class Model {
     private final StringProperty emailAddress;
 
     //TODO: test array only, to be deleted
-    static String[] people = new String[] {"Paolo", "Alessandro", "Enrico", "Giulia", "Gaia", "Simone"};
+    static String[] people = new String[] {"Paolo@unito.it", "Alessandro@unito.it", "Enrico@unito.it",
+            "Giulia@unito.it", "Gaia@unito.it", "Simone@unito.it"};
     static String[] subjects = new String[] {
             "Importante", "A proposito della nostra ultima conversazione", "Tanto va la gatta al lardo",
             "Non dimenticare...", "Domani scuola" };
@@ -73,15 +74,11 @@ public class Model {
 
     public void deleteEmail(Email email) { inboxContent.remove(email); }
 
-    //TODO: test only, to be deleted
-    public void addRandomEmail() {
-        inboxContent.add(generateRandomEmail());
-        inboxContent.sort(null);
-    }
 
 
     /**
      *genera emailAddress random da aggiungere alla lista di emailAddress, ese verranno mostrate nella ui
+     * TODO: soon to be deleted
      */
     public void generateRandomEmails(int n) {
 
@@ -98,14 +95,4 @@ public class Model {
         inboxContent.sort(null);
     }
 
-    //TODO: test only, to be deleted
-    public Email generateRandomEmail(){
-        Random r = new Random();
-        return new Email(
-                people[r.nextInt(people.length)],
-                List.of(people[r.nextInt(people.length)]),
-                subjects[r.nextInt(subjects.length)],
-                texts[r.nextInt(texts.length)],
-                new Date(), true);
-    }
 }

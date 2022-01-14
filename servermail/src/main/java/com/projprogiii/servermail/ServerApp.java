@@ -1,5 +1,6 @@
 package com.projprogiii.servermail;
 
+import com.projprogiii.lib.utils.CommonUtil;
 import com.projprogiii.servermail.model.Model;
 import com.projprogiii.servermail.server.Server;
 import javafx.application.Application;
@@ -9,6 +10,7 @@ import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class ServerApp extends Application {
 
@@ -19,7 +21,7 @@ public class ServerApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        serverName = "server> ";
+        serverName = " server> ";
 
         model = Model.getInstance();
         server = Server.getInstance();
@@ -34,7 +36,8 @@ public class ServerApp extends Application {
     }
 
     public static void printLog(String logText){
-        model.addLog(logText);
+        model.addLog('[' + CommonUtil.formatDate(new Date()) + ']'
+                + logText);
     }
 
     public static void printSystemLog(String logText){

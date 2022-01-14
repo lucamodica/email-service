@@ -1,6 +1,7 @@
 package com.projprogiii.clientmail.model.client;
 
 import com.projprogiii.clientmail.model.client.config.ConfigManager;
+import com.projprogiii.lib.enums.Command;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.User;
 import com.projprogiii.lib.utils.CommonUtil;
@@ -37,14 +38,11 @@ public class Client {
         return new Client();
     }
 
-
-    public User getUser(){ return user; }
-
-    public void sendEmail(Email email){
-        //TODO implement sending email communication to server
+    public User getUser(){
+        return user;
     }
 
-    public void deleteEmail(Email email){
-        //TODO send command to server in order to delete specific email from db
+    public void sendCommand(Command command){
+
     }
 }
