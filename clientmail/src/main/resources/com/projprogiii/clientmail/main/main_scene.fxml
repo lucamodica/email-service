@@ -75,7 +75,7 @@
                         <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
                      </padding>
                      <children>
-                        <Button fx:id="deleteBtn" mnemonicParsing="false" onMouseClicked="#onDeleteButtonClick" prefHeight="40.0" prefWidth="75.0" styleClass="btn, btn-danger" text="Delete">
+                        <Button fx:id="deleteBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="75.0" styleClass="btn, btn-danger" text="Delete">
                            <tooltip>
                               <Tooltip styleClass="tooltip-danger" text="Delete the selected email" />
                            </tooltip>
@@ -83,7 +83,7 @@
                               <Insets left="10.0" right="30.0" top="5.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="forwardBtn" mnemonicParsing="false" onMouseClicked="#onForwardButtonClick" prefHeight="40.0" prefWidth="75.0" styleClass="btn, btn-success" text="Forward">
+                        <Button fx:id="forwardBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="75.0" styleClass="btn, btn-success" text="Forward">
                            <tooltip>
                               <Tooltip styleClass="tooltip-success" text="Delete the selected email" />
                            </tooltip>
@@ -94,9 +94,9 @@
                               <Point3D />
                            </rotationAxis>
                         </Button>
-                        <SplitMenuButton fx:id="replyBtn" mnemonicParsing="false" onMouseClicked="#onReplyButtonClick" prefHeight="40.0" styleClass="split-menu-btn, split-menu-btn-primary" text="Reply">
+                        <SplitMenuButton fx:id="replyBtn" mnemonicParsing="false" prefHeight="40.0" styleClass="split-menu-btn, split-menu-btn-primary" text="Reply">
                            <items>
-                              <MenuItem fx:id="replyAllBtn" onAction="#onReplyAllButtonClick" text="Reply all" />
+                              <MenuItem fx:id="replyAllBtn" text="Reply all" />
                            </items>
 
                            <tooltip>

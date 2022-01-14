@@ -13,10 +13,12 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebView;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MainController extends Controller {
 
-    private interface btnHandler{
+    //Interface to generalize operation buttons handlers
+    private interface OnButtonClick{
         void handle(MouseEvent mouseEvent);
     }
 
@@ -67,7 +69,33 @@ public class MainController extends Controller {
         usernameLbl.textProperty().bind(model.emailAddressProperty());
         
         //Click listeners for the email operation buttons
-        
+        deleteBtn.setOnMouseClicked(event ->
+                opButtonHandler(event, (OnButtonClick) -> {
+                    model.deleteEmail(selectedEmail);
+                    updateDetailView(emptyEmail);
+                    AlertManager.showTemporizedAlert(dangerAlert,
+                            AlertText.MESSAGE_DELETED, 2);
+                }));
+        forwardBtn.setOnMouseClicked(event ->
+                opButtonHandler(event, (OnButtonClick) ->
+                        composeFieldsSetter("",
+                        "Forward: " + selectedEmail.getSubject(),
+                        selectedEmail.getText())));
+        replyBtn.setOnMouseClicked(event ->
+                opButtonHandler(event, (OnButtonClick) ->
+                        composeFieldsSetter(selectedEmail.getSender(),
+                        "Reply: " + selectedEmail.getSubject(),
+                        "")));
+        replyAllBtn.setOnAction(event ->
+                opButtonHandler(null, (OnButtonClick) -> {
+                    replyBtn.hide();
+                    List<String> list = selectedEmail.getReceivers();
+                    list.remove(model.getClient().getUser().emailAddress());
+                    composeFieldsSetter(selectedEmail.getSender() +
+                                    CommonUtil.receiversToString(list),
+                            "ReplyAll: " + selectedEmail.getSubject(),
+                            "");
+                }));
 
         emptyEmail = new Email("", List.of(""), "", "", null);
         updateDetailView(emptyEmail);
@@ -80,35 +108,16 @@ public class MainController extends Controller {
         ClientApp.sceneController.switchTo(SceneName.COMPOSE);
     }
     
-    
-    @FXML
-    private void onDeleteButtonClick() {
-        model.deleteEmail(selectedEmail);
-        updateDetailView(emptyEmail);
-        AlertManager.showTemporizedAlert(dangerAlert, AlertText.MESSAGE_DELETED, 2);
-    }
-    @FXML
-    private void onForwardButtonClick() {
-        composeFieldsSetter("",
-                "Forward: " + selectedEmail.getSubject(),
-                selectedEmail.getText());
-    }
-    @FXML
-    private void onReplyButtonClick() {
-        composeFieldsSetter(selectedEmail.getSender(),
-                "Reply: " + selectedEmail.getSubject(),
-                "");
-    }
-    @FXML
-    private void onReplyAllButtonClick() {
-        replyBtn.hide();
 
-        List<String> list = selectedEmail.getReceivers();
-        list.remove(model.getClient().getUser().emailAddress());
-
-        composeFieldsSetter(selectedEmail.getSender() + CommonUtil.receiversToString(list),
-                "ReplyAll: " + selectedEmail.getSubject(),
-                "");
+    private void opButtonHandler(MouseEvent mouseEvent, OnButtonClick handler){
+        try {
+            if (!Email.isEmpty(Objects.requireNonNull(selectedEmail))){
+                handler.handle(mouseEvent);
+            }
+        } catch (NullPointerException e){
+            System.out.println("Cannot perform operation on an email " +
+                    "if it's null");
+        }
     }
 
     @FXML
