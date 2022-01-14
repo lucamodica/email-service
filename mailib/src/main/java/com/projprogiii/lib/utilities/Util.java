@@ -2,6 +2,7 @@ package com.projprogiii.lib.utilities;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class Util {
@@ -15,5 +16,11 @@ public class Util {
         return dateFormatter.format(date);
     }
 
-
+    public static String receiversToString(List<String> list) {
+        String s = new String();
+        for (String adress: list ) {
+            s = s + ", " + adress;
+        }
+        return s;
+    }
 }
