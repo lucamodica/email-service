@@ -37,6 +37,10 @@ public class Email implements Serializable, Comparable<Email>{
         this(sender, receivers, subject, text, date);
         this.isToRead = isToRead;
     }
+    public static Email generateEmptyEmail(){
+        return new Email("", List.of(""), "",
+                "", null);
+    }
 
     public int getMailId() {
         return mailId;
@@ -64,20 +68,18 @@ public class Email implements Serializable, Comparable<Email>{
     }
 
     public static boolean isEmpty(Email email){
-        return email.sender.equals("") &&
-                Arrays.stream(email.receivers.toArray()).
-                        allMatch(receiver -> receiver.equals("")) &&
-                email.subject.equals("") &&
-                email.text.equals("");
+        return email.equals(generateEmptyEmail());
     }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Email email = (Email) o;
-        return Objects.equals(sender, email.sender) && Objects.equals(receivers, email.receivers)
-                && Objects.equals(subject, email.subject) && Objects.equals(text, email.text);
+        return getMailId() == email.getMailId() &&
+                Objects.equals(getSubject(), email.getSubject()) &&
+                Objects.equals(getText(), email.getText());
     }
     @Override
     public int hashCode() {

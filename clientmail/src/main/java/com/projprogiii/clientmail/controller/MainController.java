@@ -2,8 +2,8 @@ package com.projprogiii.clientmail.controller;
 
 import com.projprogiii.clientmail.ClientApp;
 import com.projprogiii.clientmail.scene.SceneName;
-import com.projprogiii.clientmail.utils.AlertManager;
-import com.projprogiii.clientmail.utils.AlertText;
+import com.projprogiii.clientmail.utils.alert.AlertManager;
+import com.projprogiii.clientmail.utils.alert.AlertText;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.utils.CommonUtil;
 import javafx.fxml.FXML;
@@ -13,7 +13,6 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebView;
 
 import java.util.List;
-import java.util.Objects;
 
 public class MainController extends Controller {
 
@@ -58,10 +57,10 @@ public class MainController extends Controller {
 
     @FXML
     public void initialize(){
-        //istanza nuovo client
+        //New selcted email instance
         model.generateRandomEmails(10);
-
-        selectedEmail = null;
+        emptyEmail = Email.generateEmptyEmail();
+        selectedEmail = emptyEmail;
 
         //binding tra lstEmails e inboxProperty
         emailsLst.itemsProperty().bind(model.inboxProperty());
@@ -72,6 +71,7 @@ public class MainController extends Controller {
         deleteBtn.setOnMouseClicked(event ->
                 opButtonHandler(event, (OnButtonClick) -> {
                     model.deleteEmail(selectedEmail);
+                    selectedEmail = emptyEmail;
                     updateDetailView(emptyEmail);
                     AlertManager.showTemporizedAlert(dangerAlert,
                             AlertText.MESSAGE_DELETED, 2);
@@ -97,29 +97,21 @@ public class MainController extends Controller {
                             "");
                 }));
 
-        emptyEmail = new Email("", List.of(""), "", "", null);
         updateDetailView(emptyEmail);
     }
 
     public TextFlow getSuccessAlert() { return successAlert; }
 
+    private void opButtonHandler(MouseEvent mouseEvent, OnButtonClick handler){
+        if (!Email.isEmpty(selectedEmail)){
+            handler.handle(mouseEvent);
+        }
+    }
+
     @FXML
     private void onComposeButtonClick() {
         ClientApp.sceneController.switchTo(SceneName.COMPOSE);
     }
-    
-
-    private void opButtonHandler(MouseEvent mouseEvent, OnButtonClick handler){
-        try {
-            if (!Email.isEmpty(Objects.requireNonNull(selectedEmail))){
-                handler.handle(mouseEvent);
-            }
-        } catch (NullPointerException e){
-            System.out.println("Cannot perform operation on an email " +
-                    "if it's null");
-        }
-    }
-
     @FXML
     private void composeFieldsSetter(String receivers, String object, String htmltext){
         ClientApp.sceneController.switchTo(SceneName.COMPOSE);
