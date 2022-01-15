@@ -88,8 +88,7 @@ public class Model {
                     people[r.nextInt(people.length)],
                     List.of(people[r.nextInt(people.length)]),
                     subjects[r.nextInt(subjects.length)],
-                    texts[r.nextInt(texts.length)],
-                    new Date());
+                    texts[r.nextInt(texts.length)]);
             this.addEmail(email);
         }
         inboxContent.sort(null);

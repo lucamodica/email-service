@@ -1,14 +1,11 @@
 package com.projprogiii.lib.objects;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 
-public record User(String emailAddress) implements Serializable {
-
-    public User {
-
-    }
+public record User(int id, String emailAddress) implements Serializable {
 
     @Override
     public boolean equals(Object o) {
@@ -18,9 +15,8 @@ public record User(String emailAddress) implements Serializable {
         return Objects.equals(emailAddress, user.emailAddress);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(emailAddress);
+    public static int genUserId(String emailAddress){
+        return Objects.hash(emailAddress, new Date());
     }
 
     @Override

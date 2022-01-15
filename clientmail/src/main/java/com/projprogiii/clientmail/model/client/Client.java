@@ -20,7 +20,7 @@ public class Client {
 
             String emailAddress = configManager.readProperty("user.emailAddress");
             if (CommonUtil.validateEmail(emailAddress)){
-                this.user = new User(emailAddress);
+                this.user = new User(User.genUserId(emailAddress), emailAddress);
             }
             else {
                 throw new IllegalArgumentException();
@@ -47,4 +47,6 @@ public class Client {
     public void deleteEmail(Email email){
         //TODO send command to server in order to delete specific email from db
     }
+
+
 }
