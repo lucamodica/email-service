@@ -12,7 +12,11 @@ public record User(int id, String emailAddress) implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(emailAddress, user.emailAddress);
+        return Objects.equals(id, user.id());
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public static int genUserId(String emailAddress){

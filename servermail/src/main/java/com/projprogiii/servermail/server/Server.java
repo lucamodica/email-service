@@ -1,6 +1,7 @@
 package com.projprogiii.servermail.server;
 
 import com.projprogiii.servermail.ServerApp;
+import com.projprogiii.servermail.model.log.LogManager;
 import com.projprogiii.servermail.server.config.ConfigManager;
 
 public class Server {
@@ -8,11 +9,13 @@ public class Server {
     private final String threadsNumber;
     private final String timeout;
     private final int serverPort;
+    private final LogManager logManager;
 
     private Server(){
         ConfigManager configManager = ConfigManager.getInstance();
+        logManager = ServerApp.model.getLogManager();
 
-        ServerApp.printSystemLog("Loading initial configuration server.properties...");
+        logManager.printSystemLog("Loading initial configuration server.properties...");
 
         this.threadsNumber = configManager.
                 readProperty("server.threads_number");
@@ -24,14 +27,14 @@ public class Server {
         printLogInit();
     }
     private void printLogInit(){
-        ServerApp.printSystemLog("Configuration loaded.");
-        ServerApp.printSystemLog("Max thread in thread pool: " +
+        logManager.printSystemLog("Configuration loaded.");
+        logManager.printSystemLog("Max thread in thread pool: " +
                 threadsNumber + ".");
-        ServerApp.printSystemLog("Timeout to accept a new connection: " +
+        logManager.printSystemLog("Timeout to accept a new connection: " +
                 timeout + " ms.");
-        ServerApp.printSystemLog("Server port: " + serverPort + ".");
-        ServerApp.printLog("");
-        ServerApp.printSystemLog("Hello!");
+        logManager.printSystemLog("Server port: " + serverPort + ".");
+        logManager.printLog("");
+        logManager.printSystemLog("Hello!");
     }
     public static Server getInstance(){
         return new Server();

@@ -1,37 +1,34 @@
 package com.projprogiii.servermail.model;
 
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
-import java.util.Collections;
-import java.util.LinkedList;
+import com.projprogiii.servermail.model.db.DbManager;
+import com.projprogiii.servermail.model.log.LogManager;
+import com.projprogiii.servermail.model.sync.SyncManager;
 
 
 public class Model {
 
-    private ListProperty<String> log;
-    private ObservableList<String> logContent;
+    private final DbManager dbManager;
+    private final SyncManager syncManager;
+    private final LogManager logManager;
 
-    /**
-     * Class constructor and getInstance function.
-     */
     private Model(){
-        this.logContent = FXCollections.observableList(Collections.
-                synchronizedList(new LinkedList<>()));
-        this.log = new SimpleListProperty<>();
-        this.log.set(logContent);
+        dbManager = DbManager.getInstance();
+        syncManager = SyncManager.getInstance();
+        logManager = LogManager.getInstance();
     }
     public static Model getInstance(){
         return new Model();
     }
 
-    public ListProperty<String> logProperty() {
-        return log;
+    public DbManager getDbManager() {
+        return dbManager;
     }
 
-    public void addLog(String logText){
-        logContent.add(logText);
+    public SyncManager getSyncManager() {
+        return syncManager;
+    }
+
+    public LogManager getLogManager() {
+        return logManager;
     }
 }

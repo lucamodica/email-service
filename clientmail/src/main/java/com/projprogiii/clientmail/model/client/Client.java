@@ -48,5 +48,4 @@ public class Client {
         //TODO send command to server in order to delete specific email from db
     }
 
-
 }

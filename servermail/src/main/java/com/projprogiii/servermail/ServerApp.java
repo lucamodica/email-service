@@ -16,12 +16,10 @@ public class ServerApp extends Application {
 
     public static Server server;
     public static Model model;
-    private static String serverName;
+
 
     @Override
     public void start(Stage stage) throws IOException {
-
-        serverName = " server> ";
 
         model = Model.getInstance();
         server = Server.getInstance();
@@ -33,15 +31,6 @@ public class ServerApp extends Application {
         stage.setScene(scene);
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.show();
-    }
-
-    public static void printLog(String logText){
-        model.addLog('[' + CommonUtil.formatDate(new Date()) + ']'
-                + logText);
-    }
-
-    public static void printSystemLog(String logText){
-        printLog(serverName + logText);
     }
 
     public static void main(String[] args) {
