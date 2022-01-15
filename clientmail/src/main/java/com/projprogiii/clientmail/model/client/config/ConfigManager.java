@@ -38,10 +38,7 @@ public class ConfigManager {
     }
 
     private File getDir() {
-        String uri = new File("").getAbsolutePath() + "/clientmail/src/main/java/" +
-                String.valueOf(getClass()).
-                replaceAll("class |ConfigManager", "").
-                replaceAll("\\.","/") + "user.properties";
+        String uri = new File("").getAbsolutePath() + "/clientmail/src/main/" + "user.properties";
         return new File(uri);
     }
 }

@@ -15,5 +15,4 @@
 *.txt
 
 #Config files
-/servermail/src/main/java/com/projprogiii/servermail/server/config/server.properties
-/clientmail/src/main/java/com/projprogiii/clientmail/model/client/config/user.properties
+/*/src/main/*.properties

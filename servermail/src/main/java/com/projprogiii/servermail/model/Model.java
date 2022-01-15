@@ -23,11 +23,9 @@ public class Model {
     public DbManager getDbManager() {
         return dbManager;
     }
-
     public SyncManager getSyncManager() {
         return syncManager;
     }
-
     public LogManager getLogManager() {
         return logManager;
     }

@@ -8,4 +8,6 @@ public class DbManager {
     public static DbManager getInstance(){
         return new DbManager();
     }
+
+    //costruttore con cartella /db
 }

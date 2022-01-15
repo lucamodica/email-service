@@ -16,4 +16,10 @@ public class SyncManager {
         return new SyncManager();
     }
 
+    public void addLock(User user){
+        locks.putIfAbsent(user, new ReentrantReadWriteLock());
+    }
+    public void removeLock(User user){
+        locks.remove(user);
+    }
 }
