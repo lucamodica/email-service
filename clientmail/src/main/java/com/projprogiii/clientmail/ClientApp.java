@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientApp extends Application {
 
@@ -33,6 +35,8 @@ public class ClientApp extends Application {
 
     public static void main(String[] args) {
         model = Model.getInstance();
+        model.getClient().login();
+
         launch();
     }
 }

@@ -5,13 +5,27 @@ import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.User;
 import com.projprogiii.lib.utils.CommonUtil;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ConnectException;
+import java.net.Socket;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import static java.lang.System.exit;
 
 public class Client {
 
     private User user;
     private String serverHost;
-    private String serverPort;
+    private int serverPort;
+
+    Socket currentSocket = null;
+    ObjectOutputStream outputStream = null;
+    ObjectInputStream inputStream = null;
 
     private Client() {
         ConfigManager configManager = ConfigManager.getInstance();
@@ -26,7 +40,7 @@ public class Client {
                 throw new IllegalArgumentException();
             }
             serverHost = configManager.readProperty("user.server_host");
-            serverPort = configManager.readProperty("user.server_port");
+            serverPort = Integer.parseInt(configManager.readProperty("user.server_port"));
 
         } catch (IllegalArgumentException e){
             System.out.println("Illegal emailAddress value! Change it in user.properties file.");
@@ -48,4 +62,103 @@ public class Client {
         //TODO send command to server in order to delete specific email from db
     }
 
+    public void login(){
+        ExecutorService exec = Executors.newFixedThreadPool(3);
+
+        exec.execute(()->startCommunication());
+
+
+
+        //useful for waiting before termination of server
+        try {
+            exec.awaitTermination(5, TimeUnit.SECONDS);
+            //Blocks until all tasks
+            // have completed execution after a shutdown request,
+            // or the timeout occurs, or the current thread is interrupted, whichever happens first.
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+        }
+
+
+
+    }
+    public void startCommunication(){
+        int attempts = 0;
+
+        boolean success = false;
+        while(attempts < 10 && !success) {
+            attempts += 1;
+            System.out.println("[Client "+ user.emailAddress() +"] Tentativo nr. " + attempts);
+
+            success = tryCommunication();
+
+            if(success) {
+                continue;
+            }
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private boolean tryCommunication() {
+        try {
+            connectToServer();
+
+            Thread.sleep(5000);
+
+            //send op
+            outputStream.writeObject(user.emailAddress());
+            outputStream.flush();
+            //receive op
+            String s = (String) inputStream.readObject();
+            System.out.println("[Client " + user.emailAddress() + "] Oggetto ricevuto => " + s);
+
+
+            return true;
+        } catch (ConnectException ce) {
+            // nothing to be done
+            return false;
+        } catch (IOException se) {
+            se.printStackTrace();
+            return false;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            closeConnections();
+        }
+    }
+
+    private void connectToServer() throws IOException {
+        currentSocket = new Socket(serverHost, serverPort);
+        outputStream = new ObjectOutputStream(currentSocket.getOutputStream());
+
+        // Dalla documentazione di ObjectOutputStream
+        // callers may wish to flush the stream immediately to ensure that constructors for receiving
+        // ObjectInputStreams will not block when reading the header.
+        outputStream.flush();
+
+        inputStream = new ObjectInputStream(currentSocket.getInputStream());
+
+        System.out.println("[Client "+ user.emailAddress() + "] Connesso");
+    }
+
+    private void closeConnections() {
+        if (currentSocket != null) {
+            try {
+                inputStream.close();
+                outputStream.close();
+                currentSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

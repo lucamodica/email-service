@@ -14,8 +14,8 @@ module servermail {
     opens com.projprogiii.servermail.model to javafx.fxml;
     exports com.projprogiii.servermail.controller;
     opens com.projprogiii.servermail.controller to javafx.fxml;
-    exports com.projprogiii.servermail.server;
-    opens com.projprogiii.servermail.server to javafx.fxml;
+    exports com.projprogiii.servermail.model.server;
+    opens com.projprogiii.servermail.model.server to javafx.fxml;
     exports com.projprogiii.servermail.model.db;
     opens com.projprogiii.servermail.model.db to javafx.fxml;
     exports com.projprogiii.servermail.model.sync;
