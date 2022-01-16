@@ -1,6 +1,8 @@
 package com.projprogiii.lib.enums;
 
 public enum Command {
+    //Need a "log-in" command as client starts?
+    LOGIN(0),
     FETCH_EMAIL(0),
     CHECK_EMAIL(0),
     SEND_EMAIL(1),

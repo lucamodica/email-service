@@ -20,7 +20,7 @@ public class Client {
 
             String emailAddress = configManager.readProperty("user.emailAddress");
             if (CommonUtil.validateEmail(emailAddress)){
-                this.user = new User(User.genUserId(emailAddress), emailAddress);
+                this.user = new User(emailAddress);
             }
             else {
                 throw new IllegalArgumentException();
