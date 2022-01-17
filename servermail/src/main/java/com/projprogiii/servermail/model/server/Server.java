@@ -14,7 +14,7 @@ public class Server {
     private final int threadsNumber;
     private final int timeout;
     private final int serverPort;
-    private final LogManager logManager;
+    public final LogManager logManager;
 
     private Server(){
         ConfigManager configManager = ConfigManager.getInstance();
@@ -55,19 +55,14 @@ public class Server {
         return serverPort;
     }
 
-    public void startServer(){
+    public void startSession(){
         ExecutorService exec = Executors.newFixedThreadPool(threadsNumber);
         Runnable task = new Session();
         exec.execute(task);
 
-
-
-        //useful for waiting before termination of server
+        //useful for waiting before termination of server. either waiting n seconds or thread interruption or completed execution
         try {
             exec.awaitTermination(5, TimeUnit.SECONDS);
-            //Blocks until all tasks
-            // have completed execution after a shutdown request,
-            // or the timeout occurs, or the current thread is interrupted, whichever happens first.
         } catch (InterruptedException e) {
             System.out.println(e.getMessage());
         }

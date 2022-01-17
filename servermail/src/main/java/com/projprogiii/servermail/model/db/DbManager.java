@@ -34,6 +34,9 @@ public class DbManager {
 
     private boolean makeDir(String path){
         File f = new File(dbPath + path);
+        if (f.exists()){
+            return false;
+        }
         return f.mkdirs();
     }
 

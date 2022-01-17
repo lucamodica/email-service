@@ -15,7 +15,6 @@ public class ServerApp extends Application {
     public static Server server;
     public static Model model;
 
-
     @Override
     public void start(Stage stage) throws IOException {
 
@@ -33,10 +32,8 @@ public class ServerApp extends Application {
         model = Model.getInstance();
         server = Server.getInstance();
 
-
-        server.startServer();
-
-        //wont execute until we move threadpool here
+        server.startSession();
+        //TODO launch() is delayed, caused somewhere in startServer(), same as client. needs fix
         launch();
     }
 

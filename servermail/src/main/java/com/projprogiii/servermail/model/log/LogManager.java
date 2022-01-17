@@ -17,7 +17,6 @@ public class LogManager {
 
     private static String serverName;
 
-
     private LogManager (){
         this.logContent = FXCollections.observableList(Collections.
                 synchronizedList(new LinkedList<>()));
@@ -44,5 +43,4 @@ public class LogManager {
     public void printSystemLog(String logText){
         printLog(serverName + logText);
     }
-
 }

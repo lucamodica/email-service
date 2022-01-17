@@ -10,7 +10,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -62,35 +61,25 @@ public class Client {
         //TODO send command to server in order to delete specific email from db
     }
 
+    //TODO generizzare per comandi
     public void login(){
         ExecutorService exec = Executors.newFixedThreadPool(3);
 
-        exec.execute(()->startCommunication());
-
-
+        exec.execute(()-> communicationTest());
 
         //useful for waiting before termination of server
         try {
             exec.awaitTermination(5, TimeUnit.SECONDS);
-            //Blocks until all tasks
-            // have completed execution after a shutdown request,
-            // or the timeout occurs, or the current thread is interrupted, whichever happens first.
         } catch (InterruptedException e) {
             System.out.println(e.getMessage());
         }
-
-
-
     }
-    public void startCommunication(){
-        int attempts = 0;
 
+    public void communicationTest(){
         boolean success = false;
-        while(attempts < 10 && !success) {
-            attempts += 1;
-            System.out.println("[Client "+ user.emailAddress() +"] Tentativo nr. " + attempts);
 
-            success = tryCommunication();
+        while(!success) {
+            success = communicationTestAux();
 
             if(success) {
                 continue;
@@ -104,7 +93,8 @@ public class Client {
         }
     }
 
-    private boolean tryCommunication() {
+    //TODO generizzare per comandi
+    private boolean communicationTestAux() {
         try {
             connectToServer();
 
@@ -114,9 +104,8 @@ public class Client {
             outputStream.writeObject(user.emailAddress());
             outputStream.flush();
             //receive op
-            String s = (String) inputStream.readObject();
-            System.out.println("[Client " + user.emailAddress() + "] Oggetto ricevuto => " + s);
-
+            boolean b = (boolean) inputStream.readObject();
+            System.out.println("[Client " + user.emailAddress() + "] Logged => " + b);
 
             return true;
         } catch (ConnectException ce) {
@@ -139,15 +128,8 @@ public class Client {
     private void connectToServer() throws IOException {
         currentSocket = new Socket(serverHost, serverPort);
         outputStream = new ObjectOutputStream(currentSocket.getOutputStream());
-
-        // Dalla documentazione di ObjectOutputStream
-        // callers may wish to flush the stream immediately to ensure that constructors for receiving
-        // ObjectInputStreams will not block when reading the header.
         outputStream.flush();
-
         inputStream = new ObjectInputStream(currentSocket.getInputStream());
-
-        System.out.println("[Client "+ user.emailAddress() + "] Connesso");
     }
 
     private void closeConnections() {

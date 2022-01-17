@@ -75,7 +75,6 @@ public class Model {
     public void deleteEmail(Email email) { inboxContent.remove(email); }
 
 
-
     /**
      *genera emailAddress random da aggiungere alla lista di emailAddress, ese verranno mostrate nella ui
      * TODO: soon to be deleted

@@ -1,5 +1,6 @@
 package com.projprogiii.servermail.model.server.session;
 
+import com.projprogiii.lib.objects.User;
 import com.projprogiii.servermail.ServerApp;
 
 import java.io.IOException;
@@ -7,9 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import static com.projprogiii.lib.utils.CommonUtil.validateEmail;
-import static com.projprogiii.servermail.ServerApp.server;
 
 public class Session implements Runnable{
     Socket currentSocket = null;
@@ -22,7 +20,7 @@ public class Session implements Runnable{
             ServerSocket serverSocket = new ServerSocket(ServerApp.server.getServerPort());
 
             while (true) {
-                serveClient(serverSocket);
+                clientDbInit(serverSocket);
             }
 
         } catch (IOException e) {
@@ -38,20 +36,21 @@ public class Session implements Runnable{
         }
     }
 
-    private void serveClient(ServerSocket serverSocket) {
+    private void clientDbInit(ServerSocket serverSocket) {
         try {
             openStreams(serverSocket);
+            //now string, needs to be generalized - command/json?
+            String emailAddress = (String) inStream.readObject();
+            //ServerApp.server.logManager.printSystemLog("Client " + emailAddress + " connected, generating db");
+            System.out.println("Client " + emailAddress + " connected, generating db");
 
-            String emailAdress = (String) inStream.readObject();
-
-            if (validateEmail(emailAdress)){
-                outStream.writeObject("Correct email address");
+            if (ServerApp.model.getDbManager().logUser(new User(emailAddress))){
+                outStream.writeObject(true);
             } else {
-                outStream.writeObject("Error in email address format");
+                outStream.writeObject(false);
             }
 
             outStream.flush();
-
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -59,33 +58,19 @@ public class Session implements Runnable{
         }
     }
 
-    // apre gli stream necessari alla connessione corrente
     private void openStreams(ServerSocket serverSocket) throws IOException {
         currentSocket = serverSocket.accept();
-        System.out.println("Server Connesso");
-
         inStream = new ObjectInputStream(currentSocket.getInputStream());
         outStream = new ObjectOutputStream(currentSocket.getOutputStream());
         outStream.flush();
     }
 
-    // Chiude gli stream utilizzati durante l'ultima connessione
     private void closeStreams() {
         try {
-            if(inStream != null) {
-                inStream.close();
-            }
-
-            if(outStream != null) {
-                outStream.close();
-            }
+            if(inStream != null) { inStream.close(); }
+            if(outStream != null) { outStream.close(); }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
-
-
-
 }
