@@ -21,7 +21,6 @@ public class MainController extends Controller {
         void handle(MouseEvent mouseEvent);
     }
 
-
     @FXML
     private ListView<Email> emailsLst;
     @FXML
@@ -57,8 +56,6 @@ public class MainController extends Controller {
 
     @FXML
     public void initialize(){
-        //New selcted email instance
-        model.generateRandomEmails(10);
         emptyEmail = Email.generateEmptyEmail();
         selectedEmail = emptyEmail;
 
