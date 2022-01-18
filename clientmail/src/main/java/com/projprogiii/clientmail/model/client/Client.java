@@ -1,6 +1,7 @@
 package com.projprogiii.clientmail.model.client;
 
 import com.projprogiii.clientmail.model.client.config.ConfigManager;
+import com.projprogiii.lib.enums.CommandName;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.User;
 import com.projprogiii.lib.utils.CommonUtil;
@@ -142,5 +143,9 @@ public class Client {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void sendCmd(CommandName command, String... args){
+
     }
 }

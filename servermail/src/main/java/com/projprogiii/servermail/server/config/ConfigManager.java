@@ -1,4 +1,4 @@
-package com.projprogiii.servermail.model.server.config;
+package com.projprogiii.servermail.server.config;
 
 import java.io.*;
 import java.util.Properties;

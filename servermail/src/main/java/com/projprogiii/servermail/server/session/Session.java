@@ -1,7 +1,9 @@
-package com.projprogiii.servermail.model.server.session;
+package com.projprogiii.servermail.server.session;
 
-import com.projprogiii.lib.enums.Command;
+import com.projprogiii.lib.enums.CommandName;
+import com.projprogiii.lib.objects.User;
 import com.projprogiii.servermail.ServerApp;
+import com.projprogiii.servermail.server.session.command.Command;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -24,6 +26,9 @@ public class Session implements Runnable{
                 clientDbInit(serverSocket);
             }
 
+
+            Command cmd = createCommand();
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -41,8 +46,19 @@ public class Session implements Runnable{
         try {
             openStreams(serverSocket);
             //TODO change command read to json
-            Command command = (Command) inputStream.readObject();
+            String emailAddress = (String) inputStream.readObject();
             //commandManager.handleCommand()
+
+            System.out.println("Client " + " connected, generating db");
+
+            if (ServerApp.model.getDbManager().logUser(new User(emailAddress))){
+                outputStream.writeObject(true);
+            } else {
+                outputStream.writeObject(false);
+            }
+            //ServerApp.server.logManager.printSystemLog("Client " + emailAddress + " connected, generating db");
+
+            outputStream.flush();
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -65,5 +81,9 @@ public class Session implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private Command createCommand(CommandName commandName){
+
     }
 }

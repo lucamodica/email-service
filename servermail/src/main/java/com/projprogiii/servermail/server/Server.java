@@ -1,9 +1,9 @@
-package com.projprogiii.servermail.model.server;
+package com.projprogiii.servermail.server;
 
 import com.projprogiii.servermail.ServerApp;
 import com.projprogiii.servermail.model.log.LogManager;
-import com.projprogiii.servermail.model.server.config.ConfigManager;
-import com.projprogiii.servermail.model.server.session.Session;
+import com.projprogiii.servermail.server.config.ConfigManager;
+import com.projprogiii.servermail.server.session.Session;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

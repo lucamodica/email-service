@@ -1,6 +1,6 @@
 package com.projprogiii.lib.enums;
 
-public enum Command {
+public enum CommandName {
     //Need a "log-in" command as client starts?
     LOGIN(0),
     FETCH_EMAIL(0),
@@ -11,7 +11,7 @@ public enum Command {
 
     public final int argsLength;
 
-    Command(int argsLength) {
+    CommandName(int argsLength) {
         this.argsLength = argsLength;
     }
 
