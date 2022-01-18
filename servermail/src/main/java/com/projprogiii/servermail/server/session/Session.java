@@ -1,11 +1,10 @@
 package com.projprogiii.servermail.server.session;
 
 import com.projprogiii.lib.enums.CommandName;
-import com.projprogiii.lib.objects.Email;
+import com.projprogiii.lib.objects.DataPackage;
 import com.projprogiii.lib.objects.User;
 import com.projprogiii.servermail.ServerApp;
-import com.projprogiii.servermail.server.session.command.Command;
-import org.json.JSONObject;
+import com.projprogiii.servermail.server.session.command.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -48,21 +47,11 @@ public class Session implements Runnable{
         try {
             openStreams(serverSocket);
             //TODO change command read to json
-            String s = (String) inputStream.readObject();
+            DataPackage pkg = (DataPackage) inputStream.readObject();
+            handleCommand(pkg.getCommandName());
+            System.out.println("Client " + pkg.getAuth() + " connected, generating db");
 
-            JSONObject json = new JSONObject(s);
-            String emailAddress = json.getString("auth");
-            CommandName cmd = (CommandName)json.get("cmd");
-            Email email = (Email)json.get("args");
-
-            System.out.println("PROVIAMO?");
-            System.out.println(emailAddress);
-            System.out.println(cmd);
-            System.out.println(email);
-
-            System.out.println("Client " + emailAddress + " connected, generating db");
-
-            if (ServerApp.model.getDbManager().logUser(new User(emailAddress))){
+            if (ServerApp.model.getDbManager().logUser(new User(pkg.getAuth()))){
                 outputStream.writeObject(true);
             } else {
                 outputStream.writeObject(false);
@@ -90,6 +79,26 @@ public class Session implements Runnable{
             if(outputStream != null) { outputStream.close(); }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public Command handleCommand(CommandName cmdname){
+        switch(cmdname){
+            case FETCH_EMAIL -> {
+                return new FetchEmail();
+            }
+            case SEND_EMAIL -> {
+                return new SendEmail();
+            }
+            case MARK_AS_READ -> {
+                return new MarkAsRead();
+            }
+            case DELETE_EMAIL -> {
+                return new DeleteEmail();
+            }
+            default -> {
+                return null;
+            }
         }
     }
 }

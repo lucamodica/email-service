@@ -84,8 +84,17 @@ public class Email implements Serializable, Comparable<Email>{
 
     @Override
     public String toString() {
-        return String.join(" - ", List.of(this.sender, this.subject));
+        return "Email{" +
+                "id=" + id +
+                ", sender='" + sender + '\'' +
+                ", receivers=" + receivers +
+                ", subject='" + subject + '\'' +
+                ", text='" + text + '\'' +
+                ", isToRead=" + isToRead +
+                ", date=" + date +
+                '}';
     }
+
     public String dateToString(){
         if (this.date == null) return "";
         return CommonUtil.formatDate(this.date);

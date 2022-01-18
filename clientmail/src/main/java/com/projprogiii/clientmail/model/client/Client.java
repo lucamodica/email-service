@@ -2,6 +2,7 @@ package com.projprogiii.clientmail.model.client;
 
 import com.projprogiii.clientmail.model.client.config.ConfigManager;
 import com.projprogiii.lib.enums.CommandName;
+import com.projprogiii.lib.objects.DataPackage;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.User;
 import com.projprogiii.lib.utils.CommonUtil;
@@ -82,7 +83,7 @@ public class Client {
             }
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -93,18 +94,13 @@ public class Client {
     private boolean communicationTestAux() {
         try {
             connectToServer();
+            Thread.sleep(100);
 
-            Thread.sleep(5000);
+            DataPackage pkg = new DataPackage(user.emailAddress(), CommandName.FETCH_EMAIL, new Email(user.emailAddress(), Collections.singletonList("lucamodica@unito.it"), "test obj", "test text"));
 
-            JSONObject json = new JSONObject();
-            json.put("auth", user.emailAddress());
-            json.put("cmd", CommandName.FETCH_EMAIL);
-            json.put("args", new Email(user.emailAddress(), Collections.singletonList("lucamodica@unito.it"), "test obj", "test text"));
-
-            outputStream.writeObject(json.toString());
-
+            outputStream.writeObject(pkg);
             outputStream.flush();
-            //receive op
+            //receive response
             boolean b = (boolean) inputStream.readObject();
             System.out.println("[Client " + user.emailAddress() + "] Logged => " + b);
 
