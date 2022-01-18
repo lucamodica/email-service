@@ -2,7 +2,6 @@ package com.projprogiii.servermail.server.session.command;
 
 import com.projprogiii.lib.enums.ServerResponseName;
 import com.projprogiii.lib.objects.ClientRequest;
-import com.projprogiii.lib.objects.User;
 import com.projprogiii.servermail.ServerApp;
 
 import java.io.IOException;
@@ -16,11 +15,11 @@ public class FetchEmail extends Command{
     }
 
     @Override
-    public void init(ClientRequest pkg) throws IOException {
-        System.out.println("Client " + pkg.auth() + " connected, generating db");
+    public void init(ClientRequest req) throws IOException {
+        System.out.println("Client " + req.auth() + " connected, generating db");
         //TODO real fetch handling and sout to log
 
-        if (ServerApp.model.getDbManager().logUser(new User(pkg.auth()))){
+        if (ServerApp.model.getDbManager().logUser(req.auth())){
             sendResponse(ServerResponseName.USER_REGISTERED);
         } else {
             sendResponse(ServerResponseName.USER_ALREADY_REGISTERED);

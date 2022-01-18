@@ -33,7 +33,7 @@ public class ComposeController extends Controller {
     @FXML
     public void initialize(){
         senderTextField.setEditable(false);
-        senderTextField.setText(model.getClient().getUser().emailAddress());
+        senderTextField.setText(model.getClient().getUser());
     }
 
     public TextField getSenderTextField() {

@@ -33,7 +33,7 @@ public class Model {
         this.inbox = new SimpleListProperty<>();
         this.inbox.set(inboxContent);
 
-        this.emailAddress = new SimpleStringProperty(client.getUser().emailAddress());
+        this.emailAddress = new SimpleStringProperty(client.getUser());
     }
 
     public static Model getInstance(){ return new Model(); }

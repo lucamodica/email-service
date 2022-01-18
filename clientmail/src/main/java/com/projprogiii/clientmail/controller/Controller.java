@@ -8,6 +8,6 @@ public abstract class Controller {
     Model model = ClientApp.model;
 
     public String getUserEmail(){
-        return model.getClient().getUser().emailAddress();
+        return model.getClient().getUser();
     }
 }

@@ -5,7 +5,6 @@ import com.projprogiii.lib.enums.CommandName;
 import com.projprogiii.lib.enums.ServerResponseName;
 import com.projprogiii.lib.objects.ClientRequest;
 import com.projprogiii.lib.objects.Email;
-import com.projprogiii.lib.objects.User;
 import com.projprogiii.lib.utils.CommonUtil;
 import org.json.JSONObject;
 
@@ -24,7 +23,7 @@ import static java.lang.System.exit;
 
 public class Client {
 
-    private User user;
+    private String user;
     private String serverHost;
     private int serverPort;
     private Date lastFetch;
@@ -40,7 +39,7 @@ public class Client {
 
             String emailAddress = configManager.readProperty("user.emailAddress");
             if (CommonUtil.validateEmail(emailAddress)){
-                this.user = new User(emailAddress);
+                this.user = emailAddress;
             }
             else {
                 throw new IllegalArgumentException();
@@ -57,7 +56,7 @@ public class Client {
         return new Client();
     }
 
-    public User getUser(){ return user; }
+    public String getUser(){ return user; }
 
     //TODO generizzare per comandi
     public void login(){
@@ -97,9 +96,9 @@ public class Client {
             connectToServer();
             Thread.sleep(100);
 
-            ClientRequest pkg = new ClientRequest(user.emailAddress(),
+            ClientRequest pkg = new ClientRequest(user,
                     CommandName.FETCH_EMAIL,
-                    new Email(user.emailAddress(), Collections.singletonList("lucamodica@unito.it"), "test obj", "test text"));
+                    new Email(user, Collections.singletonList("lucamodica@unito.it"), "test obj", "test text"));
             outputStream.writeObject(pkg);
             outputStream.flush();
             //receive response
@@ -107,16 +106,9 @@ public class Client {
             System.out.println(response);
             return true;
         } catch (ConnectException ce) {
-            // nothing to be done
             return false;
-        } catch (IOException se) {
+        } catch (IOException | InterruptedException | ClassNotFoundException se) {
             se.printStackTrace();
-            return false;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return false;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
             return false;
         } finally {
             closeConnections();
@@ -145,7 +137,7 @@ public class Client {
     public void sendCmd(CommandName command, String... args){
 
         JSONObject jsonObject = new JSONObject()
-            .put("auth", user.emailAddress())
+            .put("auth", user)
             .put("command", command)
             .put("args", args);
 

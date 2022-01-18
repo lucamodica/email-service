@@ -87,7 +87,7 @@ public class MainController extends Controller {
                 opButtonHandler(null, (OnButtonClick) -> {
                     replyBtn.hide();
                     List<String> list = selectedEmail.getReceivers();
-                    list.remove(model.getClient().getUser().emailAddress());
+                    list.remove(model.getClient().getUser());
                     composeFieldsSetter(selectedEmail.getSender() +
                                     CommonUtil.receiversToString(list),
                             "ReplyAll: " + selectedEmail.getSubject(),
@@ -115,7 +115,7 @@ public class MainController extends Controller {
         ComposeController controller = (ComposeController) ClientApp.sceneController.
                 getController(SceneName.COMPOSE);
 
-        controller.getSenderTextField().setText(model.getClient().getUser().emailAddress());
+        controller.getSenderTextField().setText(model.getClient().getUser());
         controller.getRecipientsTextField().setText(receivers);
         controller.getObjectTextField().setText(object);
         controller.getMessageEditor().setHtmlText(htmltext);

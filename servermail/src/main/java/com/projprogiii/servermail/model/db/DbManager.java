@@ -1,7 +1,6 @@
 package com.projprogiii.servermail.model.db;
 
 import com.projprogiii.lib.objects.Email;
-import com.projprogiii.lib.objects.User;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -51,8 +50,8 @@ public class DbManager {
         }
     }
 
-    public boolean logUser(User user){
-        return makeDir(user.emailAddress());
+    public boolean logUser(String user){
+        return makeDir(user);
     }
     //TODO implement sync - no need to implement user log checks here, already asked during client sendEmail
     public void saveEmail(Email email){
@@ -60,7 +59,7 @@ public class DbManager {
         emailAddresses.add(email.getSender());
 
         for (String s : emailAddresses) {
-            logUser(new User(s));
+            logUser(s);
             saveEmailAux(s, email);
         }
     }
