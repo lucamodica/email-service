@@ -43,7 +43,6 @@ public class ClientApp extends Application {
         ExecutorService exec = Executors.newSingleThreadExecutor();
         exec.execute(()->launch());
 
-        //model.getClient().sendCmd(CommandName.SEND_EMAIL, "ciao", "come", "stai");
         model.getClient().login();
     }
 }

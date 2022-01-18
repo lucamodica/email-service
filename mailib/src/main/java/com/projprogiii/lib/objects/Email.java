@@ -12,8 +12,8 @@ public class Email implements Serializable, Comparable<Email>{
     private final List<String> receivers;
     private final String subject;
     private final String text;
-    private boolean isToRead;
     private Date date;
+    private boolean isToRead;
 
     public Email(String sender, List<String> receivers,
                  String subject, String text){
@@ -31,7 +31,15 @@ public class Email implements Serializable, Comparable<Email>{
         this(sender, receivers, subject, text);
         this.isToRead = isToRead;
     }
-
+    public Email (Email email, boolean isToRead){
+        this.id = email.id;
+        this.sender = email.sender;
+        this.receivers = email.receivers;
+        this.subject = email.subject;
+        this.text = email.text;
+        this.date = email.date;
+        this.isToRead = isToRead;
+    }
     public static Email generateEmptyEmail(){
         Email email = new Email("", List.of(""), "",
                 "");
@@ -59,8 +67,12 @@ public class Email implements Serializable, Comparable<Email>{
     }
 
     public Date getDate() { return date; }
+
     public void setToRead(boolean b){
         this.isToRead = b;
+    }
+    public static Email setToRead(Email email){
+        return new Email(email, true);
     }
     public boolean isToRead() {
         return isToRead;

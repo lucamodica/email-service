@@ -3,6 +3,7 @@ package com.projprogiii.servermail.server.session;
 import com.projprogiii.lib.enums.CommandName;
 import com.projprogiii.lib.objects.ClientRequest;
 import com.projprogiii.servermail.ServerApp;
+import com.projprogiii.servermail.model.db.DbManager;
 import com.projprogiii.servermail.server.session.command.*;
 
 import java.io.IOException;
@@ -27,8 +28,6 @@ public class Session implements Runnable{
             }
 
 
-            //Command cmdName = createCommand();
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -45,12 +44,20 @@ public class Session implements Runnable{
     private void clientDbInit(ServerSocket serverSocket) {
         try {
             openStreams(serverSocket);
+
             //TODO change command read to json
-            ClientRequest request = (ClientRequest) inputStream.readObject();
-            Command command = createCommand(request.cmdName());
-            command.init(request);
+            ClientRequest req = (ClientRequest) inputStream.readObject();
+            Command command = createCommand(req.cmdName());
 
-
+            DbManager db = ServerApp.model.getDbManager();
+            if (db.checkUser(req.auth())){
+                System.out.println("User exists");
+            }
+            else {
+                System.out.println("Creating db for the new user " + req.auth());
+                db.addUser(req.auth());
+            }
+            command.init(req);
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

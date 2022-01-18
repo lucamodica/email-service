@@ -3,11 +3,10 @@ package com.projprogiii.servermail.model.db;
 import com.projprogiii.lib.objects.Email;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Arrays;
+
+import static java.lang.System.exit;
 
 public class DbManager {
 
@@ -17,61 +16,63 @@ public class DbManager {
         dbPath = new File("").getAbsolutePath() + "/servermail/src/main/data/";
         File f = new File(dbPath);
 
-        if (!f.exists()){
-            f.mkdirs();
-        } else {
-            //TODO remove this for final version, as data should not be removed after server startup
-            //removeDir will still be used to remove files or folders
-            removeDir(dbPath);
-            f.mkdirs();
+        try {
+            if (!f.exists() && !f.mkdirs()){
+                throw new IOException();
+            }
+        } catch (IOException e){
+            System.out.println("Cannot create the database folder!");
+            exit(1);
         }
     }
-
     public static DbManager getInstance(){
         return new DbManager();
     }
 
-    private boolean makeDir(String path){
-        File f = new File(dbPath + path);
-        if (f.exists()){
-            return false;
-        }
-        return f.mkdirs();
-    }
+    public boolean checkUser(String user){
+        String[] dirs = new File(dbPath).list(
+                (current, name) -> new File(current, name)
+                        .isDirectory()
+        );
 
-    private void removeDir(String path){
+        return dirs != null && dirs.length != 0 &&
+                Arrays.stream(dirs).toList().contains(user);
+    }
+    public void addUser(String user){
+        File f = new File(dbPath + user);
+
         try {
-            Files.walk(Paths.get(path))
-                    .sorted(Comparator.reverseOrder())
-                    .map(Path::toFile)
-                    .forEach(File::delete);
-        } catch (IOException e) {
-            e.printStackTrace();
+            if (!f.mkdirs()){
+                throw new IOException();
+            }
+        } catch (IOException e){
+            System.out.println("Cannot create " + user + " user folder!");
         }
     }
 
-    public boolean logUser(String user){
-        return makeDir(user);
-    }
     //TODO implement sync - no need to implement user log checks here, already asked during client sendEmail
     public void saveEmail(Email email){
         ArrayList<String> emailAddresses = new ArrayList<>(email.getReceivers());
-        emailAddresses.add(email.getSender());
 
+        //Store the email into the sender folder first
+        store(email.getSender(), email);
+
+        //Setting the email as it's to be read for all
+        //other receivers users
+        Email emailToBeRead = Email.setToRead(email);
         for (String s : emailAddresses) {
-            logUser(s);
-            saveEmailAux(s, email);
+            addUser(s);
+            store(s, emailToBeRead);
         }
     }
-
-    private void saveEmailAux(String s, Email email){
+    private void store(String s, Email email){
         try {
             FileOutputStream fout;
             fout = new FileOutputStream(dbPath + "/" + s +  "/" + email.getId() + ".txt");
             ObjectOutputStream out = new ObjectOutputStream(fout);
             out.writeObject(email);
             out.flush();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
