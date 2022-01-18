@@ -4,6 +4,7 @@ import com.projprogiii.lib.enums.CommandName;
 import com.projprogiii.lib.objects.User;
 import com.projprogiii.servermail.ServerApp;
 import com.projprogiii.servermail.server.session.command.Command;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -46,10 +47,13 @@ public class Session implements Runnable{
         try {
             openStreams(serverSocket);
             //TODO change command read to json
-            String emailAddress = (String) inputStream.readObject();
-            //commandManager.handleCommand()
+            String s = (String) inputStream.readObject();
 
-            System.out.println("Client " + " connected, generating db");
+            JSONObject json = new JSONObject(s);
+            String emailAddress = json.getString("auth");
+
+            System.out.println("Client " + emailAddress + " connected, generating db");
+            //commandManager.handleCommand()
 
             if (ServerApp.model.getDbManager().logUser(new User(emailAddress))){
                 outputStream.writeObject(true);

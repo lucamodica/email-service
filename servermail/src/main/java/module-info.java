@@ -7,7 +7,8 @@ module servermail {
                     requires org.kordamp.bootstrapfx.core;
 
     requires mailib;
-        
+    requires org.json;
+
     opens com.projprogiii.servermail to javafx.fxml;
     exports com.projprogiii.servermail;
     exports com.projprogiii.servermail.model;
