@@ -48,16 +48,10 @@ public class Session implements Runnable{
             openStreams(serverSocket);
             //TODO change command read to json
             DataPackage pkg = (DataPackage) inputStream.readObject();
-            handleCommand(pkg.getCommandName());
-            System.out.println("Client " + pkg.getAuth() + " connected, generating db");
+            Command command = handleCommand(pkg.getCommandName());
+            command.init(pkg);
 
-            if (ServerApp.model.getDbManager().logUser(new User(pkg.getAuth()))){
-                outputStream.writeObject(true);
-            } else {
-                outputStream.writeObject(false);
-            }
 
-            outputStream.flush();
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -85,7 +79,7 @@ public class Session implements Runnable{
     public Command handleCommand(CommandName cmdname){
         switch(cmdname){
             case FETCH_EMAIL -> {
-                return new FetchEmail();
+                return new FetchEmail(outputStream);
             }
             case SEND_EMAIL -> {
                 return new SendEmail();

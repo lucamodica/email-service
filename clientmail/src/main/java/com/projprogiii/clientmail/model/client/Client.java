@@ -2,6 +2,7 @@ package com.projprogiii.clientmail.model.client;
 
 import com.projprogiii.clientmail.model.client.config.ConfigManager;
 import com.projprogiii.lib.enums.CommandName;
+import com.projprogiii.lib.enums.ServerResponse;
 import com.projprogiii.lib.objects.DataPackage;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.User;
@@ -96,14 +97,14 @@ public class Client {
             connectToServer();
             Thread.sleep(100);
 
-            DataPackage pkg = new DataPackage(user.emailAddress(), CommandName.FETCH_EMAIL, new Email(user.emailAddress(), Collections.singletonList("lucamodica@unito.it"), "test obj", "test text"));
-
+            DataPackage pkg = new DataPackage(user.emailAddress(),
+                    CommandName.FETCH_EMAIL,
+                    new Email(user.emailAddress(), Collections.singletonList("lucamodica@unito.it"), "test obj", "test text"));
             outputStream.writeObject(pkg);
             outputStream.flush();
             //receive response
-            boolean b = (boolean) inputStream.readObject();
-            System.out.println("[Client " + user.emailAddress() + "] Logged => " + b);
-
+            ServerResponse response = (ServerResponse) inputStream.readObject();
+            System.out.println(response);
             return true;
         } catch (ConnectException ce) {
             // nothing to be done
