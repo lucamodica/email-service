@@ -8,6 +8,8 @@ module clientmail {
 
     requires com.dlsc.formsfx;
 
+    requires org.json;
+
     requires mailib;
 
     opens com.projprogiii.clientmail to javafx.fxml;
