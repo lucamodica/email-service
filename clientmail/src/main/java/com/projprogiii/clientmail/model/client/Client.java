@@ -2,6 +2,7 @@ package com.projprogiii.clientmail.model.client;
 
 import com.projprogiii.clientmail.model.client.config.ConfigManager;
 import com.projprogiii.lib.enums.CommandName;
+import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.User;
 import com.projprogiii.lib.utils.CommonUtil;
 import org.json.JSONObject;
@@ -11,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -94,8 +96,13 @@ public class Client {
 
             Thread.sleep(5000);
 
-            //send op
-            outputStream.writeObject(user.emailAddress());
+            JSONObject json = new JSONObject();
+            json.put("auth", user.emailAddress());
+            json.put("cmd", CommandName.FETCH_EMAIL);
+            json.put("args", new Email(user.emailAddress(), Collections.singletonList("lucamodica@unito.it"), "test obj", "test text"));
+
+            outputStream.writeObject(json.toString());
+
             outputStream.flush();
             //receive op
             boolean b = (boolean) inputStream.readObject();

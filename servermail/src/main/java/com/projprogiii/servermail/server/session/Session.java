@@ -1,6 +1,7 @@
 package com.projprogiii.servermail.server.session;
 
 import com.projprogiii.lib.enums.CommandName;
+import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.User;
 import com.projprogiii.servermail.ServerApp;
 import com.projprogiii.servermail.server.session.command.Command;
@@ -28,7 +29,7 @@ public class Session implements Runnable{
             }
 
 
-            Command cmd = createCommand();
+            //Command cmd = createCommand();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -51,16 +52,21 @@ public class Session implements Runnable{
 
             JSONObject json = new JSONObject(s);
             String emailAddress = json.getString("auth");
+            CommandName cmd = (CommandName)json.get("cmd");
+            Email email = (Email)json.get("args");
+
+            System.out.println("PROVIAMO?");
+            System.out.println(emailAddress);
+            System.out.println(cmd);
+            System.out.println(email);
 
             System.out.println("Client " + emailAddress + " connected, generating db");
-            //commandManager.handleCommand()
 
             if (ServerApp.model.getDbManager().logUser(new User(emailAddress))){
                 outputStream.writeObject(true);
             } else {
                 outputStream.writeObject(false);
             }
-            //ServerApp.server.logManager.printSystemLog("Client " + emailAddress + " connected, generating db");
 
             outputStream.flush();
 
@@ -85,9 +91,5 @@ public class Session implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private Command createCommand(CommandName commandName){
-
     }
 }
