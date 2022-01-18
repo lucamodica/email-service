@@ -1,6 +1,6 @@
 package com.projprogiii.servermail.model.server.session;
 
-import com.projprogiii.lib.objects.User;
+import com.projprogiii.lib.enums.Command;
 import com.projprogiii.servermail.ServerApp;
 
 import java.io.IOException;
@@ -11,8 +11,8 @@ import java.net.Socket;
 
 public class Session implements Runnable{
     Socket currentSocket = null;
-    ObjectInputStream inStream = null;
-    ObjectOutputStream outStream = null;
+    ObjectInputStream inputStream = null;
+    ObjectOutputStream outputStream = null;
 
     @Override
     public void run() {
@@ -20,6 +20,7 @@ public class Session implements Runnable{
             ServerSocket serverSocket = new ServerSocket(ServerApp.server.getServerPort());
 
             while (true) {
+                //always listening
                 clientDbInit(serverSocket);
             }
 
@@ -39,18 +40,10 @@ public class Session implements Runnable{
     private void clientDbInit(ServerSocket serverSocket) {
         try {
             openStreams(serverSocket);
-            //now string, needs to be generalized - command/json?
-            String emailAddress = (String) inStream.readObject();
-            //ServerApp.server.logManager.printSystemLog("Client " + emailAddress + " connected, generating db");
-            System.out.println("Client " + emailAddress + " connected, generating db");
+            //TODO change command read to json
+            Command command = (Command) inputStream.readObject();
+            //commandManager.handleCommand()
 
-            if (ServerApp.model.getDbManager().logUser(new User(emailAddress))){
-                outStream.writeObject(true);
-            } else {
-                outStream.writeObject(false);
-            }
-
-            outStream.flush();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -60,15 +53,15 @@ public class Session implements Runnable{
 
     private void openStreams(ServerSocket serverSocket) throws IOException {
         currentSocket = serverSocket.accept();
-        inStream = new ObjectInputStream(currentSocket.getInputStream());
-        outStream = new ObjectOutputStream(currentSocket.getOutputStream());
-        outStream.flush();
+        inputStream = new ObjectInputStream(currentSocket.getInputStream());
+        outputStream = new ObjectOutputStream(currentSocket.getOutputStream());
+        outputStream.flush();
     }
 
     private void closeStreams() {
         try {
-            if(inStream != null) { inStream.close(); }
-            if(outStream != null) { outStream.close(); }
+            if(inputStream != null) { inputStream.close(); }
+            if(outputStream != null) { outputStream.close(); }
         } catch (IOException e) {
             e.printStackTrace();
         }
