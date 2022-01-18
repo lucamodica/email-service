@@ -1,6 +1,6 @@
 package com.projprogiii.servermail.server.session.command;
 
-import com.projprogiii.lib.objects.DataPackage;
+import com.projprogiii.lib.objects.ClientRequest;
 
 import java.io.ObjectOutput;
 
@@ -8,7 +8,7 @@ public class SendEmail extends Command{
     private ObjectOutput outputStream;
 
     @Override
-    public void init(DataPackage pkg) {
+    public void init(ClientRequest pkg) {
 
     }
 }

@@ -1,8 +1,7 @@
 package com.projprogiii.servermail.server.session;
 
 import com.projprogiii.lib.enums.CommandName;
-import com.projprogiii.lib.objects.DataPackage;
-import com.projprogiii.lib.objects.User;
+import com.projprogiii.lib.objects.ClientRequest;
 import com.projprogiii.servermail.ServerApp;
 import com.projprogiii.servermail.server.session.command.*;
 
@@ -28,7 +27,7 @@ public class Session implements Runnable{
             }
 
 
-            //Command cmd = createCommand();
+            //Command cmdName = createCommand();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,9 +46,9 @@ public class Session implements Runnable{
         try {
             openStreams(serverSocket);
             //TODO change command read to json
-            DataPackage pkg = (DataPackage) inputStream.readObject();
-            Command command = handleCommand(pkg.getCommandName());
-            command.init(pkg);
+            ClientRequest request = (ClientRequest) inputStream.readObject();
+            Command command = createCommand(request.cmdName());
+            command.init(request);
 
 
 
@@ -76,7 +75,7 @@ public class Session implements Runnable{
         }
     }
 
-    public Command handleCommand(CommandName cmdname){
+    public Command createCommand(CommandName cmdname){
         switch(cmdname){
             case FETCH_EMAIL -> {
                 return new FetchEmail(outputStream);

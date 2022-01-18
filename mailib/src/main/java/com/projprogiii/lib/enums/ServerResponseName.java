@@ -1,6 +1,6 @@
 package com.projprogiii.lib.enums;
 
-public enum ServerResponse {
+public enum ServerResponseName {
     SUCCESS(null, 0),
     UNKNOWN_COMMAND("Unknown Command", 0),
     USER_REGISTERED("User registered with success", 0),
@@ -9,7 +9,7 @@ public enum ServerResponse {
     public final String text;
     public final int argsLength;
 
-    ServerResponse(String text, int argsLength) {
+    ServerResponseName(String text, int argsLength) {
         this.text = text;
         this.argsLength = argsLength;
     }

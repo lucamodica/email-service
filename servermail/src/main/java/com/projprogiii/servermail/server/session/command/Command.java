@@ -1,9 +1,9 @@
 package com.projprogiii.servermail.server.session.command;
 
-import com.projprogiii.lib.objects.DataPackage;
+import com.projprogiii.lib.objects.ClientRequest;
 
 import java.io.IOException;
 
 public abstract class Command {
-    public abstract void init(DataPackage pkg) throws IOException;
+    public abstract void init(ClientRequest pkg) throws IOException;
 }
