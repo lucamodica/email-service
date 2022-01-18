@@ -35,8 +35,11 @@ public class ClientApp extends Application {
 
     public static void main(String[] args) {
         model = Model.getInstance();
+
+        //Thread t = new Thread(()->launch());
+        //t.start();
+        launch();
         model.getClient().login();
 
-        launch();
     }
 }

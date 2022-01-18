@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +23,7 @@ public class Client {
     private User user;
     private String serverHost;
     private int serverPort;
+    private Date lastFetch;
 
     Socket currentSocket = null;
     ObjectOutputStream outputStream = null;

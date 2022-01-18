@@ -1,16 +1,15 @@
 package com.projprogiii.lib.enums;
 
-import java.util.Locale;
-
 public enum ServerResponse {
-    SUCCESS(null),
-    UNKNOWN_COMMAND("Unknown Command");
-
+    SUCCESS(null, 0),
+    UNKNOWN_COMMAND("Unknown Command", 0);
 
     public final String text;
+    public final int argsLength;
 
-    ServerResponse(String text) {
+    ServerResponse(String text, int argsLength) {
         this.text = text;
+        this.argsLength = argsLength;
     }
 
     public String toString() {
