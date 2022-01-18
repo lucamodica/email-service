@@ -12,6 +12,8 @@ import org.kordamp.bootstrapfx.BootstrapFX;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientApp extends Application {
 
@@ -36,10 +38,9 @@ public class ClientApp extends Application {
     public static void main(String[] args) {
         model = Model.getInstance();
 
-        //Thread t = new Thread(()->launch());
-        //t.start();
-        launch();
-        model.getClient().login();
+        ExecutorService exec = Executors.newFixedThreadPool(1);
+        exec.execute(()->launch());
 
+        model.getClient().login();
     }
 }

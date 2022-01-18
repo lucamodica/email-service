@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServerApp extends Application {
 
@@ -32,9 +34,9 @@ public class ServerApp extends Application {
         model = Model.getInstance();
         server = Server.getInstance();
 
+        ExecutorService exec = Executors.newFixedThreadPool(1);
+        exec.execute(()->launch());
         server.startSession();
-        //TODO launch() is delayed, caused somewhere in startServer(), same as client. needs fix
-        launch();
     }
 
 
