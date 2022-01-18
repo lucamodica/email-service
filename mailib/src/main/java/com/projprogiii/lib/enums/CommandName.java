@@ -1,6 +1,8 @@
 package com.projprogiii.lib.enums;
 
-public enum CommandName {
+import java.io.Serializable;
+
+public enum CommandName implements Serializable {
     FETCH_EMAIL(0),
     //CHECK_EMAIL(0),
     SEND_EMAIL(1),

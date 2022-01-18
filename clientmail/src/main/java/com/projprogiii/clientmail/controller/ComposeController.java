@@ -71,7 +71,7 @@ public class ComposeController extends Controller {
                     new ArrayList<>(List.of(recipentsArray)),
                     objectTextField.getText(), messageEditor.getHtmlText());
 
-            model.getClient().sendEmail(email);
+            //TODO: insert sendCmd method
             model.addEmail(email);
 
             //clearing all fields

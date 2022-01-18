@@ -2,9 +2,9 @@ package com.projprogiii.clientmail.model.client;
 
 import com.projprogiii.clientmail.model.client.config.ConfigManager;
 import com.projprogiii.lib.enums.CommandName;
-import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.User;
 import com.projprogiii.lib.utils.CommonUtil;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -53,16 +53,7 @@ public class Client {
         return new Client();
     }
 
-
     public User getUser(){ return user; }
-
-    public void sendEmail(Email email){
-        //TODO implement sending email communication to server
-    }
-
-    public void deleteEmail(Email email){
-        //TODO send command to server in order to delete specific email from db
-    }
 
     //TODO generizzare per comandi
     public void login(){
@@ -149,5 +140,16 @@ public class Client {
 
     public void sendCmd(CommandName command, String... args){
 
+        JSONObject jsonObject = new JSONObject()
+            .put("auth", user.emailAddress())
+            .put("command", command)
+            .put("args", args);
+
+        String s = jsonObject.toString();
+        System.out.println(jsonObject);
+        System.out.println(s);
+
+        JSONObject jsonObject1 = new JSONObject(s);
+        System.out.println(jsonObject1.getString("command"));
     }
 }
