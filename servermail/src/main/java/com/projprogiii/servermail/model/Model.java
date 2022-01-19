@@ -10,7 +10,6 @@ public class Model {
     private final SyncManager syncManager;
     private final LogManager logManager;
 
-
     private Model(){
         dbManager = DbManager.getInstance();
         syncManager = SyncManager.getInstance();

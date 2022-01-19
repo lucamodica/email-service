@@ -55,24 +55,30 @@ public class ClientApp extends Application {
         fetchEmails = Executors.newSingleThreadScheduledExecutor();
         Client client = model.getClient();
 
-        appFX.execute(Application::launch);
-        Executors.newSingleThreadExecutor().execute(() -> {
-            ServerResponse resp = client.sendCmd(CommandName.SEND_EMAIL, new Email(
-                    client.getUser(),
-                    Collections.singletonList("Enrico@unito.it"),
-                    "Hey!",
-                    "Hey there, test mail here"
-            ));
+        Email email = new Email(
+                client.getUser(),
+                Collections.singletonList("Enrico@unito.it"),
+                "Hey!",
+                "Hey there, test mail here"
+        );
+        email.setToRead(true);
 
-            Platform.runLater(() -> model.addEmail(resp.args().get(0)));
-                });
+        model.addEmail(email);
+        appFX.execute(Application::launch);
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            ServerResponse resp = client.sendCmd(CommandName.SEND_EMAIL, email);
+            if (resp != null){
+                Platform.runLater(() -> model.addEmail(email));
+                email.setToRead(false);
+            }
+        });
         fetchEmails.scheduleAtFixedRate(
                 () -> {
                     ServerResponse resp = client.sendCmd(CommandName.FETCH_EMAIL,
                             lastFetch);
 
                     System.out.println(resp);
-                }
-                ,1, 2, TimeUnit.SECONDS);
+                },1, 2, TimeUnit.SECONDS);
     }
 }

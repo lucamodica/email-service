@@ -61,10 +61,16 @@ public class MainController extends Controller {
 
         //binding tra lstEmails e inboxProperty
         emailsLst.itemsProperty().bind(model.inboxProperty());
-        emailsLst.setOnMouseClicked(this::showSelectedEmail);
+        setListViewCellsListeners(emailsLst);
         usernameLbl.textProperty().bind(model.emailAddressProperty());
-        
-        //Click listeners for the email operation buttons
+
+        setBtnsListeners();
+        updateDetailView(emptyEmail);
+    }
+
+    public TextFlow getSuccessAlert() { return successAlert; }
+
+    private void setBtnsListeners(){
         deleteBtn.setOnMouseClicked(event ->
                 opButtonHandler(event, (OnButtonClick) -> {
                     model.deleteEmail(selectedEmail);
@@ -76,13 +82,13 @@ public class MainController extends Controller {
         forwardBtn.setOnMouseClicked(event ->
                 opButtonHandler(event, (OnButtonClick) ->
                         composeFieldsSetter("",
-                        "Forward: " + selectedEmail.getSubject(),
-                        selectedEmail.getText())));
+                                "Forward: " + selectedEmail.getSubject(),
+                                selectedEmail.getText())));
         replyBtn.setOnMouseClicked(event ->
                 opButtonHandler(event, (OnButtonClick) ->
                         composeFieldsSetter(selectedEmail.getSender(),
-                        "Reply: " + selectedEmail.getSubject(),
-                        "")));
+                                "Reply: " + selectedEmail.getSubject(),
+                                "")));
         replyAllBtn.setOnAction(event ->
                 opButtonHandler(null, (OnButtonClick) -> {
                     replyBtn.hide();
@@ -93,12 +99,7 @@ public class MainController extends Controller {
                             "ReplyAll: " + selectedEmail.getSubject(),
                             "");
                 }));
-
-        updateDetailView(emptyEmail);
     }
-
-    public TextFlow getSuccessAlert() { return successAlert; }
-
     private void opButtonHandler(MouseEvent mouseEvent, OnButtonClick handler){
         if (!Email.isEmpty(selectedEmail)){
             handler.handle(mouseEvent);
@@ -121,13 +122,27 @@ public class MainController extends Controller {
         controller.getMessageEditor().setHtmlText(htmltext);
     }
 
-    private void showSelectedEmail(MouseEvent mouseEvent) {
-        Email email = emailsLst.getSelectionModel().getSelectedItem();
-        if (email != null) {
-            email.setToRead(false);
-        }
-        selectedEmail = email;
-        updateDetailView(email);
+    private void setListViewCellsListeners(ListView<Email> emailsLst){
+        emailsLst.setCellFactory(cell -> new ListCell<>() {
+            @Override
+            protected void updateItem(Email email, boolean empty) {
+                super.updateItem(email, empty);
+
+                boolean check = !empty && email != null;
+                setText(check ? email.toString() : null);
+                setStyle(check ? "-fx-font-weight: bold" : null);
+
+                setOnMouseClicked((click) -> {
+                    Email selectedEmail = emailsLst.getSelectionModel().getSelectedItem();
+                    if (selectedEmail != null) {
+                        selectedEmail.setToRead(false);
+                        setStyle(null);
+                    }
+                    MainController.this.selectedEmail = selectedEmail;
+                    updateDetailView(selectedEmail);
+                });
+            }
+        });
     }
     private void updateDetailView(Email email) {
         if(email != null) {

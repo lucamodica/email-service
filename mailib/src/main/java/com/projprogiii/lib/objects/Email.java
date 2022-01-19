@@ -79,15 +79,7 @@ public class Email implements Serializable, Comparable<Email>{
 
     @Override
     public String toString() {
-        return "Email{" +
-                "id=" + id +
-                ", sender='" + sender + '\'' +
-                ", receivers=" + receivers +
-                ", subject='" + subject + '\'' +
-                ", text='" + text + '\'' +
-                ", isToRead=" + isToRead +
-                ", date=" + date +
-                '}';
+        return sender + " - " + subject;
     }
 
     public String dateToString(){

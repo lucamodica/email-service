@@ -60,7 +60,6 @@ public class Client {
     private ServerResponse communicate(ClientRequest req) {
         try {
             connectToServer();
-            System.out.println(req);
             outputStream.writeObject(req);
             outputStream.flush();
 
@@ -96,8 +95,6 @@ public class Client {
     public ServerResponse sendCmd(CommandName command, Object... args){
         ClientRequest req = new ClientRequest(user, command,
                 Arrays.stream(args).toList());
-
-
         return communicate(req);
     }
 }
