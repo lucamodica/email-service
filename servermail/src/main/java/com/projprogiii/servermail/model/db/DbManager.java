@@ -56,17 +56,17 @@ public class DbManager {
 
         //Setting the email as it's to be read for all
         //other receivers users
-        Email emailToBeRead = Email.setToRead(email);
+        email.setToRead(true);
         for (String s : emailAddresses) {
             addUser(s);
-            storeEmail(s, emailToBeRead);
+            storeEmail(s, email);
         }
     }
 
-    private void storeEmail(String s, Email email){
+    private void storeEmail(String path, Email email){
         try {
             FileOutputStream fout;
-            fout = new FileOutputStream(dbPath + "/" + s +  "/" + email.getId() + ".txt");
+            fout = new FileOutputStream(path);
             ObjectOutputStream out = new ObjectOutputStream(fout);
             out.writeObject(email);
             out.flush();
@@ -94,5 +94,23 @@ public class DbManager {
             e.printStackTrace();
         } catch (NullPointerException ignored){}
         return list;
+    }
+
+    private String findEmailPath(Email email){
+        int id = email.getId();
+        File f = new File(dbPath + "/" + email.getSender() +  "/" +  id + ".txt");
+        return f.getAbsolutePath();
+    }
+
+    public boolean deleteEmail(Email email){
+        String path = findEmailPath(email);
+        File f = new File(path);
+        return f.delete();
+    }
+
+    public void markAsReadEmail(Email email){
+        String path = findEmailPath(email);
+        email.setToRead(false);
+        storeEmail(email);
     }
 }

@@ -26,15 +26,6 @@ public class Email implements Serializable, Comparable<Email>{
         this.id = this.hashCode();
     }
 
-    public Email (Email email, boolean isToRead){
-        this.id = email.id;
-        this.sender = email.sender;
-        this.receivers = email.receivers;
-        this.subject = email.subject;
-        this.text = email.text;
-        this.date = email.date;
-        this.isToRead = isToRead;
-    }
     public static Email generateEmptyEmail(){
         Email email = new Email("", List.of(""), "",
                 "");
@@ -65,9 +56,6 @@ public class Email implements Serializable, Comparable<Email>{
 
     public void setToRead(boolean b){
         this.isToRead = b;
-    }
-    public static Email setToRead(Email email){
-        return new Email(email, true);
     }
     public boolean isToRead() {
         return isToRead;

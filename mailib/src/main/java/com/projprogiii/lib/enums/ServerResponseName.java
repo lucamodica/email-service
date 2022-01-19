@@ -5,7 +5,7 @@ public enum ServerResponseName {
     UNKNOWN_COMMAND("Unknown Command"),
     USER_REGISTERED("User registered with success"),
     USER_ALREADY_REGISTERED("User was already registered!"),
-    ILLEGAL_PARAMS("Invalid parameters number");
+    ILLEGAL_PARAMS("Invalid parameters number or type");
 
     public final String text;
 

@@ -12,7 +12,6 @@ public class FetchEmail extends Command{
 
     @Override
     public ServerResponse handle(ClientRequest req){
-        //TODO real fetch handling and sout to log
         List<Email> list = ServerApp.model.getDbManager().readEmails(req.auth());
         return new ServerResponse(ServerResponseName.SUCCESS, list);
     }

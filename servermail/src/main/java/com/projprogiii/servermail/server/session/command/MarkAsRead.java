@@ -5,9 +5,8 @@ import com.projprogiii.lib.objects.ServerResponse;
 
 public class MarkAsRead extends Command {
 
-
     @Override
-    public ServerResponse handle(ClientRequest pkg) {
+    public ServerResponse handle(ClientRequest req) {
         return null;
     }
 }

@@ -7,7 +7,11 @@ import com.projprogiii.lib.objects.ServerResponse;
 public class DeleteEmail extends Command {
 
     @Override
-    public ServerResponse handle(ClientRequest pkg) {
+    public ServerResponse handle(ClientRequest req) {
+        //check email existence before
+
+
+
         return null;
     }
 }
