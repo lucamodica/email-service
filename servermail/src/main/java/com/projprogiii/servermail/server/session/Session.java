@@ -12,44 +12,28 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
 
 public class Session implements Runnable{
-    Socket currentSocket = null;
-    ObjectInputStream inputStream = null;
-    ObjectOutputStream outputStream = null;
+
+    Socket socket;
+    ObjectInputStream inputStream;
+    ObjectOutputStream outputStream;
+
+    public Session(Socket socket){
+        this.socket = socket;
+    }
 
     @Override
     public void run() {
-        try {
-            ServerSocket serverSocket = new ServerSocket(ServerApp.server.getServerPort());
-
-            while (true) {
-                //always listening
-                sessionOperationHandler(serverSocket);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (currentSocket!=null) {
-                try {
-                    currentSocket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        sessionOperationHandler();
     }
 
-    private void sessionOperationHandler(ServerSocket serverSocket) {
+    private void sessionOperationHandler() {
         try {
             ServerResponse response;
-            //open stream and get client request
-            currentSocket = serverSocket.accept();
 
-            outputStream = new ObjectOutputStream(currentSocket.getOutputStream());
-            inputStream = new ObjectInputStream(currentSocket.getInputStream());
+            outputStream = new ObjectOutputStream(socket.getOutputStream());
+            inputStream = new ObjectInputStream(socket.getInputStream());
 
             ClientRequest req = (ClientRequest) inputStream.readObject();
             System.out.println(req);
@@ -74,7 +58,6 @@ public class Session implements Runnable{
             closeStreams();
         }
     }
-
     private void closeStreams() {
         try {
             if(inputStream != null) { inputStream.close(); }
@@ -101,7 +84,6 @@ public class Session implements Runnable{
             default -> throw new IllegalStateException("Unexpected value: " + cmdName);
         }
     }
-
     private void checkAuth(String auth){
         if (ServerApp.model.getDbManager().addUser(auth)){
             System.out.println("User " + auth + " registered");

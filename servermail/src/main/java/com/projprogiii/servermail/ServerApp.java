@@ -16,6 +16,7 @@ public class ServerApp extends Application {
 
     public static Server server;
     public static Model model;
+    private static ExecutorService appFX;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -30,14 +31,19 @@ public class ServerApp extends Application {
 
     }
 
+    @Override
+    public void stop(){
+        appFX.shutdown();
+        server.shutdown();
+    }
+
     public static void main(String[] args) {
         model = Model.getInstance();
         server = Server.getInstance();
+        appFX = Executors.newSingleThreadExecutor();
 
-        ExecutorService exec = Executors.newFixedThreadPool(1);
-        exec.execute(()->launch());
-        server.startSession();
+        appFX.execute(Application::launch);
+        server.start();
     }
-
 
 }
