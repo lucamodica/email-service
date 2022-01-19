@@ -25,6 +25,7 @@ public class DbManager {
             exit(1);
         }
     }
+
     public static DbManager getInstance(){
         return new DbManager();
     }
@@ -38,6 +39,7 @@ public class DbManager {
         return dirs != null && dirs.length != 0 &&
                 Arrays.stream(dirs).toList().contains(user);
     }
+
     public void addUser(String user){
         File f = new File(dbPath + user);
 
@@ -50,22 +52,23 @@ public class DbManager {
         }
     }
 
-    //TODO implement sync - no need to implement user log checks here, already asked during client sendEmail
+    //TODO implement sync
     public void saveEmail(Email email){
         ArrayList<String> emailAddresses = new ArrayList<>(email.getReceivers());
 
         //Store the email into the sender folder first
-        store(email.getSender(), email);
+        storeEmail(email.getSender(), email);
 
         //Setting the email as it's to be read for all
         //other receivers users
         Email emailToBeRead = Email.setToRead(email);
         for (String s : emailAddresses) {
             addUser(s);
-            store(s, emailToBeRead);
+            storeEmail(s, emailToBeRead);
         }
     }
-    private void store(String s, Email email){
+
+    private void storeEmail(String s, Email email){
         try {
             FileOutputStream fout;
             fout = new FileOutputStream(dbPath + "/" + s +  "/" + email.getId() + ".txt");

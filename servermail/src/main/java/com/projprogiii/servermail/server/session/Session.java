@@ -47,6 +47,7 @@ public class Session implements Runnable{
 
             //TODO change command read to json
             ClientRequest req = (ClientRequest) inputStream.readObject();
+            closeInStreams();
             Command command = createCommand(req.cmdName());
 
             //checkAuth need to return boolean, so we can check if we trust the command or not
@@ -56,7 +57,7 @@ public class Session implements Runnable{
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
-            closeStreams();
+            closeOutStreams();
         }
     }
 
@@ -67,15 +68,6 @@ public class Session implements Runnable{
         outputStream.flush();
     }
 
-    private void closeStreams() {
-        try {
-            if(inputStream != null) { inputStream.close(); }
-            if(outputStream != null) { outputStream.close(); }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
     //replace complete one, more control
     private void closeInStreams() {
         try {
@@ -94,8 +86,8 @@ public class Session implements Runnable{
         }
     }
 
-    public Command createCommand(CommandName cmdname){
-        switch(cmdname){
+    public Command createCommand(CommandName cmdName){
+        switch(cmdName){
             case FETCH_EMAIL -> {
                 return new FetchEmail(outputStream);
             }
@@ -114,15 +106,11 @@ public class Session implements Runnable{
         }
     }
 
-    //need to return boolean
     private void checkAuth(String auth){
         DbManager db = ServerApp.model.getDbManager();
         if (db.checkUser(auth)){
             System.out.println("User exists");
         } else {
-            //non mi piace molto, viene effettuato REGISTER ad ogni comando
-            //poco robusto in caso di errori. Meglio REGISTER solo al primo FETCH
-            //In caso di problemi, si può generare un comando REGISTER, ma meglio evitare
             System.out.println("Creating db for the new user " + auth);
             db.addUser(auth);
         }

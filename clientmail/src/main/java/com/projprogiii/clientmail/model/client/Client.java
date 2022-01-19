@@ -35,13 +35,11 @@ public class Client {
     private Client() {
         ConfigManager configManager = ConfigManager.getInstance();
 
-        try{
-
+        try {
             String emailAddress = configManager.readProperty("user.emailAddress");
             if (CommonUtil.validateEmail(emailAddress)){
                 this.user = emailAddress;
-            }
-            else {
+            } else {
                 throw new IllegalArgumentException();
             }
             serverHost = configManager.readProperty("user.server_host");
