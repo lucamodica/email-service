@@ -4,7 +4,8 @@ public enum AlertText {
     INVALID_RECIPIENTS("Error inserting recipents, please check syntax and make " +
             "sure that the domain is '@unito.it'!"),
     MESSAGE_SENT("Email sent with success!"),
-    MESSAGE_DELETED("Email deleted with success!");
+    MESSAGE_DELETED("Email deleted with success!"),
+    NO_CONNECTION("Connection not found.");
 
     public final String text;
 

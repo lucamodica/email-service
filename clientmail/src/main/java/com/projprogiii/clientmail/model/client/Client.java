@@ -5,8 +5,8 @@ import com.projprogiii.lib.enums.CommandName;
 import com.projprogiii.lib.enums.ServerResponseName;
 import com.projprogiii.lib.objects.ClientRequest;
 import com.projprogiii.lib.objects.Email;
+import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.lib.utils.CommonUtil;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -27,7 +27,6 @@ public class Client {
     private String user;
     private String serverHost;
     private int serverPort;
-    private Date lastFetch;
 
     Socket currentSocket = null;
     ObjectOutputStream outputStream = null;
@@ -58,69 +57,31 @@ public class Client {
     public String getUser(){ return user; }
 
     //TODO generizzare per comandi
-    public void login(){
-        ExecutorService exec = Executors.newFixedThreadPool(3);
-
-        exec.execute(()-> communicationTest());
-
-        //useful for waiting before termination of server
-        try {
-            exec.awaitTermination(5, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void communicationTest(){
-        boolean success = false;
-
-        while(!success) {
-            success = communicationTestAux();
-
-            if(success) {
-                continue;
-            }
-
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    //TODO generizzare per comandi
-    private boolean communicationTestAux() {
+    private ServerResponse communicate(ClientRequest req) {
         try {
             connectToServer();
-            Thread.sleep(100);
 
-            ClientRequest pkg = new ClientRequest(user,
-                    CommandName.FETCH_EMAIL,
-                    new Email(user, Collections.singletonList("lucamodica@unito.it"), "test obj", "test text"));
-            outputStream.writeObject(pkg);
+            outputStream.writeObject(req);
             outputStream.flush();
             //receive response
-            ServerResponseName response = (ServerResponseName) inputStream.readObject();
+            ServerResponse response = (ServerResponse) inputStream.readObject();
             System.out.println(response);
-            return true;
+            return response;
         } catch (ConnectException ce) {
-            return false;
-        } catch (IOException | InterruptedException | ClassNotFoundException se) {
+            return null;
+        } catch (IOException | ClassNotFoundException se) {
             se.printStackTrace();
-            return false;
+            return null;
         } finally {
             closeConnections();
         }
     }
-
     private void connectToServer() throws IOException {
         currentSocket = new Socket(serverHost, serverPort);
         outputStream = new ObjectOutputStream(currentSocket.getOutputStream());
         outputStream.flush();
         inputStream = new ObjectInputStream(currentSocket.getInputStream());
     }
-
     private void closeConnections() {
         if (currentSocket != null) {
             try {
@@ -133,18 +94,11 @@ public class Client {
         }
     }
 
-    public void sendCmd(CommandName command, String... args){
+    public ServerResponse sendCmd(CommandName command, Object... args){
+        ClientRequest req = new ClientRequest(user, command,
+                Arrays.stream(args).toList());
+        System.out.println(req);
 
-        JSONObject jsonObject = new JSONObject()
-            .put("auth", user)
-            .put("command", command)
-            .put("args", args);
-
-        String s = jsonObject.toString();
-        System.out.println(jsonObject);
-        System.out.println(s);
-
-        JSONObject jsonObject1 = new JSONObject(s);
-        System.out.println(jsonObject1.getString("command"));
+        return communicate(req);
     }
 }
