@@ -1,6 +1,7 @@
 package com.projprogiii.servermail.server.session;
 
 import com.projprogiii.lib.enums.CommandName;
+import com.projprogiii.lib.enums.ServerResponseName;
 import com.projprogiii.lib.objects.ClientRequest;
 import com.projprogiii.servermail.ServerApp;
 import com.projprogiii.servermail.model.db.DbManager;
@@ -24,9 +25,8 @@ public class Session implements Runnable{
 
             while (true) {
                 //always listening
-                clientDbInit(serverSocket);
+                sessionOperationHandler(serverSocket);
             }
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,7 +41,7 @@ public class Session implements Runnable{
         }
     }
 
-    private void clientDbInit(ServerSocket serverSocket) {
+    private void sessionOperationHandler(ServerSocket serverSocket) {
         try {
             openStreams(serverSocket);
 
@@ -49,14 +49,8 @@ public class Session implements Runnable{
             ClientRequest req = (ClientRequest) inputStream.readObject();
             Command command = createCommand(req.cmdName());
 
-            DbManager db = ServerApp.model.getDbManager();
-            if (db.checkUser(req.auth())){
-                System.out.println("User exists");
-            }
-            else {
-                System.out.println("Creating db for the new user " + req.auth());
-                db.addUser(req.auth());
-            }
+            //checkAuth need to return boolean, so we can check if we trust the command or not
+            checkAuth(req.auth());
             command.init(req);
 
         } catch (IOException | ClassNotFoundException e) {
@@ -81,6 +75,24 @@ public class Session implements Runnable{
             e.printStackTrace();
         }
     }
+    
+    //replace complete one, more control
+    private void closeInStreams() {
+        try {
+            if(inputStream != null) { inputStream.close(); }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //replace complete one, more control
+    private void closeOutStreams() {
+        try {
+            if(outputStream != null) { outputStream.close(); }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Command createCommand(CommandName cmdname){
         switch(cmdname){
@@ -88,17 +100,31 @@ public class Session implements Runnable{
                 return new FetchEmail(outputStream);
             }
             case SEND_EMAIL -> {
-                return new SendEmail();
+                return new SendEmail(outputStream);
             }
             case MARK_AS_READ -> {
-                return new MarkAsRead();
+                return new MarkAsRead(outputStream);
             }
             case DELETE_EMAIL -> {
-                return new DeleteEmail();
+                return new DeleteEmail(outputStream);
             }
             default -> {
-                return null;
+                return new InvalidCommand(outputStream);
             }
+        }
+    }
+
+    //need to return boolean
+    private void checkAuth(String auth){
+        DbManager db = ServerApp.model.getDbManager();
+        if (db.checkUser(auth)){
+            System.out.println("User exists");
+        } else {
+            //non mi piace molto, viene effettuato REGISTER ad ogni comando
+            //poco robusto in caso di errori. Meglio REGISTER solo al primo FETCH
+            //In caso di problemi, si può generare un comando REGISTER, ma meglio evitare
+            System.out.println("Creating db for the new user " + auth);
+            db.addUser(auth);
         }
     }
 }
