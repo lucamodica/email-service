@@ -35,8 +35,7 @@ public class DbManager {
     public boolean checkUser(String user){
         String[] dirs = new File(dbPath).list(
                 (current, name) -> new File(current, name)
-                        .isDirectory()
-        );
+                        .isDirectory());
 
         return dirs != null && dirs.length != 0 &&
                 Arrays.stream(dirs).toList().contains(user);
@@ -52,19 +51,20 @@ public class DbManager {
         ArrayList<String> emailAddresses = new ArrayList<>(email.getReceivers());
 
         //Store the email into the sender folder first
-        storeEmail(email.getSender(), email);
+        storeEmail(email, email.getSender());
 
         //Setting the email as it's to be read for all
         //other receivers users
         email.setToRead(true);
         for (String s : emailAddresses) {
-            addUser(s);
-            storeEmail(s, email);
+            if(!checkUser(s)) addUser(s);
+            storeEmail(email, s);
         }
     }
 
-    private void storeEmail(String path, Email email){
+    private void storeEmail(Email email, String auth){
         try {
+            String path = findEmailPath(email, auth);
             FileOutputStream fout;
             fout = new FileOutputStream(path);
             ObjectOutputStream out = new ObjectOutputStream(fout);
@@ -96,21 +96,20 @@ public class DbManager {
         return list;
     }
 
-    private String findEmailPath(Email email){
+    private String findEmailPath(Email email, String auth){
         int id = email.getId();
-        File f = new File(dbPath + "/" + email.getSender() +  "/" +  id + ".txt");
+        File f = new File(dbPath + "/" + auth +  "/" +  id + ".txt");
         return f.getAbsolutePath();
     }
 
-    public boolean deleteEmail(Email email){
-        String path = findEmailPath(email);
+    public boolean deleteEmail(Email email, String auth){
+        String path = findEmailPath(email, auth);
         File f = new File(path);
         return f.delete();
     }
 
-    public void markAsReadEmail(Email email){
-        String path = findEmailPath(email);
+    public void markAsReadEmail(Email email, String auth){
         email.setToRead(false);
-        storeEmail(email);
+        storeEmail(email, auth);
     }
 }
