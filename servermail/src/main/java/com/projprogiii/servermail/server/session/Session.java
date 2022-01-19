@@ -47,8 +47,12 @@ public class Session implements Runnable{
             ServerResponse response;
             //open stream and get client request
             currentSocket = serverSocket.accept();
+
+            outputStream = new ObjectOutputStream(currentSocket.getOutputStream());
             inputStream = new ObjectInputStream(currentSocket.getInputStream());
+
             ClientRequest req = (ClientRequest) inputStream.readObject();
+            System.out.println(req);
 
             //OP block
             if(req.cmdName().argsLength != req.args().size()){
@@ -60,7 +64,6 @@ public class Session implements Runnable{
             }
 
             //writing server response
-            outputStream = new ObjectOutputStream(currentSocket.getOutputStream());
             outputStream.flush();
             outputStream.writeObject(response);
             outputStream.flush();

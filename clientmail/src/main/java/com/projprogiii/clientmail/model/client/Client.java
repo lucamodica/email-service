@@ -60,13 +60,12 @@ public class Client {
     private ServerResponse communicate(ClientRequest req) {
         try {
             connectToServer();
-
+            System.out.println(req);
             outputStream.writeObject(req);
             outputStream.flush();
+
             //receive response
-            ServerResponse response = (ServerResponse) inputStream.readObject();
-            System.out.println(response);
-            return response;
+            return (ServerResponse) inputStream.readObject();
         } catch (ConnectException ce) {
             return null;
         } catch (IOException | ClassNotFoundException se) {
@@ -97,7 +96,7 @@ public class Client {
     public ServerResponse sendCmd(CommandName command, Object... args){
         ClientRequest req = new ClientRequest(user, command,
                 Arrays.stream(args).toList());
-        System.out.println(req);
+
 
         return communicate(req);
     }
