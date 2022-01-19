@@ -15,10 +15,8 @@ import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.*;
 
 public class ClientApp extends Application {
@@ -45,8 +43,17 @@ public class ClientApp extends Application {
         stage.show();
     }
 
-    public static void shutdown() {
+    @Override
+    public void stop(){
+        appFX.shutdown();
 
+        fetchEmails.shutdown();
+        try {
+            System.out.println(fetchEmails.awaitTermination(1, TimeUnit.SECONDS) ?
+                    "" : "Timeout elapsed before fetchEmails thread termination.");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
@@ -79,6 +86,7 @@ public class ClientApp extends Application {
                             lastFetch);
 
                     System.out.println(resp);
+                    lastFetch = new Date();
                 },1, 2, TimeUnit.SECONDS);
     }
 }

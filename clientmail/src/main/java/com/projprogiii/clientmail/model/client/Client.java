@@ -2,9 +2,7 @@ package com.projprogiii.clientmail.model.client;
 
 import com.projprogiii.clientmail.model.client.config.ConfigManager;
 import com.projprogiii.lib.enums.CommandName;
-import com.projprogiii.lib.enums.ServerResponseName;
 import com.projprogiii.lib.objects.ClientRequest;
-import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.lib.utils.CommonUtil;
 
@@ -14,11 +12,6 @@ import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import static java.lang.System.exit;
 
@@ -56,8 +49,7 @@ public class Client {
 
     public String getUser(){ return user; }
 
-    //TODO generizzare per comandi
-    private ServerResponse communicate(ClientRequest req) {
+    private ServerResponse getServerResponse(ClientRequest req) {
         try {
             connectToServer();
             outputStream.writeObject(req);
@@ -95,6 +87,6 @@ public class Client {
     public ServerResponse sendCmd(CommandName command, Object... args){
         ClientRequest req = new ClientRequest(user, command,
                 Arrays.stream(args).toList());
-        return communicate(req);
+        return getServerResponse(req);
     }
 }
