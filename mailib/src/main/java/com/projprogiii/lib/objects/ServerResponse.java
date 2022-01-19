@@ -3,7 +3,8 @@ package com.projprogiii.lib.objects;
 import com.projprogiii.lib.enums.ServerResponseName;
 
 import java.io.Serializable;
+import java.util.List;
 
 public record ServerResponse(ServerResponseName responseName,
-                             Object[] args) implements Serializable {
+                             List<Email> args) implements Serializable {
 }

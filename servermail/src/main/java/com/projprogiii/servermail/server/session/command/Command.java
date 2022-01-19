@@ -1,11 +1,8 @@
 package com.projprogiii.servermail.server.session.command;
 
-import com.projprogiii.lib.enums.ServerResponseName;
 import com.projprogiii.lib.objects.ClientRequest;
-
-import java.io.IOException;
+import com.projprogiii.lib.objects.ServerResponse;
 
 public abstract class Command {
-    public abstract void init(ClientRequest pkg) throws IOException;
-
+    public abstract ServerResponse handle(ClientRequest req);
 }

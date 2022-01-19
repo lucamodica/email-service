@@ -25,12 +25,7 @@ public class Email implements Serializable, Comparable<Email>{
         this.isToRead = false;
         this.id = this.hashCode();
     }
-    //TODO Temporary, to be checked
-    public Email(String sender, List<String> receivers, String subject,
-                 String text, boolean isToRead) {
-        this(sender, receivers, subject, text);
-        this.isToRead = isToRead;
-    }
+
     public Email (Email email, boolean isToRead){
         this.id = email.id;
         this.sender = email.sender;

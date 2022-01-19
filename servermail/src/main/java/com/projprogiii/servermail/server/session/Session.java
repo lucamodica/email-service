@@ -3,8 +3,8 @@ package com.projprogiii.servermail.server.session;
 import com.projprogiii.lib.enums.CommandName;
 import com.projprogiii.lib.enums.ServerResponseName;
 import com.projprogiii.lib.objects.ClientRequest;
+import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.servermail.ServerApp;
-import com.projprogiii.servermail.model.db.DbManager;
 import com.projprogiii.servermail.server.session.command.*;
 
 import java.io.IOException;
@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 
 public class Session implements Runnable{
     Socket currentSocket = null;
@@ -43,43 +44,37 @@ public class Session implements Runnable{
 
     private void sessionOperationHandler(ServerSocket serverSocket) {
         try {
-            openStreams(serverSocket);
-
-            //TODO change command read to json
+            ServerResponse response;
+            //open stream and get client request
+            currentSocket = serverSocket.accept();
+            inputStream = new ObjectInputStream(currentSocket.getInputStream());
             ClientRequest req = (ClientRequest) inputStream.readObject();
-            closeInStreams();
-            Command command = createCommand(req.cmdName());
 
-            //checkAuth need to return boolean, so we can check if we trust the command or not
-            checkAuth(req.auth());
-            command.init(req);
+            //OP block
+            if(req.cmdName().argsLength != req.args().size()){
+                response = new ServerResponse(ServerResponseName.ILLEGAL_PARAMS, null);
+            } else {
+                Command command = createCommand(req.cmdName());
+                checkAuth(req.auth());
+                response = command.handle(req);
+            }
+
+            //writing server response
+            outputStream = new ObjectOutputStream(currentSocket.getOutputStream());
+            outputStream.flush();
+            outputStream.writeObject(response);
+            outputStream.flush();
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
-            closeOutStreams();
+            closeStreams();
         }
     }
 
-    private void openStreams(ServerSocket serverSocket) throws IOException {
-        currentSocket = serverSocket.accept();
-        inputStream = new ObjectInputStream(currentSocket.getInputStream());
-        outputStream = new ObjectOutputStream(currentSocket.getOutputStream());
-        outputStream.flush();
-    }
-
-    //replace complete one, more control
-    private void closeInStreams() {
+    private void closeStreams() {
         try {
             if(inputStream != null) { inputStream.close(); }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //replace complete one, more control
-    private void closeOutStreams() {
-        try {
             if(outputStream != null) { outputStream.close(); }
         } catch (IOException e) {
             e.printStackTrace();
@@ -89,30 +84,24 @@ public class Session implements Runnable{
     public Command createCommand(CommandName cmdName){
         switch(cmdName){
             case FETCH_EMAIL -> {
-                return new FetchEmail(outputStream);
+                return new FetchEmail();
             }
             case SEND_EMAIL -> {
-                return new SendEmail(outputStream);
+                return new SendEmail();
             }
             case MARK_AS_READ -> {
-                return new MarkAsRead(outputStream);
+                return new MarkAsRead();
             }
             case DELETE_EMAIL -> {
-                return new DeleteEmail(outputStream);
+                return new DeleteEmail();
             }
-            default -> {
-                return new InvalidCommand(outputStream);
-            }
+            default -> throw new IllegalStateException("Unexpected value: " + cmdName);
         }
     }
 
     private void checkAuth(String auth){
-        DbManager db = ServerApp.model.getDbManager();
-        if (db.checkUser(auth)){
-            System.out.println("User exists");
-        } else {
-            System.out.println("Creating db for the new user " + auth);
-            db.addUser(auth);
+        if (ServerApp.model.getDbManager().addUser(auth)){
+            System.out.println("User " + auth + " registered");
         }
     }
 }

@@ -5,6 +5,8 @@ import com.projprogiii.lib.objects.Email;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 import static java.lang.System.exit;
 
@@ -40,16 +42,9 @@ public class DbManager {
                 Arrays.stream(dirs).toList().contains(user);
     }
 
-    public void addUser(String user){
+    public boolean addUser(String user){
         File f = new File(dbPath + user);
-
-        try {
-            if (!f.mkdirs()){
-                throw new IOException();
-            }
-        } catch (IOException e){
-            System.out.println("Cannot create " + user + " user folder!");
-        }
+        return f.mkdirs();
     }
 
     //TODO implement sync
@@ -78,5 +73,26 @@ public class DbManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Email> readEmails(String user){
+        File[] emails = new File(dbPath + "/" + user +  "/")
+                .listFiles();
+
+        FileInputStream fin;
+        ObjectInputStream obj;
+        List<Email> list = new ArrayList<>();
+
+        try {
+            for (File file : Objects.requireNonNull(emails)) {
+                fin = new FileInputStream(file);
+                obj = new ObjectInputStream(fin);
+                list.add((Email) obj.readObject());
+            }
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        } catch (NullPointerException ignored){}
+        return list;
     }
 }
