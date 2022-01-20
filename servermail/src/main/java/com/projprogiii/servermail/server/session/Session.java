@@ -5,7 +5,9 @@ import com.projprogiii.lib.enums.ServerResponseName;
 import com.projprogiii.lib.objects.ClientRequest;
 import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.servermail.ServerApp;
+import com.projprogiii.servermail.model.log.LogManager;
 import com.projprogiii.servermail.server.session.command.*;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -17,9 +19,12 @@ public class Session implements Runnable{
     Socket socket;
     ObjectInputStream inputStream;
     ObjectOutputStream outputStream;
+    LogManager logManager;
+
 
     public Session(Socket socket){
         this.socket = socket;
+        logManager = ServerApp.model.getLogManager();
     }
 
     @Override
@@ -31,11 +36,12 @@ public class Session implements Runnable{
             inputStream = new ObjectInputStream(socket.getInputStream());
 
             ClientRequest req = (ClientRequest) inputStream.readObject();
-            System.out.println(req);
+            Platform.runLater(() -> logManager.printSystemLog(req.toString()));
 
             //OP block
             if(req.cmdName().argsLength != req.args().size()){
-                response = new ServerResponse(ServerResponseName.ILLEGAL_PARAMS, null);
+                response = new ServerResponse(ServerResponseName.ILLEGAL_PARAMS,
+                        null);
             } else {
                 Command command = createCommand(req.cmdName());
                 checkAuth(req.auth());
