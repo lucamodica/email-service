@@ -2,10 +2,9 @@ package com.projprogiii.lib.enums;
 
 public enum ServerResponseName {
     SUCCESS(null),
-    UNKNOWN_COMMAND("Unknown Command"),
-    USER_REGISTERED("User registered with success"),
-    USER_ALREADY_REGISTERED("User was already registered!"),
-    ILLEGAL_PARAMS("Invalid parameters number or type");
+    ILLEGAL_PARAMS("Invalid parameters number or type."),
+    INVALID_RECIPIENTS("Invalid recipients adresses."),
+    OP_ERROR("Something went wrong.");
 
     public final String text;
 

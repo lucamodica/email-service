@@ -4,7 +4,10 @@ import com.projprogiii.clientmail.ClientApp;
 import com.projprogiii.clientmail.scene.SceneName;
 import com.projprogiii.clientmail.utils.alert.AlertManager;
 import com.projprogiii.clientmail.utils.alert.AlertText;
+import com.projprogiii.lib.enums.CommandName;
+import com.projprogiii.lib.enums.ServerResponseName;
 import com.projprogiii.lib.objects.Email;
+import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.lib.utils.CommonUtil;
 
 import javafx.fxml.FXML;
@@ -13,14 +16,15 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.web.HTMLEditor;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ComposeController extends Controller {
 
     @FXML
-    private TextFlow warnAlert;
+    private TextFlow dangerAlert;
     @FXML
-    private TextFlow msgSentAlert;
+    private TextFlow successAlert;
     @FXML
     private TextField senderTextField;
     @FXML
@@ -29,6 +33,9 @@ public class ComposeController extends Controller {
     private TextField objectTextField;
     @FXML
     private HTMLEditor messageEditor;
+
+    public TextFlow getSuccessAlert() { return successAlert; }
+    public TextFlow getDangerAlert() { return dangerAlert; }
 
     @FXML
     public void initialize(){
@@ -39,15 +46,12 @@ public class ComposeController extends Controller {
     public TextField getSenderTextField() {
         return senderTextField;
     }
-
     public TextField getRecipientsTextField() {
         return recipientsTextField;
     }
-
     public TextField getObjectTextField() {
         return objectTextField;
     }
-
     public HTMLEditor getMessageEditor() {
         return messageEditor;
     }
@@ -72,19 +76,20 @@ public class ComposeController extends Controller {
                     objectTextField.getText(), messageEditor.getHtmlText());
 
             //TODO: insert sendCmd method
-            //ClientApp.model.getClient().sendCmd();
-            //model.addEmails(email);
+            ServerResponse response = ClientApp.model.getClient().sendCmd(CommandName.SEND_EMAIL, email);
+            if (response.responseName() == ServerResponseName.SUCCESS) {
+                model.addEmails(Collections.singletonList(email));
+                //clearing all fields
+                recipientsTextField.clear();
+                objectTextField.clear();
+                messageEditor.setHtmlText("");
 
-            //clearing all fields
-            recipientsTextField.clear();
-            objectTextField.clear();
-            messageEditor.setHtmlText("");
-
-            AlertManager.showSuccessSendMessage(AlertText.MESSAGE_SENT, 2);
+                AlertManager.showSuccessSendMessage(AlertText.MESSAGE_SENT, 2);
+            } else {
+                AlertManager.showTemporizedAlert(dangerAlert, AlertText.INVALID_RECIPIENTS, 2);
+            }
         } else {
-            AlertManager.showTemporizedAlert(warnAlert, AlertText.INVALID_RECIPIENTS, 2);
+            AlertManager.showTemporizedAlert(dangerAlert, AlertText.INVALID_RECIPIENTS, 2);
         }
     }
-
-
 }
