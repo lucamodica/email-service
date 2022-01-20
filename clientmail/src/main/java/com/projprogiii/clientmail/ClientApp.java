@@ -70,9 +70,8 @@ public class ClientApp extends Application {
                             lastFetch);
                     if (resp != null && resp.args() != null){
                         Platform.runLater(() -> model.addEmails(resp.args()));
+                        lastFetch = new Date();
                     }
-                    System.out.println(resp);
-                    lastFetch = new Date();
                 },1, 2, TimeUnit.SECONDS);
     }
 }
