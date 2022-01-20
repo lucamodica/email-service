@@ -11,13 +11,18 @@ public class SendEmail implements Command{
     @Override
     public ServerResponse handle(ClientRequest req) {
         Email email = (Email) req.args().get(0);
+        ServerResponseName name;
         if (email == null){
-            return new ServerResponse(ServerResponseName.ILLEGAL_PARAMS, null);
+            name = ServerResponseName.ILLEGAL_PARAMS;
+        }
+        else if (email.getReceivers().stream().allMatch(receiver ->
+                    ServerApp.model.getDbManager().checkUser(receiver))){
+            name = ServerResponseName.INVALID_RECIPIENTS;
         }
         else {
-
+            ServerApp.model.getDbManager().saveEmail(email);
+            name = ServerResponseName.SUCCESS;
         }
-        ServerApp.model.getDbManager().saveEmail(email);
-        return new ServerResponse(ServerResponseName.SUCCESS, null);
+        return new ServerResponse(name, null);
     }
 }
