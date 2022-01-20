@@ -78,7 +78,7 @@ public class ComposeController extends Controller {
                     objectTextField.getText(), messageEditor.getHtmlText());
 
             ServerResponse response = ClientApp.model.getClient().sendCmd(CommandName.SEND_EMAIL, email);
-            ResponseHandler.handleResponse(response, this,
+            ResponseHandler.handleResponse(response, ClientApp.sceneController.getController(SceneName.COMPOSE),
                     () -> {
                         model.addEmails(Collections.singletonList(email));
                         //clearing all fields

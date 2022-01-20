@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Arrays;
 
 import static java.lang.System.exit;
@@ -57,7 +58,7 @@ public class Client {
 
             //receive response
             return (ServerResponse) inputStream.readObject();
-        } catch (ConnectException ce) {
+        } catch (SocketException ce) {
             return null;
         } catch (IOException | ClassNotFoundException se) {
             se.printStackTrace();
