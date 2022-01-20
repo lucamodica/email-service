@@ -22,6 +22,7 @@ public class ServerController {
 
                 setText((!empty && logItem != null) ? logItem : null);
                 getStyleClass().add("single_log");
+                logLst.scrollTo(logManager.logProperty().size());
             }
         });
     }

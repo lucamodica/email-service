@@ -36,7 +36,7 @@ public class Session implements Runnable{
             inputStream = new ObjectInputStream(socket.getInputStream());
 
             ClientRequest req = (ClientRequest) inputStream.readObject();
-            Platform.runLater(() -> logManager.printSystemLog(req.toString()));
+            Platform.runLater(() -> logManager.printLog(req.toString()));
 
             //OP block
             if(req.cmdName().argsLength != req.args().size()){

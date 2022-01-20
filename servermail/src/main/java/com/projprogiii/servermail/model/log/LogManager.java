@@ -35,15 +35,8 @@ public class LogManager {
     public void printNewLine(){
         logContent.add("");
     }
-    public void printLog(String logText){
+    public synchronized void printLog(String logText){
         logContent.add('[' + CommonUtil.formatDate(new Date()) + "] "
-                + logText);
-    }
-    public void printLogForUser(String user, String logText){
-        printLog(serverName + "to " + user +
-                "> " + logText);
-    }
-    public void printSystemLog(String logText){
-        printLog(serverName + "> " + logText);
+                + serverName + "> " + logText);
     }
 }
