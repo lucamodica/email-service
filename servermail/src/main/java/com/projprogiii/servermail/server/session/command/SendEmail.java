@@ -6,7 +6,7 @@ import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.servermail.ServerApp;
 
-public class SendEmail extends Command{
+public class SendEmail implements Command{
 
     @Override
     public ServerResponse handle(ClientRequest req) {

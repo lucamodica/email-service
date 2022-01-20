@@ -6,7 +6,7 @@ import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.servermail.ServerApp;
 
-public class DeleteEmail extends Command {
+public class DeleteEmail implements Command {
 
     @Override
     public ServerResponse handle(ClientRequest req) {

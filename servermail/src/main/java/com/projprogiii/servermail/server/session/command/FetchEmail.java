@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FetchEmail extends Command{
+public class FetchEmail implements Command{
 
     @Override
     public ServerResponse handle(ClientRequest req){

@@ -3,7 +3,6 @@ package com.projprogiii.servermail;
 import com.projprogiii.servermail.model.Model;
 import com.projprogiii.servermail.server.Server;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -34,8 +33,9 @@ public class ServerApp extends Application {
 
     @Override
     public void stop(){
+        model.getLogManager().printNewLine();
         model.getLogManager().
-                printSystemLog("Server shutting down...");
+                printLog("Server shutting down...");
         server.interrupt();
         appFX.shutdown();
     }

@@ -4,7 +4,6 @@ import com.projprogiii.servermail.ServerApp;
 import com.projprogiii.servermail.model.log.LogManager;
 import com.projprogiii.servermail.server.config.ConfigManager;
 import com.projprogiii.servermail.server.session.Session;
-import javafx.application.Platform;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -27,7 +26,7 @@ public class Server extends Thread {
         ConfigManager configManager = ConfigManager.getInstance();
         logManager = ServerApp.model.getLogManager();
 
-        logManager.printSystemLog("Loading initial configuration server.properties...");
+        logManager.printLog("Loading initial configuration server.properties...");
         this.threadsNumber = Integer.parseInt(configManager.
                 readProperty("server.threads_number"));
         this.timeout = Integer.parseInt(configManager.
@@ -44,20 +43,20 @@ public class Server extends Thread {
     }
 
     private void printLogInit(){
-        logManager.printSystemLog("Configuration loaded.");
-        logManager.printSystemLog("Max thread in thread pool: " +
+        logManager.printLog("Configuration loaded.");
+        logManager.printLog("Max thread in thread pool: " +
                 threadsNumber + ".");
-        logManager.printSystemLog("Timeout to accept a new connection: " +
+        logManager.printLog("Timeout to accept a new connection: " +
                 timeout + " ms.");
-        logManager.printSystemLog("Server port: " + serverPort + ".");
+        logManager.printLog("Server port: " + serverPort + ".");
         logManager.printNewLine();
-        logManager.printSystemLog("Hello!");
+        logManager.printLog("Hello!");
     }
 
 
     @Override
     public void start() {
-        logManager.printSystemLog("Start server at port: " + serverPort);
+        logManager.printLog("Start server at port: " + serverPort);
         Socket currentSocket = null;
         try {
             serverSocket = new ServerSocket(serverPort);
@@ -89,7 +88,7 @@ public class Server extends Thread {
     public void shutdown(){
         serverThreads.shutdown();
         try {
-            logManager.printSystemLog(serverThreads.awaitTermination((2L *
+            logManager.printLog(serverThreads.awaitTermination((2L *
                     threadsNumber) + 1, TimeUnit.SECONDS) ?
                     "" : "Timeout elapsed before serverThreads thread pool termination.");
             serverSocket.close();
