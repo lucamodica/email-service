@@ -8,6 +8,7 @@ import com.projprogiii.servermail.server.session.Session;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -72,13 +73,14 @@ public class Server extends Thread {
             }
         }
     }
+
     public void shutdown(){
         serverThreads.shutdown();
         try {
-            serverSocket.close();
             System.out.println(serverThreads.awaitTermination((2L * threadsNumber) + 1,
                     TimeUnit.SECONDS) ?
                     "" : "Timeout elapsed before serverThreads thread pool termination.");
+            serverSocket.close();
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }

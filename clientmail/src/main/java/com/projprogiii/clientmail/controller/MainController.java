@@ -140,6 +140,7 @@ public class MainController extends Controller {
                     }
                     MainController.this.selectedEmail = selectedEmail;
                     updateDetailView(selectedEmail);
+
                 });
             }
         });

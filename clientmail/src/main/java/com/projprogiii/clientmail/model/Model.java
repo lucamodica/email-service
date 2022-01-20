@@ -53,8 +53,8 @@ public class Model {
      */
     public StringProperty emailAddressProperty() { return emailAddress; }
 
-    public void addEmail(Email email){
-        inboxContent.add(email);
+    public void addEmails(List<Email> emails){
+        inboxContent.addAll(emails);
         inboxContent.sort(null);
     }
 

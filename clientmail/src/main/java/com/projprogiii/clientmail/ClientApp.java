@@ -8,6 +8,7 @@ import com.projprogiii.lib.enums.CommandName;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.ServerResponse;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -44,7 +45,6 @@ public class ClientApp extends Application {
     @Override
     public void stop(){
         appFX.shutdown();
-
         fetchEmails.shutdown();
         try {
             System.out.println(fetchEmails.awaitTermination(1, TimeUnit.SECONDS) ?
@@ -60,22 +60,6 @@ public class ClientApp extends Application {
         fetchEmails = Executors.newSingleThreadScheduledExecutor();
         Client client = model.getClient();
 
-        /*
-        Email email = new Email(
-                client.getUser(),
-                Collections.singletonList("Enrico@unito.it"),
-                "Hey!",
-                "Hey there, test mail here"
-        );
-        Executors.newSingleThreadExecutor().execute(() -> {
-            ServerResponse resp = client.sendCmd(CommandName.SEND_EMAIL, email);
-            if (resp != null){
-                Platform.runLater(() -> model.addEmail(email));
-                email.setToRead(false);
-            }
-        });
-         */
-
         //Start JavaFX app
         appFX.execute(Application::launch);
 
@@ -84,7 +68,9 @@ public class ClientApp extends Application {
                 () -> {
                     ServerResponse resp = client.sendCmd(CommandName.FETCH_EMAIL,
                             lastFetch);
-
+                    if (resp != null && resp.args() != null){
+                        Platform.runLater(() -> model.addEmails(resp.args()));
+                    }
                     System.out.println(resp);
                     lastFetch = new Date();
                 },1, 2, TimeUnit.SECONDS);
