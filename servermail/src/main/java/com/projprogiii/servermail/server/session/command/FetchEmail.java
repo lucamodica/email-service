@@ -14,7 +14,6 @@ public class FetchEmail implements Command{
 
     @Override
     public ServerResponse handle(ClientRequest req){
-        System.out.println("Fetching...");
         Date date = (Date)req.args().get(0);
 
         List<Email> list = ServerApp.model.getDbManager().readEmails(req.auth()).stream()

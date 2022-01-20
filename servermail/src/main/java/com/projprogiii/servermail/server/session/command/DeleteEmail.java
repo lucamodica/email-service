@@ -11,9 +11,10 @@ public class DeleteEmail implements Command {
     @Override
     public ServerResponse handle(ClientRequest req) {
         Email email = (Email) req.args().get(0);
-        if (email == null || !ServerApp.model.getDbManager().deleteEmail(email, req.auth())){
-            return  new ServerResponse(ServerResponseName.ILLEGAL_PARAMS, null);
-        }
-        return new ServerResponse(ServerResponseName.SUCCESS, null);
+        ServerResponseName name = (email == null || !ServerApp.model.getDbManager()
+                .deleteEmail(email, req.auth())) ? ServerResponseName.SUCCESS :
+                ServerResponseName.ILLEGAL_PARAMS;
+
+        return new ServerResponse(name, null);
     }
 }
