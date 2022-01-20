@@ -10,7 +10,6 @@ import com.projprogiii.servermail.server.session.command.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Session implements Runnable{
@@ -25,10 +24,6 @@ public class Session implements Runnable{
 
     @Override
     public void run() {
-        sessionOperationHandler();
-    }
-
-    private void sessionOperationHandler() {
         try {
             ServerResponse response;
 
@@ -58,6 +53,7 @@ public class Session implements Runnable{
             closeStreams();
         }
     }
+
     private void closeStreams() {
         try {
             if(inputStream != null) { inputStream.close(); }
@@ -66,7 +62,6 @@ public class Session implements Runnable{
             e.printStackTrace();
         }
     }
-
     public Command createCommand(CommandName cmdName){
         switch(cmdName){
             case FETCH_EMAIL -> {

@@ -40,10 +40,6 @@ public class Server extends Thread {
         return new Server();
     }
 
-    public int getServerPort() {
-        return serverPort;
-    }
-
     private void printLogInit(){
         logManager.printSystemLog("Configuration loaded.");
         logManager.printSystemLog("Max thread in thread pool: " +
@@ -64,14 +60,14 @@ public class Server extends Thread {
                 currentSocket.setSoTimeout(timeout);
                 serverThreads.execute(new Session(currentSocket));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
+
         } finally {
             if (currentSocket != null) {
                 try {
                     currentSocket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException ignored) {
+
                 }
             }
         }
