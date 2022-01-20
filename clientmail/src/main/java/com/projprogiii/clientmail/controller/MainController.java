@@ -69,6 +69,7 @@ public class MainController extends Controller {
     }
 
     public TextFlow getSuccessAlert() { return successAlert; }
+    public TextFlow getDangerAlert() { return dangerAlert; }
 
     private void setBtnsListeners(){
         deleteBtn.setOnMouseClicked(event ->
