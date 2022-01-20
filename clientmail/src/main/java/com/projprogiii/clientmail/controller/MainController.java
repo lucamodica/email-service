@@ -4,7 +4,10 @@ import com.projprogiii.clientmail.ClientApp;
 import com.projprogiii.clientmail.scene.SceneName;
 import com.projprogiii.clientmail.utils.alert.AlertManager;
 import com.projprogiii.clientmail.utils.alert.AlertText;
+import com.projprogiii.clientmail.utils.responsehandler.ResponseHandler;
+import com.projprogiii.lib.enums.CommandName;
 import com.projprogiii.lib.objects.Email;
+import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.lib.utils.CommonUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -73,34 +76,54 @@ public class MainController extends Controller {
 
     private void setBtnsListeners(){
         deleteBtn.setOnMouseClicked(event ->
-                opButtonHandler(event, (OnButtonClick) -> {
+                opButtonHandler(event, (OnButtonClick) -> delete()));
+
+        forwardBtn.setOnMouseClicked(event ->
+                opButtonHandler(event, (OnButtonClick) -> forward()));
+
+        replyBtn.setOnMouseClicked(event ->
+                opButtonHandler(event, (OnButtonClick) -> reply()));
+
+        replyAllBtn.setOnAction(event ->
+                opButtonHandler(null, (OnButtonClick) -> replyAll()));
+    }
+    private void delete(){
+        //server-side delete
+        ServerResponse response = ClientApp.model.getClient()
+                .sendCmd(CommandName.DELETE_EMAIL, selectedEmail);
+        ResponseHandler.handleResponse(response,
+                ClientApp.sceneController.getController(SceneName.MAIN),
+                () -> {
                     model.deleteEmail(selectedEmail);
-                    selectedEmail = emptyEmail;
                     updateDetailView(emptyEmail);
                     AlertManager.showTemporizedAlert(dangerAlert,
                             AlertText.MESSAGE_DELETED, 2);
-                }));
-        forwardBtn.setOnMouseClicked(event ->
-                opButtonHandler(event, (OnButtonClick) ->
-                        composeFieldsSetter("",
-                                "Forward: " + selectedEmail.getSubject(),
-                                selectedEmail.getText())));
-        replyBtn.setOnMouseClicked(event ->
-                opButtonHandler(event, (OnButtonClick) ->
-                        composeFieldsSetter(selectedEmail.getSender(),
-                                "Reply: " + selectedEmail.getSubject(),
-                                "")));
-        replyAllBtn.setOnAction(event ->
-                opButtonHandler(null, (OnButtonClick) -> {
-                    replyBtn.hide();
-                    List<String> list = selectedEmail.getReceivers();
-                    list.remove(model.getClient().getUser());
-                    composeFieldsSetter(selectedEmail.getSender() +
-                                    CommonUtil.receiversToString(list),
-                            "ReplyAll: " + selectedEmail.getSubject(),
-                            "");
-                }));
+                });
+        selectedEmail = emptyEmail;
     }
+
+    private void forward(){
+        composeFieldsSetter("",
+                "Forward: " + selectedEmail.getSubject(),
+                selectedEmail.getText());
+    }
+
+    private void reply(){
+        composeFieldsSetter(selectedEmail.getSender(),
+                "Reply: " + selectedEmail.getSubject(),
+                "");
+    }
+
+    private void replyAll(){
+        replyBtn.hide();
+        List<String> list = selectedEmail.getReceivers();
+        list.remove(model.getClient().getUser());
+        composeFieldsSetter(selectedEmail.getSender() +
+                        CommonUtil.receiversToString(list),
+                "ReplyAll: " + selectedEmail.getSubject(),
+                "");
+    }
+
     private void opButtonHandler(MouseEvent mouseEvent, OnButtonClick handler){
         if (!Email.isEmpty(selectedEmail)){
             handler.handle(mouseEvent);
@@ -111,6 +134,7 @@ public class MainController extends Controller {
     private void onComposeButtonClick() {
         ClientApp.sceneController.switchTo(SceneName.COMPOSE);
     }
+
     @FXML
     private void composeFieldsSetter(String receivers, String object, String htmltext){
         ClientApp.sceneController.switchTo(SceneName.COMPOSE);
@@ -138,6 +162,12 @@ public class MainController extends Controller {
                     if (selectedEmail != null) {
                         selectedEmail.setToRead(false);
                         setStyle(null);
+
+                        ServerResponse response = ClientApp.model.getClient().sendCmd(CommandName.MARK_AS_READ, selectedEmail);
+                        ResponseHandler.handleResponse(response,
+                                (MainController) ClientApp.sceneController.getController(SceneName.MAIN),
+                                () -> {}
+                                );
                     }
                     MainController.this.selectedEmail = selectedEmail;
                     updateDetailView(selectedEmail);
@@ -146,6 +176,7 @@ public class MainController extends Controller {
             }
         });
     }
+
     private void updateDetailView(Email email) {
         if(email != null) {
             fromLbl.setText(email.getSender());
