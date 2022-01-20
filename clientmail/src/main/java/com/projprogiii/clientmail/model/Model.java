@@ -54,7 +54,9 @@ public class Model {
     public StringProperty emailAddressProperty() { return emailAddress; }
 
     public void addEmails(List<Email> emails){
-        inboxContent.addAll(emails);
+        for (Email e : emails) {
+            if(!inboxContent.contains(e)) inboxContent.add(e);
+        }
         inboxContent.sort(null);
     }
 
