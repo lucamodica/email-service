@@ -4,6 +4,8 @@ import com.projprogiii.clientmail.ClientApp;
 import com.projprogiii.clientmail.scene.SceneName;
 import com.projprogiii.clientmail.utils.alert.AlertManager;
 import com.projprogiii.clientmail.utils.alert.AlertText;
+import com.projprogiii.clientmail.utils.responsehandler.ResponseHandler;
+import com.projprogiii.clientmail.utils.responsehandler.SuccessHandler;
 import com.projprogiii.lib.enums.CommandName;
 import com.projprogiii.lib.enums.ServerResponseName;
 import com.projprogiii.lib.objects.Email;
@@ -75,19 +77,16 @@ public class ComposeController extends Controller {
                     new ArrayList<>(List.of(recipentsArray)),
                     objectTextField.getText(), messageEditor.getHtmlText());
 
-            //TODO: insert sendCmd method
             ServerResponse response = ClientApp.model.getClient().sendCmd(CommandName.SEND_EMAIL, email);
-            if (response.responseName() == ServerResponseName.SUCCESS) {
-                model.addEmails(Collections.singletonList(email));
-                //clearing all fields
-                recipientsTextField.clear();
-                objectTextField.clear();
-                messageEditor.setHtmlText("");
-
-                AlertManager.showSuccessSendMessage(AlertText.MESSAGE_SENT, 2);
-            } else {
-                AlertManager.showTemporizedAlert(dangerAlert, AlertText.INVALID_RECIPIENTS, 2);
-            }
+            ResponseHandler.handleResponse(response, this,
+                    () -> {
+                        model.addEmails(Collections.singletonList(email));
+                        //clearing all fields
+                        recipientsTextField.clear();
+                        objectTextField.clear();
+                        messageEditor.setHtmlText("");
+                        AlertManager.showSuccessSendMessage(AlertText.MESSAGE_SENT, 2);
+                    } );
         } else {
             AlertManager.showTemporizedAlert(dangerAlert, AlertText.INVALID_RECIPIENTS, 2);
         }

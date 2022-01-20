@@ -14,9 +14,16 @@ public class ResponseHandler {
             case SUCCESS -> successHandler.handle();
             case ILLEGAL_PARAMS -> AlertManager.showTemporizedAlert(
                     controller.getDangerAlert(),
+                    AlertText.INVALID_RECIPIENTS_FORMAT,
+                    2);
+            case INVALID_RECIPIENTS -> AlertManager.showTemporizedAlert(
+                    controller.getDangerAlert(),
                     AlertText.INVALID_RECIPIENTS,
                     2);
-
+            case OP_ERROR -> AlertManager.showTemporizedAlert(
+                    controller.getDangerAlert(),
+                    AlertText.OP_ERROR,
+                    2);
         }
     }
 }
