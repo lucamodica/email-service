@@ -130,7 +130,7 @@ public class MainController extends Controller {
 
                 boolean check = !empty && email != null;
                 setText(check ? email.toString() : null);
-                setStyle(check ? "-fx-font-weight: bold" : null);
+                setStyle(check && email.isToRead() ? "-fx-font-weight: bold" : null);
 
                 setOnMouseClicked((click) -> {
                     Email selectedEmail = emailsLst.getSelectionModel().getSelectedItem();

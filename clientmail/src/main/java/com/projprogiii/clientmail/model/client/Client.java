@@ -66,12 +66,14 @@ public class Client {
             closeConnections();
         }
     }
+
     private void connectToServer() throws IOException {
         currentSocket = new Socket(serverHost, serverPort);
         outputStream = new ObjectOutputStream(currentSocket.getOutputStream());
         outputStream.flush();
         inputStream = new ObjectInputStream(currentSocket.getInputStream());
     }
+
     private void closeConnections() {
         if (currentSocket != null) {
             try {
