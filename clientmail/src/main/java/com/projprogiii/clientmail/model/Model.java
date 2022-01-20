@@ -40,6 +40,10 @@ public class Model {
 
     public Client getClient() { return client; }
 
+    public ObservableList<Email> getInboxContent() {
+        return inboxContent;
+    }
+
     /**
      * @return lista di emailAddress
      *

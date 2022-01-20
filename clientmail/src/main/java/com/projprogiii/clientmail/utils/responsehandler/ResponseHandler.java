@@ -10,6 +10,12 @@ public class ResponseHandler {
     public static void handleResponse(ServerResponse resp,
                                       Controller controller,
                                       SuccessHandler successHandler){
+        if (resp == null) {
+            AlertManager.showTemporizedAlert(
+                    controller.getDangerAlert(),
+                    AlertText.NO_CONNECTION,
+                    2);
+        }
         switch (resp.responseName()){
             case SUCCESS -> successHandler.handle();
             case ILLEGAL_PARAMS -> AlertManager.showTemporizedAlert(

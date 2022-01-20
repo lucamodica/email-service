@@ -6,6 +6,7 @@ public enum AlertText {
     MESSAGE_SENT("Email sent with success!"),
     MESSAGE_DELETED("Email deleted with success!"),
     OP_ERROR("Ops, something went wrong"),
+    NEW_EMAILS("New emails!"),
     NO_CONNECTION("Connection not found.");
 
     public final String text;
