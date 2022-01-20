@@ -40,6 +40,10 @@ public class Model {
 
     public Client getClient() { return client; }
 
+    public ObservableList<Email> getInboxContent() {
+        return inboxContent;
+    }
+
     /**
      * @return lista di emailAddress
      *
@@ -54,9 +58,7 @@ public class Model {
     public StringProperty emailAddressProperty() { return emailAddress; }
 
     public void addEmails(List<Email> emails){
-        for (Email e : emails) {
-            if(!inboxContent.contains(e)) inboxContent.add(e);
-        }
+        inboxContent.addAll(emails);
         inboxContent.sort(null);
     }
 
