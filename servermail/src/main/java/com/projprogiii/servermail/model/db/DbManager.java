@@ -121,13 +121,6 @@ public class DbManager {
         String path = findEmailPath(email, user);
         File f = new File(path);
 
-        try {
-            Files.delete(Paths.get(path));
-        } catch (IOException e) {
-            e.printStackTrace();
-            e.getCause();
-        }
-
         return f.delete();
     }
 
