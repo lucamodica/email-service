@@ -91,6 +91,6 @@ public class ClientApp extends Application {
                                 sceneController.getController(SceneName.MAIN),
                                 () -> fetch(resp));
                     } catch (NullPointerException ignored){}
-                },1, 2, TimeUnit.SECONDS);
+                },1, 5, TimeUnit.SECONDS);
     }
 }

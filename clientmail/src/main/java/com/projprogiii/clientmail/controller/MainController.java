@@ -16,6 +16,7 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebView;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MainController extends Controller {
 
@@ -156,7 +157,13 @@ public class MainController extends Controller {
                 super.updateItem(email, empty);
 
                 boolean check = !empty && email != null;
-                setText(check ? email.toString() : null);
+
+                String text = !check ? null :
+                        Objects.equals(email.getSender(), getUserEmail()) ?
+                        "YOU - " + email.getSubject() :
+                        email.toString();
+
+                setText(text);
                 setStyle(check && email.isToRead() ? "-fx-font-weight: bold" : null);
 
                 setOnMouseClicked((click) -> {

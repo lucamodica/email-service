@@ -34,8 +34,11 @@ public class ComposeController extends Controller {
     @FXML
     private HTMLEditor messageEditor;
 
+
     public TextFlow getSuccessAlert() { return successAlert; }
+
     public TextFlow getDangerAlert() { return dangerAlert; }
+
 
     @FXML
     public void initialize(){
@@ -43,18 +46,23 @@ public class ComposeController extends Controller {
         senderTextField.setText(getUserEmail());
     }
 
+
     public TextField getSenderTextField() {
         return senderTextField;
     }
+
     public TextField getRecipientsTextField() {
         return recipientsTextField;
     }
+
     public TextField getObjectTextField() {
         return objectTextField;
     }
+
     public HTMLEditor getMessageEditor() {
         return messageEditor;
     }
+
 
     @FXML
     private void onCancelButtonClick() {
@@ -65,6 +73,7 @@ public class ComposeController extends Controller {
 
         ClientApp.sceneController.switchTo(SceneName.MAIN);
     }
+
 
     @FXML
     private void onSendButtonClick() {
@@ -81,6 +90,7 @@ public class ComposeController extends Controller {
             AlertManager.showTemporizedAlert(dangerAlert, AlertText.INVALID_RECIPIENTS, 2);
         }
     }
+
 
     private void send(Email email){
         model.addEmails(Collections.singletonList(email));

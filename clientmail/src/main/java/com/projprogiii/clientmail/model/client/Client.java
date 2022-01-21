@@ -53,17 +53,16 @@ public class Client {
     //receive response from inputStream, called after sending a command
     private ServerResponse getServerResponse(ClientRequest req) {
 
-        ServerResponse resp;
+        ServerResponse resp = null;
         try {
             connectToServer();
             outputStream.writeObject(req);
             outputStream.flush();
             resp = (ServerResponse) inputStream.readObject();
-        } catch (SocketException ce) {
-            resp = null;
-        } catch (IOException | ClassNotFoundException se) {
-            se.printStackTrace();
-            resp = null;
+        } catch (IOException ignored) {
+
+        } catch (ClassNotFoundException e){
+            e.printStackTrace();
         } finally {
             closeConnections();
         }
@@ -81,8 +80,8 @@ public class Client {
     private void closeConnections() {
         if (currentSocket != null) {
             try {
-                inputStream.close();
                 outputStream.close();
+                inputStream.close();
                 currentSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();

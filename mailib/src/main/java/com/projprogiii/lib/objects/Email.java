@@ -25,7 +25,6 @@ public class Email implements Serializable, Comparable<Email>{
         this.isToRead = false;
         this.id = this.hashCode();
     }
-
     public static Email generateEmptyEmail(){
         Email email = new Email("", List.of(""), "",
                 "");
@@ -79,10 +78,10 @@ public class Email implements Serializable, Comparable<Email>{
     public String toString() {
         return sender + " - " + subject;
     }
-
     public String dateToString(){
-        if (this.date == null) return "";
-        return CommonUtil.formatDate(this.date);
+        return (this.date == null) ?
+                "" :
+                CommonUtil.formatDate(this.date);
     }
 
     @Override

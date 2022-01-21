@@ -3,6 +3,8 @@ package com.projprogiii.servermail.model.db;
 import com.projprogiii.lib.objects.Email;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -70,10 +72,11 @@ public class DbManager {
             FileOutputStream fout;
             fout = new FileOutputStream(path);
             ObjectOutputStream out = new ObjectOutputStream(fout);
-            if(Objects.equals(email.getSender(), user)) email.setToRead(false);
 
             out.writeObject(email);
             out.flush();
+            out.close();
+            fout.close();
             result = true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -114,6 +117,13 @@ public class DbManager {
     public boolean deleteEmail(Email email, String user){
         String path = findEmailPath(email, user);
         File f = new File(path);
+
+        try {
+            Files.delete(Paths.get(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+            e.getCause();
+        }
 
         return f.delete();
     }
