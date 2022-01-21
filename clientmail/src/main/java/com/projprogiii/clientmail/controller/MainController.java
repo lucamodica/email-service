@@ -44,7 +44,6 @@ public class MainController extends Controller {
     private TextFlow dangerAlert;
     @FXML
     private TextFlow successAlert;
-
     @FXML
     private Button deleteBtn;
     @FXML
@@ -63,9 +62,9 @@ public class MainController extends Controller {
         selectedEmail = emptyEmail;
 
         //binding tra lstEmails e inboxProperty
-        emailsLst.itemsProperty().bind(model.inboxProperty());
+        emailsLst.itemsProperty().bind(model.getInboxProperty());
         setListViewCellsListeners(emailsLst);
-        usernameLbl.textProperty().bind(model.emailAddressProperty());
+        usernameLbl.textProperty().bind(model.getEmailAddressProperty());
 
         setBtnsListeners();
         updateDetailView(emptyEmail);
@@ -87,13 +86,15 @@ public class MainController extends Controller {
         replyAllBtn.setOnAction(event ->
                 opButtonHandler(null, (OnButtonClick) -> replyAll()));
     }
+
     private void delete(){
         //server-side delete
-        ServerResponse response = ClientApp.model.getClient()
+        ServerResponse response = model.getClient()
                 .sendCmd(CommandName.DELETE_EMAIL, selectedEmail);
         ResponseHandler.handleResponse(response,
                 ClientApp.sceneController.getController(SceneName.MAIN),
                 () -> {
+                    //client-side delete
                     model.deleteEmail(selectedEmail);
                     updateDetailView(emptyEmail);
                     AlertManager.showTemporizedAlert(dangerAlert,
@@ -117,7 +118,7 @@ public class MainController extends Controller {
     private void replyAll(){
         replyBtn.hide();
         List<String> list = selectedEmail.getReceivers();
-        list.remove(model.getClient().getUser());
+        list.remove(getUserEmail());
         composeFieldsSetter(selectedEmail.getSender() +
                         CommonUtil.receiversToString(list),
                 "ReplyAll: " + selectedEmail.getSubject(),
@@ -135,18 +136,19 @@ public class MainController extends Controller {
         ClientApp.sceneController.switchTo(SceneName.COMPOSE);
     }
 
+    //Used to automatically set textfields in reply/replyAll and forward cases
     @FXML
     private void composeFieldsSetter(String receivers, String object, String htmltext){
         ClientApp.sceneController.switchTo(SceneName.COMPOSE);
         ComposeController controller = (ComposeController) ClientApp.sceneController.
                 getController(SceneName.COMPOSE);
 
-        controller.getSenderTextField().setText(model.getClient().getUser());
+        controller.getSenderTextField().setText(getUserEmail());
         controller.getRecipientsTextField().setText(receivers);
         controller.getObjectTextField().setText(object);
         controller.getMessageEditor().setHtmlText(htmltext);
     }
-
+    //anonymous class used to manage bold text in function of Email's isToRead state
     private void setListViewCellsListeners(ListView<Email> emailsLst){
         emailsLst.setCellFactory(cell -> new ListCell<>() {
             @Override
@@ -160,18 +162,19 @@ public class MainController extends Controller {
                 setOnMouseClicked((click) -> {
                     Email selectedEmail = emailsLst.getSelectionModel().getSelectedItem();
                     if (selectedEmail != null) {
+                        //client-side markAsRead
                         selectedEmail.setToRead(false);
                         setStyle(null);
 
-                        ServerResponse response = ClientApp.model.getClient().sendCmd(CommandName.MARK_AS_READ, selectedEmail);
+                        //server-side markAsRead
+                        ServerResponse response = model.getClient().sendCmd(CommandName.MARK_AS_READ, selectedEmail);
                         ResponseHandler.handleResponse(response,
-                                (MainController) ClientApp.sceneController.getController(SceneName.MAIN),
+                                ClientApp.sceneController.getController(SceneName.MAIN),
                                 () -> {}
                                 );
                     }
                     MainController.this.selectedEmail = selectedEmail;
                     updateDetailView(selectedEmail);
-
                 });
             }
         });

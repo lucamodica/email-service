@@ -2,9 +2,9 @@ package com.projprogiii.lib.enums;
 
 public enum ServerResponseName {
     SUCCESS(null),
-    ILLEGAL_PARAMS("Invalid parameters number or type."),
-    INVALID_RECIPIENTS("Invalid recipients adresses."),
-    OP_ERROR("Something went wrong.");
+    ILLEGAL_PARAMS("Invalid parameters."),
+    INVALID_RECIPIENTS("Invalid recipients address, some of them may not exists."),
+    OP_ERROR("Ops, something went wrong.");
 
     public final String text;
 

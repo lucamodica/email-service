@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class CommonUtil {
 
     public static boolean validateEmail(String email){
-        return Pattern.matches("^(.+)@unito.it", email);
+        return Pattern.matches("^(.+?)@unito.it", email);
     }
 
     public static String formatDate(Date date){
@@ -18,11 +18,9 @@ public class CommonUtil {
 
     public static String receiversToString(List<String> list) {
         StringBuilder s = new StringBuilder();
-        for (String adress: list ) {
-            s.append(", ").append(adress);
+        for (String address: list ) {
+            s.append(", ").append(address);
         }
         return s.toString();
     }
-
-
 }

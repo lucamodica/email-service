@@ -9,10 +9,8 @@ import com.projprogiii.lib.utils.CommonUtil;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Arrays;
 
 import static java.lang.System.exit;
 
@@ -50,13 +48,12 @@ public class Client {
 
     public String getUser(){ return user; }
 
+    //receive response from inputStream, called after sending a command
     private ServerResponse getServerResponse(ClientRequest req) {
         try {
             connectToServer();
             outputStream.writeObject(req);
             outputStream.flush();
-
-            //receive response
             return (ServerResponse) inputStream.readObject();
         } catch (SocketException ce) {
             return null;
@@ -86,10 +83,11 @@ public class Client {
             }
         }
     }
-
-    public ServerResponse sendCmd(CommandName command, Object... args){
-        ClientRequest req = new ClientRequest(user, command,
-                Arrays.stream(args).toList());
+    //sent command consist of a ClientRequest object, packing:
+    //- the commandName used from server to repack a response
+    //- the Object (Date or Email) passed to the server
+    public ServerResponse sendCmd(CommandName command, Object arg){
+        ClientRequest req = new ClientRequest(user, command, arg);
         return getServerResponse(req);
     }
 }

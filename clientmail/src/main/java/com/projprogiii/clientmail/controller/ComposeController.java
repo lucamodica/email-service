@@ -5,9 +5,7 @@ import com.projprogiii.clientmail.scene.SceneName;
 import com.projprogiii.clientmail.utils.alert.AlertManager;
 import com.projprogiii.clientmail.utils.alert.AlertText;
 import com.projprogiii.clientmail.utils.responsehandler.ResponseHandler;
-import com.projprogiii.clientmail.utils.responsehandler.SuccessHandler;
 import com.projprogiii.lib.enums.CommandName;
-import com.projprogiii.lib.enums.ServerResponseName;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.lib.utils.CommonUtil;
@@ -42,7 +40,7 @@ public class ComposeController extends Controller {
     @FXML
     public void initialize(){
         senderTextField.setEditable(false);
-        senderTextField.setText(model.getClient().getUser());
+        senderTextField.setText(getUserEmail());
     }
 
     public TextField getSenderTextField() {
@@ -70,25 +68,26 @@ public class ComposeController extends Controller {
 
     @FXML
     private void onSendButtonClick() {
-
-        String[] recipentsArray = recipientsTextField.getText().split("\\s*,\\s*");
-        if (Arrays.stream(recipentsArray).allMatch(CommonUtil::validateEmail)){
+        String[] recipientsArray = recipientsTextField.getText().split("\\s*,\\s*");
+        if (Arrays.stream(recipientsArray).allMatch(CommonUtil::validateEmail)){
             Email email = new Email(senderTextField.getText(),
-                    new ArrayList<>(List.of(recipentsArray)),
+                    new ArrayList<>(List.of(recipientsArray)),
                     objectTextField.getText(), messageEditor.getHtmlText());
 
-            ServerResponse response = ClientApp.model.getClient().sendCmd(CommandName.SEND_EMAIL, email);
+            ServerResponse response = model.getClient().sendCmd(CommandName.SEND_EMAIL, email);
             ResponseHandler.handleResponse(response, ClientApp.sceneController.getController(SceneName.COMPOSE),
-                    () -> {
-                        model.addEmails(Collections.singletonList(email));
-                        //clearing all fields
-                        recipientsTextField.clear();
-                        objectTextField.clear();
-                        messageEditor.setHtmlText("");
-                        AlertManager.showSuccessSendMessage(AlertText.MESSAGE_SENT, 2);
-                    } );
+                    () -> send(email));
         } else {
             AlertManager.showTemporizedAlert(dangerAlert, AlertText.INVALID_RECIPIENTS, 2);
         }
+    }
+
+    private void send(Email email){
+        model.addEmails(Collections.singletonList(email));
+        //clearing all fields
+        recipientsTextField.clear();
+        objectTextField.clear();
+        messageEditor.setHtmlText("");
+        AlertManager.showSuccessSendMessage(AlertText.MESSAGE_SENT, 2);
     }
 }

@@ -2,7 +2,6 @@ package com.projprogiii.clientmail.controller;
 
 import com.projprogiii.clientmail.ClientApp;
 import com.projprogiii.clientmail.model.Model;
-import com.projprogiii.clientmail.utils.alert.AlertText;
 import javafx.scene.text.TextFlow;
 
 public abstract class Controller {

@@ -38,7 +38,6 @@ public class Email implements Serializable, Comparable<Email>{
     public int getId() {
         return id;
     }
-
     public String getSender() {
         return sender;
     }
@@ -51,14 +50,13 @@ public class Email implements Serializable, Comparable<Email>{
     public String getText() {
         return text;
     }
-
     public Date getDate() { return date; }
+    public boolean isToRead() {
+        return isToRead;
+    }
 
     public void setToRead(boolean b){
         this.isToRead = b;
-    }
-    public boolean isToRead() {
-        return isToRead;
     }
 
     public static boolean isEmpty(Email email){

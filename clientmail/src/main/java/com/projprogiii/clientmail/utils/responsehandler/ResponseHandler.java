@@ -24,7 +24,7 @@ public class ResponseHandler {
                 case SUCCESS -> successHandler.handle();
                 case ILLEGAL_PARAMS -> AlertManager.showTemporizedAlert(
                         controller.getDangerAlert(),
-                        AlertText.INVALID_RECIPIENTS_FORMAT,
+                        AlertText.ILLEGAL_PARAMS,
                         2);
                 case INVALID_RECIPIENTS -> AlertManager.showTemporizedAlert(
                         controller.getDangerAlert(),

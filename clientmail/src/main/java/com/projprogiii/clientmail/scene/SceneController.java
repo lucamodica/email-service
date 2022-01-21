@@ -19,8 +19,12 @@ public class SceneController {
         this.main = main;
         sceneMap = new HashMap<>();
     }
+
     public static SceneController getInstance(Scene main){
         return new SceneController(main);
+    }
+    public Controller getController(SceneName name){
+        return sceneMap.get(name).controller();
     }
 
     public void addScene(SceneName name) throws IOException {
@@ -31,12 +35,8 @@ public class SceneController {
         sceneMap.put(name, new ClientWindow(loader.load(), loader.getController()));
     }
 
-    public Controller getController(SceneName name){
-        return sceneMap.get(name).controller();
-    }
-
+    //switcher of current scene
     public void switchTo(SceneName name){
         main.setRoot(sceneMap.get(name).pane());
     }
-
 }

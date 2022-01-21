@@ -18,11 +18,9 @@ import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.*;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 public class ClientApp extends Application {
 
@@ -65,29 +63,31 @@ public class ClientApp extends Application {
         fetchEmails = Executors.newSingleThreadScheduledExecutor();
         Client client = model.getClient();
 
-        //Start JavaFX app
+        //Start JavaFX app using method reference
         appFX.execute(Application::launch);
 
-        //Start the fetch email thread
+        //Start the fetch email thread; operation repeated at fixed rate for constant fetching
         fetchEmails.scheduleAtFixedRate(
                 () -> {
                     ServerResponse resp = client.sendCmd(CommandName.FETCH_EMAIL,
                             lastFetch);
                     ResponseHandler.handleResponse(resp,
                             sceneController.getController(SceneName.MAIN),
-                            () -> {
-                                List<Email> l = resp.args()
-                                        .stream()
-                                        .filter(email -> !model.getInboxContent().contains(email))
-                                        .toList();
-                                if (!l.isEmpty()){
-                                    Platform.runLater(() -> model.addEmails(l));
-                                    if (!lastFetch.equals(new Date(Long.MIN_VALUE))){
-                                        AlertManager.showSuccessSendMessage(AlertText.NEW_EMAILS, 2);
-                                    }
-                                }
-                                lastFetch = new Date();
-                            });
+                            () -> fetch(resp));
                 },1, 2, TimeUnit.SECONDS);
+    }
+    //filters possible duplicates and new emails by date, then adds them to the ObservableList
+    private static void fetch(ServerResponse resp){
+        List<Email> l = resp.args()
+                .stream()
+                .filter(email -> !model.getInboxContent().contains(email))
+                .toList();
+        if (!l.isEmpty()){
+            Platform.runLater(() -> model.addEmails(l));
+            if (!lastFetch.equals(new Date(Long.MIN_VALUE))){
+                AlertManager.showSuccessSendMessage(AlertText.NEW_EMAILS, 2);
+            }
+        }
+        lastFetch = new Date();
     }
 }
