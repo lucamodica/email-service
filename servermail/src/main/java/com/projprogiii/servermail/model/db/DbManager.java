@@ -3,6 +3,8 @@ package com.projprogiii.servermail.model.db;
 import com.projprogiii.lib.objects.Email;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -99,7 +101,10 @@ public class DbManager {
                 fin = new FileInputStream(file);
                 obj = new ObjectInputStream(fin);
                 emails.add((Email) obj.readObject());
+                obj.close();
+                fin.close();
             }
+
 
         } catch (ClassNotFoundException | IOException |
                 NullPointerException e) {

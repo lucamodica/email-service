@@ -52,7 +52,10 @@ public class Session implements Runnable{
             outputStream.writeObject(response);
             outputStream.flush();
 
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException ignored) {
+            //Case where the client close the connection or
+            //the server timeout elapsed
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             closeStreams();

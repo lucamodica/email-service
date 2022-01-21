@@ -82,6 +82,7 @@ public class ClientApp extends Application {
         appFX.execute(Application::launch);
 
         //Start the fetch email thread; operation repeated at fixed rate for constant fetching
+
         fetchEmails.scheduleAtFixedRate(
                 () -> {
                     ServerResponse resp = client.sendCmd(CommandName.FETCH_EMAIL,
