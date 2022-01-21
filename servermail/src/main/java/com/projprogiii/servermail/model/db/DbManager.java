@@ -61,29 +61,9 @@ public class DbManager {
         return f.getAbsolutePath();
     }
 
-    /** Save the email in the db, storing it in both
-     *  the sender and receivers folders. */
-    public void saveEmail(Email email){
-
-
-
-        ArrayList<String> emailAddresses =
-                new ArrayList<>(email.getReceivers());
-
-        //Store the email into the sender folder first
-        storeEmail(email, email.getSender());
-
-        //Setting the email as it's to be read for all
-        //other receivers users
-        email.setToRead(true);
-        for (String s : emailAddresses) {
-            storeEmail(email, s);
-        }
-    }
-
     /** Storing single email in the specified user
      * folder, in a .txt file format. */
-    public boolean storeEmail(Email email, String user){
+    public boolean saveEmail(Email email, String user){
         boolean result;
         try {
             String path = findEmailPath(email, user);
@@ -131,34 +111,16 @@ public class DbManager {
     /** Delete a specific email (so, the file), of a
      *  specific user. */
     public boolean deleteEmail(Email email, String user){
-        boolean result;
+        String path = findEmailPath(email, user);
+        File f = new File(path);
 
-        if (email == null){
-            result = false;
-        }
-        else {
-            String path = findEmailPath(email, user);
-            File f = new File(path);
-            result = f.delete();
-        }
-
-        return result;
+        return f.delete();
     }
 
     /** Mark an email as read, changing its specific
      *  boolean attribute and rewriting it in file. */
     public boolean markAsReadEmail(Email email, String user){
-        boolean result;
-
-        if (email == null){
-            result = false;
-        }
-        else {
-            email.setToRead(false);
-            storeEmail(email, user);
-            result = true;
-        }
-
-        return result;
+        email.setToRead(false);
+        return saveEmail(email, user);
     }
 }

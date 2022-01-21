@@ -14,10 +14,16 @@ public class SyncManager {
         return new SyncManager();
     }
 
-    public void addLock(String user){
+
+    public void addLockEntry(String user){
         locks.putIfAbsent(user, new ReentrantReadWriteLock());
     }
-    public void removeLock(String user){
+
+    public void removeLockEntry(String user){
         locks.remove(user);
+    }
+
+    public ReentrantReadWriteLock getLock(String user){
+        return locks.get(user);
     }
 }

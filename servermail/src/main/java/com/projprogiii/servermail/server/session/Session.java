@@ -1,11 +1,11 @@
 package com.projprogiii.servermail.server.session;
 
 import com.projprogiii.lib.enums.CommandName;
-import com.projprogiii.lib.enums.ServerResponseName;
 import com.projprogiii.lib.objects.ClientRequest;
 import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.servermail.ServerApp;
 import com.projprogiii.servermail.model.log.LogManager;
+import com.projprogiii.servermail.model.sync.SyncManager;
 import com.projprogiii.servermail.server.session.command.*;
 import javafx.application.Platform;
 
@@ -20,11 +20,13 @@ public class Session implements Runnable{
     ObjectInputStream inputStream;
     ObjectOutputStream outputStream;
     LogManager logManager;
+    SyncManager syncManager;
 
 
     public Session(Socket socket){
         this.socket = socket;
         logManager = ServerApp.model.getLogManager();
+        syncManager = ServerApp.model.getSyncManager();
     }
 
     @Override
@@ -40,7 +42,9 @@ public class Session implements Runnable{
             //OP block
             Command command = createCommand(req.cmdName());
             checkAuth(req.auth());
+            syncManager.addLockEntry(req.auth());
             ServerResponse response = command.handle(req);
+            syncManager.removeLockEntry(req.auth());
 
             //writing server response
             outputStream.flush();

@@ -6,13 +6,17 @@ import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.servermail.ServerApp;
 
-public class SendEmail implements Command{
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+public class SendEmail extends Command{
 
     @Override
     public ServerResponse handle(ClientRequest req) {
         Email email = (Email) req.arg();
-
         ServerResponseName name;
+        ReentrantReadWriteLock.WriteLock writeLock =
+                syncManager.getLock(req.auth()).writeLock();
+
 
         if (email == null){
             name = ServerResponseName.ILLEGAL_PARAMS;
@@ -23,30 +27,35 @@ public class SendEmail implements Command{
         }
         else {
 
-            //sender write lock
+            writeLock.lock();
             boolean result = ServerApp.model.getDbManager()
-                    .storeEmail(email, email.getSender());
-            //sender unlock
+                    .saveEmail(email, email.getSender());
+            writeLock.unlock();
 
             if (!result){
-                name = ServerResponseName.ILLEGAL_PARAMS;
+                name = ServerResponseName.OP_ERROR;
             }
             else {
                 email.setToRead(true);
                 boolean allSends = true;
 
                 for (String receiver : email.getReceivers()) {
-                    //current receiver write lock
+                    syncManager.addLockEntry(receiver);
+                    writeLock = syncManager.getLock(receiver).writeLock();
+
+                    writeLock.lock();
                     if (!ServerApp.model.getDbManager()
-                            .storeEmail(email, receiver)) {
+                            .saveEmail(email, receiver)) {
                         allSends = false;
                     }
-                    //current receiver unlock
+                    writeLock.unlock();
+
+                    syncManager.removeLockEntry(receiver);
                 }
 
                 name = (allSends) ?
                         ServerResponseName.SUCCESS :
-                        ServerResponseName.ILLEGAL_PARAMS;
+                        ServerResponseName.OP_ERROR;
             }
         }
 
