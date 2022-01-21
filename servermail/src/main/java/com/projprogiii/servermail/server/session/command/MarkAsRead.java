@@ -10,7 +10,7 @@ public class MarkAsRead implements Command {
 
     @Override
     public ServerResponse handle(ClientRequest req) {
-        Email email = (Email) req.args().get(0);
+        Email email = (Email) req.arg();
 
         //write lock
         ServerResponseName name = (ServerApp.model.getDbManager()

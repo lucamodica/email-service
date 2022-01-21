@@ -12,13 +12,17 @@ public class ResponseHandler {
     public static void handleResponse(ServerResponse resp,
                                       Controller controller,
                                       SuccessHandler successHandler){
+
         if (resp == null) {
             AlertManager.showAlert(
                     controller.getDangerAlert(),
                     AlertText.NO_CONNECTION);
-        } else {
-            AlertManager.hideAlert(ClientApp.sceneController.getController(SceneName.MAIN).getDangerAlert(), 1);
-            AlertManager.hideAlert(ClientApp.sceneController.getController(SceneName.COMPOSE).getDangerAlert(), 1);
+        }
+        else {
+            AlertManager.hideAlert(ClientApp.sceneController.getController(SceneName.MAIN)
+                    .getDangerAlert(), 1);
+            AlertManager.hideAlert(ClientApp.sceneController.getController(SceneName.COMPOSE)
+                    .getDangerAlert(), 1);
 
             switch (resp.responseName()){
                 case SUCCESS -> successHandler.handle();

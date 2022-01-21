@@ -13,7 +13,7 @@ public class FetchEmail implements Command{
 
     @Override
     public ServerResponse handle(ClientRequest req){
-        Date date = (Date) req.args().get(0);
+        Date date = (Date) req.arg();
 
         //read lock
         List<Email> emails = ServerApp.model.getDbManager()

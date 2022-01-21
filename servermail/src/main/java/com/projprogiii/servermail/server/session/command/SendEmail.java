@@ -10,7 +10,7 @@ public class SendEmail implements Command{
 
     @Override
     public ServerResponse handle(ClientRequest req) {
-        Email email = (Email) req.args().get(0);
+        Email email = (Email) req.arg();
 
         ServerResponseName name;
 

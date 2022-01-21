@@ -20,9 +20,10 @@ public class Client {
     private String serverHost;
     private int serverPort;
 
-    Socket currentSocket = null;
-    ObjectOutputStream outputStream = null;
-    ObjectInputStream inputStream = null;
+    Socket currentSocket;
+    ObjectOutputStream outputStream;
+    ObjectInputStream inputStream;
+
 
     private Client() {
         ConfigManager configManager = ConfigManager.getInstance();
@@ -42,6 +43,7 @@ public class Client {
             exit(1);
         }
     }
+
     public static Client getInstance(){
         return new Client();
     }
@@ -50,19 +52,23 @@ public class Client {
 
     //receive response from inputStream, called after sending a command
     private ServerResponse getServerResponse(ClientRequest req) {
+
+        ServerResponse resp;
         try {
             connectToServer();
             outputStream.writeObject(req);
             outputStream.flush();
-            return (ServerResponse) inputStream.readObject();
+            resp = (ServerResponse) inputStream.readObject();
         } catch (SocketException ce) {
-            return null;
+            resp = null;
         } catch (IOException | ClassNotFoundException se) {
             se.printStackTrace();
-            return null;
+            resp = null;
         } finally {
             closeConnections();
         }
+
+        return resp;
     }
 
     private void connectToServer() throws IOException {
@@ -83,6 +89,7 @@ public class Client {
             }
         }
     }
+
     //sent command consist of a ClientRequest object, packing:
     //- the commandName used from server to repack a response
     //- the Object (Date or Email) passed to the server

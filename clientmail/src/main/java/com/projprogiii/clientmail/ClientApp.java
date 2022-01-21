@@ -57,6 +57,21 @@ public class ClientApp extends Application {
         }
     }
 
+    //filters possible duplicates and new emails by date, then adds them to the ObservableList
+    private static void fetch(ServerResponse resp){
+        List<Email> l = resp.args()
+                .stream()
+                .filter(email -> !model.getInboxContent().contains(email))
+                .toList();
+        if (!l.isEmpty()){
+            Platform.runLater(() -> model.addEmails(l));
+            if (!lastFetch.equals(new Date(Long.MIN_VALUE))){
+                AlertManager.showSuccessSendMessage(AlertText.NEW_EMAILS, 2);
+            }
+        }
+        lastFetch = new Date();
+    }
+
     public static void main(String[] args) {
         model = Model.getInstance();
         appFX = Executors.newSingleThreadExecutor();
@@ -71,23 +86,14 @@ public class ClientApp extends Application {
                 () -> {
                     ServerResponse resp = client.sendCmd(CommandName.FETCH_EMAIL,
                             lastFetch);
-                    ResponseHandler.handleResponse(resp,
-                            sceneController.getController(SceneName.MAIN),
-                            () -> fetch(resp));
+                    
+                    try {
+                        ResponseHandler.handleResponse(resp,
+                                sceneController.getController(SceneName.MAIN),
+                                () -> fetch(resp));
+                    } catch (NullPointerException ignored){
+
+                    }
                 },1, 2, TimeUnit.SECONDS);
-    }
-    //filters possible duplicates and new emails by date, then adds them to the ObservableList
-    private static void fetch(ServerResponse resp){
-        List<Email> l = resp.args()
-                .stream()
-                .filter(email -> !model.getInboxContent().contains(email))
-                .toList();
-        if (!l.isEmpty()){
-            Platform.runLater(() -> model.addEmails(l));
-            if (!lastFetch.equals(new Date(Long.MIN_VALUE))){
-                AlertManager.showSuccessSendMessage(AlertText.NEW_EMAILS, 2);
-            }
-        }
-        lastFetch = new Date();
     }
 }

@@ -30,7 +30,6 @@ public class Session implements Runnable{
     @Override
     public void run() {
         try {
-            ServerResponse response;
 
             outputStream = new ObjectOutputStream(socket.getOutputStream());
             inputStream = new ObjectInputStream(socket.getInputStream());
@@ -39,14 +38,9 @@ public class Session implements Runnable{
             Platform.runLater(() -> logManager.printLog(req.toString()));
 
             //OP block
-            if(req.cmdName().argsLength != req.args().size()){
-                response = new ServerResponse(ServerResponseName.ILLEGAL_PARAMS,
-                        null);
-            } else {
-                Command command = createCommand(req.cmdName());
-                checkAuth(req.auth());
-                response = command.handle(req);
-            }
+            Command command = createCommand(req.cmdName());
+            checkAuth(req.auth());
+            ServerResponse response = command.handle(req);
 
             //writing server response
             outputStream.flush();
