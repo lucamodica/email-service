@@ -70,6 +70,7 @@ public class DbManager {
             FileOutputStream fout;
             fout = new FileOutputStream(path);
             ObjectOutputStream out = new ObjectOutputStream(fout);
+            if(Objects.equals(email.getSender(), user)) email.setToRead(false);
 
             out.writeObject(email);
             out.flush();

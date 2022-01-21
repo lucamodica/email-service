@@ -9,6 +9,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Model {
 
@@ -36,6 +37,14 @@ public class Model {
     public StringProperty getEmailAddressProperty() { return emailAddress; }
 
     public void addEmails(List<Email> emails){
+        emails = emails.stream()
+                        .map(e -> {
+                            if(Objects.equals(e.getSender(), client.getUser())){
+                                e = new Email("YOU", e.getReceivers(), e.getSubject(), e.getText());
+                            }
+                            return e;
+                        })
+                .collect(Collectors.toList());
         inboxContent.addAll(emails);
         inboxContent.sort(null);
     }
