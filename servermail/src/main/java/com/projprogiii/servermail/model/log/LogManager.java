@@ -12,10 +12,9 @@ import java.util.LinkedList;
 
 public class LogManager {
 
-    private ListProperty<String> log;
-    private ObservableList<String> logContent;
-
-    private static String serverName;
+    private final ListProperty<String> log;
+    private final ObservableList<String> logContent;
+    private final String serverName;
 
     private LogManager (){
         this.logContent = FXCollections.observableList(Collections.
@@ -23,7 +22,7 @@ public class LogManager {
         this.log = new SimpleListProperty<>();
         this.log.set(logContent);
 
-        this.serverName = " server> ";
+        this.serverName = "server";
     }
     public static LogManager getInstance(){
         return new LogManager();
@@ -33,14 +32,11 @@ public class LogManager {
         return log;
     }
 
-    public void addLog(String logText){
-        logContent.add(logText);
+    public void printNewLine(){
+        logContent.add("");
     }
-    public void printLog(String logText){
-        addLog('[' + CommonUtil.formatDate(new Date()) + ']'
-                + logText);
-    }
-    public void printSystemLog(String logText){
-        printLog(serverName + logText);
+    public synchronized void printLog(String logText){
+        logContent.add('[' + CommonUtil.formatDate(new Date()) + "] "
+                + serverName + "> " + logText);
     }
 }

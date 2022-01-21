@@ -1,22 +1,36 @@
 package com.projprogiii.clientmail;
 
 import com.projprogiii.clientmail.model.Model;
+import com.projprogiii.clientmail.model.client.Client;
 import com.projprogiii.clientmail.scene.SceneController;
 import com.projprogiii.clientmail.scene.SceneName;
+import com.projprogiii.clientmail.utils.alert.AlertManager;
+import com.projprogiii.clientmail.utils.alert.AlertText;
+import com.projprogiii.clientmail.utils.responsehandler.ResponseHandler;
+import com.projprogiii.lib.enums.CommandName;
+import com.projprogiii.lib.objects.Email;
+import com.projprogiii.lib.objects.ServerResponse;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 public class ClientApp extends Application {
 
     public static Model model;
     public static SceneController sceneController;
+    private static ExecutorService appFX;
+    private static ScheduledExecutorService fetchEmails;
+    private static Date lastFetch = new Date(Long.MIN_VALUE);
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -33,10 +47,47 @@ public class ClientApp extends Application {
         stage.show();
     }
 
+    @Override
+    public void stop(){
+        appFX.shutdown();
+        fetchEmails.shutdown();
+        try {
+            System.out.println(fetchEmails.awaitTermination(1, TimeUnit.SECONDS) ?
+                    "" : "Timeout elapsed before fetchEmails thread termination.");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         model = Model.getInstance();
-        model.getClient().login();
+        appFX = Executors.newSingleThreadExecutor();
+        fetchEmails = Executors.newSingleThreadScheduledExecutor();
+        Client client = model.getClient();
 
-        launch();
+        //Start JavaFX app
+        appFX.execute(Application::launch);
+
+        //Start the fetch email thread
+        fetchEmails.scheduleAtFixedRate(
+                () -> {
+                    ServerResponse resp = client.sendCmd(CommandName.FETCH_EMAIL,
+                            lastFetch);
+                    ResponseHandler.handleResponse(resp,
+                            sceneController.getController(SceneName.MAIN),
+                            () -> {
+                                List<Email> l = resp.args()
+                                        .stream()
+                                        .filter(email -> !model.getInboxContent().contains(email))
+                                        .toList();
+                                if (!l.isEmpty()){
+                                    Platform.runLater(() -> model.addEmails(l));
+                                    if (!lastFetch.equals(new Date(Long.MIN_VALUE))){
+                                        AlertManager.showSuccessSendMessage(AlertText.NEW_EMAILS, 2);
+                                    }
+                                }
+                                lastFetch = new Date();
+                            });
+                },1, 2, TimeUnit.SECONDS);
     }
 }

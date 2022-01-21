@@ -1,14 +1,14 @@
 package com.projprogiii.servermail.model.db;
 
 import com.projprogiii.lib.objects.Email;
-import com.projprogiii.lib.objects.User;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
+import static java.lang.System.exit;
 
 public class DbManager {
 
@@ -18,13 +18,13 @@ public class DbManager {
         dbPath = new File("").getAbsolutePath() + "/servermail/src/main/data/";
         File f = new File(dbPath);
 
-        if (!f.exists()){
-            f.mkdirs();
-        } else {
-            //TODO remove this for final version, as data should not be removed after server startup
-            //removeDir will still be used to remove files or folders
-            removeDir(dbPath);
-            f.mkdirs();
+        try {
+            if (!f.exists() && !f.mkdirs()){
+                throw new IOException();
+            }
+        } catch (IOException e){
+            System.out.println("Cannot create the database folder!");
+            exit(1);
         }
     }
 
@@ -32,48 +32,84 @@ public class DbManager {
         return new DbManager();
     }
 
-    private boolean makeDir(String path){
-        File f = new File(dbPath + path);
-        if (f.exists()){
-            return false;
-        }
+    public boolean checkUser(String user){
+        String[] dirs = new File(dbPath).list(
+                (current, name) -> new File(current, name)
+                        .isDirectory());
+
+        return dirs != null && dirs.length != 0 &&
+                Arrays.stream(dirs).toList().contains(user);
+    }
+
+    public boolean addUser(String user){
+        File f = new File(dbPath + user);
         return f.mkdirs();
     }
 
-    private void removeDir(String path){
+    //TODO implement sync
+    public void saveEmail(Email email){
+        ArrayList<String> emailAddresses = new ArrayList<>(email.getReceivers());
+
+        //Store the email into the sender folder first
+        storeEmail(email, email.getSender());
+
+        //Setting the email as it's to be read for all
+        //other receivers users
+        email.setToRead(true);
+        for (String s : emailAddresses) {
+            if(!checkUser(s)) addUser(s);
+            storeEmail(email, s);
+        }
+    }
+
+    private void storeEmail(Email email, String auth){
         try {
-            Files.walk(Paths.get(path))
-                    .sorted(Comparator.reverseOrder())
-                    .map(Path::toFile)
-                    .forEach(File::delete);
+            String path = findEmailPath(email, auth);
+            FileOutputStream fout;
+            fout = new FileOutputStream(path);
+            ObjectOutputStream out = new ObjectOutputStream(fout);
+            out.writeObject(email);
+            out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean logUser(User user){
-        return makeDir(user.emailAddress());
-    }
-    //TODO implement sync - no need to implement user log checks here, already asked during client sendEmail
-    public void saveEmail(Email email){
-        ArrayList<String> emailAddresses = new ArrayList<>(email.getReceivers());
-        emailAddresses.add(email.getSender());
+    public List<Email> readEmails(String user){
+        File[] emails = new File(dbPath + "/" + user +  "/")
+                .listFiles();
 
-        for (String s : emailAddresses) {
-            logUser(new User(s));
-            saveEmailAux(s, email);
-        }
-    }
+        FileInputStream fin;
+        ObjectInputStream obj;
+        List<Email> list = new ArrayList<>();
 
-    private void saveEmailAux(String s, Email email){
         try {
-            FileOutputStream fout;
-            fout = new FileOutputStream(dbPath + "/" + s +  "/" + email.getId() + ".txt");
-            ObjectOutputStream out = new ObjectOutputStream(fout);
-            out.writeObject(email);
-            out.flush();
-        } catch (Exception e) {
+            for (File file : Objects.requireNonNull(emails)) {
+                fin = new FileInputStream(file);
+                obj = new ObjectInputStream(fin);
+                list.add((Email) obj.readObject());
+            }
+
+        } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
-        }
+        } catch (NullPointerException ignored){}
+        return list;
+    }
+
+    private String findEmailPath(Email email, String auth){
+        int id = email.getId();
+        File f = new File(dbPath + "/" + auth +  "/" +  id + ".txt");
+        return f.getAbsolutePath();
+    }
+
+    public boolean deleteEmail(Email email, String auth){
+        String path = findEmailPath(email, auth);
+        File f = new File(path);
+        return f.delete();
+    }
+
+    public void markAsReadEmail(Email email, String auth){
+        email.setToRead(false);
+        storeEmail(email, auth);
     }
 }

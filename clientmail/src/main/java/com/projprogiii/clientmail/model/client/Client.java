@@ -1,8 +1,9 @@
 package com.projprogiii.clientmail.model.client;
 
 import com.projprogiii.clientmail.model.client.config.ConfigManager;
-import com.projprogiii.lib.objects.Email;
-import com.projprogiii.lib.objects.User;
+import com.projprogiii.lib.enums.CommandName;
+import com.projprogiii.lib.objects.ClientRequest;
+import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.lib.utils.CommonUtil;
 
 import java.io.IOException;
@@ -10,15 +11,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.net.SocketException;
+import java.util.Arrays;
 
 import static java.lang.System.exit;
 
 public class Client {
 
-    private User user;
+    private String user;
     private String serverHost;
     private int serverPort;
 
@@ -29,13 +29,11 @@ public class Client {
     private Client() {
         ConfigManager configManager = ConfigManager.getInstance();
 
-        try{
-
+        try {
             String emailAddress = configManager.readProperty("user.emailAddress");
             if (CommonUtil.validateEmail(emailAddress)){
-                this.user = new User(emailAddress);
-            }
-            else {
+                this.user = emailAddress;
+            } else {
                 throw new IllegalArgumentException();
             }
             serverHost = configManager.readProperty("user.server_host");
@@ -50,76 +48,21 @@ public class Client {
         return new Client();
     }
 
+    public String getUser(){ return user; }
 
-    public User getUser(){ return user; }
-
-    public void sendEmail(Email email){
-        //TODO implement sending email communication to server
-    }
-
-    public void deleteEmail(Email email){
-        //TODO send command to server in order to delete specific email from db
-    }
-
-    //TODO generizzare per comandi
-    public void login(){
-        ExecutorService exec = Executors.newFixedThreadPool(3);
-
-        exec.execute(()-> communicationTest());
-
-        //useful for waiting before termination of server
-        try {
-            exec.awaitTermination(5, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void communicationTest(){
-        boolean success = false;
-
-        while(!success) {
-            success = communicationTestAux();
-
-            if(success) {
-                continue;
-            }
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    //TODO generizzare per comandi
-    private boolean communicationTestAux() {
+    private ServerResponse getServerResponse(ClientRequest req) {
         try {
             connectToServer();
-
-            Thread.sleep(5000);
-
-            //send op
-            outputStream.writeObject(user.emailAddress());
+            outputStream.writeObject(req);
             outputStream.flush();
-            //receive op
-            boolean b = (boolean) inputStream.readObject();
-            System.out.println("[Client " + user.emailAddress() + "] Logged => " + b);
 
-            return true;
-        } catch (ConnectException ce) {
-            // nothing to be done
-            return false;
-        } catch (IOException se) {
+            //receive response
+            return (ServerResponse) inputStream.readObject();
+        } catch (SocketException ce) {
+            return null;
+        } catch (IOException | ClassNotFoundException se) {
             se.printStackTrace();
-            return false;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return false;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return false;
+            return null;
         } finally {
             closeConnections();
         }
@@ -142,5 +85,11 @@ public class Client {
                 e.printStackTrace();
             }
         }
+    }
+
+    public ServerResponse sendCmd(CommandName command, Object... args){
+        ClientRequest req = new ClientRequest(user, command,
+                Arrays.stream(args).toList());
+        return getServerResponse(req);
     }
 }

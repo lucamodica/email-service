@@ -1,7 +1,7 @@
 package com.projprogiii.servermail;
 
 import com.projprogiii.servermail.model.Model;
-import com.projprogiii.servermail.model.server.Server;
+import com.projprogiii.servermail.server.Server;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,11 +9,14 @@ import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServerApp extends Application {
 
     public static Server server;
     public static Model model;
+    private static ExecutorService appFX;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -28,14 +31,22 @@ public class ServerApp extends Application {
 
     }
 
+    @Override
+    public void stop(){
+        model.getLogManager().printNewLine();
+        model.getLogManager().
+                printLog("Server shutting down...");
+        server.interrupt();
+        appFX.shutdown();
+    }
+
     public static void main(String[] args) {
         model = Model.getInstance();
         server = Server.getInstance();
+        appFX = Executors.newSingleThreadExecutor();
 
-        server.startSession();
-        //TODO launch() is delayed, caused somewhere in startServer(), same as client. needs fix
-        launch();
+        appFX.execute(Application::launch);
+        ((Thread) server).start();
     }
-
 
 }

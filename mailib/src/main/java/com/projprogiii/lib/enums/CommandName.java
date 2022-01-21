@@ -1,17 +1,16 @@
 package com.projprogiii.lib.enums;
 
-public enum Command {
-    //Need a "log-in" command as client starts?
-    LOGIN(0),
-    FETCH_EMAIL(0),
-    CHECK_EMAIL(0),
+import java.io.Serializable;
+
+public enum CommandName implements Serializable {
+    FETCH_EMAIL(1),
     SEND_EMAIL(1),
     MARK_AS_READ(1),
     DELETE_EMAIL(1);
 
     public final int argsLength;
 
-    Command(int argsLength) {
+    CommandName(int argsLength) {
         this.argsLength = argsLength;
     }
 
