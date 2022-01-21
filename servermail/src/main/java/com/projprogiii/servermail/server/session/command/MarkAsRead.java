@@ -11,8 +11,14 @@ public class MarkAsRead implements Command {
     @Override
     public ServerResponse handle(ClientRequest req) {
         Email email = (Email) req.args().get(0);
-        if (email == null){ return new ServerResponse(ServerResponseName.ILLEGAL_PARAMS, null); }
-        ServerApp.model.getDbManager().markAsReadEmail(email, req.auth());
-        return new ServerResponse(ServerResponseName.SUCCESS, null);
+
+        //write lock
+        ServerResponseName name = (ServerApp.model.getDbManager()
+                .markAsReadEmail(email, req.auth())) ?
+                ServerResponseName.SUCCESS :
+                ServerResponseName.ILLEGAL_PARAMS;
+        //unlock
+
+        return new ServerResponse(name, null);
     }
 }

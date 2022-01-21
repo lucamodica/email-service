@@ -14,6 +14,7 @@ public class DbManager {
 
     private final String dbPath;
 
+
     private DbManager(){
         dbPath = new File("").getAbsolutePath() + "/servermail/src/main/data/";
         File f = new File(dbPath);
@@ -32,6 +33,9 @@ public class DbManager {
         return new DbManager();
     }
 
+
+    /** Check if a specific user exists, by verifying
+     *  if exists its own folder in the db one. */
     public boolean checkUser(String user){
         String[] dirs = new File(dbPath).list(
                 (current, name) -> new File(current, name)
@@ -41,14 +45,30 @@ public class DbManager {
                 Arrays.stream(dirs).toList().contains(user);
     }
 
+    /** Add a user to the db, creating its own folder in
+     *  the db one. */
     public boolean addUser(String user){
         File f = new File(dbPath + user);
         return f.mkdirs();
     }
 
-    //TODO implement sync
+
+    /** Find the path of a specific email, giving
+     *  the email itself and the user folder. */
+    private String findEmailPath(Email email, String user){
+        int id = email.getId();
+        File f = new File(dbPath + "/" + user +  "/" +  id + ".txt");
+        return f.getAbsolutePath();
+    }
+
+    /** Save the email in the db, storing it in both
+     *  the sender and receivers folders. */
     public void saveEmail(Email email){
-        ArrayList<String> emailAddresses = new ArrayList<>(email.getReceivers());
+
+
+
+        ArrayList<String> emailAddresses =
+                new ArrayList<>(email.getReceivers());
 
         //Store the email into the sender folder first
         storeEmail(email, email.getSender());
@@ -57,59 +77,88 @@ public class DbManager {
         //other receivers users
         email.setToRead(true);
         for (String s : emailAddresses) {
-            if(!checkUser(s)) addUser(s);
             storeEmail(email, s);
         }
     }
 
-    private void storeEmail(Email email, String auth){
+    /** Storing single email in the specified user
+     * folder, in a .txt file format. */
+    public boolean storeEmail(Email email, String user){
+        boolean result;
         try {
-            String path = findEmailPath(email, auth);
+            String path = findEmailPath(email, user);
             FileOutputStream fout;
             fout = new FileOutputStream(path);
             ObjectOutputStream out = new ObjectOutputStream(fout);
+
             out.writeObject(email);
             out.flush();
+            result = true;
         } catch (IOException e) {
             e.printStackTrace();
+            result = false;
         }
+
+        return result;
     }
 
-    public List<Email> readEmails(String user){
-        File[] emails = new File(dbPath + "/" + user +  "/")
-                .listFiles();
+    /** Retrieve the list of all emails of a specified
+     *  user. */
+    public List<Email> retrieveEmails(String user){
 
+        File[] emailsFiles = new File(dbPath + "/" +
+                user +  "/").listFiles();
         FileInputStream fin;
         ObjectInputStream obj;
-        List<Email> list = new ArrayList<>();
+        List<Email> emails = new ArrayList<>();
 
         try {
-            for (File file : Objects.requireNonNull(emails)) {
+            for (File file : Objects.requireNonNull(emailsFiles)) {
                 fin = new FileInputStream(file);
                 obj = new ObjectInputStream(fin);
-                list.add((Email) obj.readObject());
+                emails.add((Email) obj.readObject());
             }
 
-        } catch (ClassNotFoundException | IOException e) {
+        } catch (ClassNotFoundException | IOException |
+                NullPointerException e) {
             e.printStackTrace();
-        } catch (NullPointerException ignored){}
-        return list;
+            emails = null;
+        }
+
+        return emails;
     }
 
-    private String findEmailPath(Email email, String auth){
-        int id = email.getId();
-        File f = new File(dbPath + "/" + auth +  "/" +  id + ".txt");
-        return f.getAbsolutePath();
+    /** Delete a specific email (so, the file), of a
+     *  specific user. */
+    public boolean deleteEmail(Email email, String user){
+        boolean result;
+
+        if (email == null){
+            result = false;
+        }
+        else {
+            String path = findEmailPath(email, user);
+            File f = new File(path);
+            result = f.delete();
+        }
+
+        return result;
     }
 
-    public boolean deleteEmail(Email email, String auth){
-        String path = findEmailPath(email, auth);
-        File f = new File(path);
-        return f.delete();
-    }
+    /** Mark an email as read, changing its specific
+     *  boolean attribute and rewriting it in file. */
+    public boolean markAsReadEmail(Email email, String user){
+        boolean result;
 
-    public void markAsReadEmail(Email email, String auth){
-        email.setToRead(false);
-        storeEmail(email, auth);
+        if (email == null){
+            result = false;
+        }
+        else {
+            email.setToRead(false);
+            storeEmail(email, user);
+            result = true;
+        }
+
+        return result;
     }
 }
