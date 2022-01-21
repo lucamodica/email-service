@@ -86,14 +86,11 @@ public class ClientApp extends Application {
                 () -> {
                     ServerResponse resp = client.sendCmd(CommandName.FETCH_EMAIL,
                             lastFetch);
-                    
                     try {
                         ResponseHandler.handleResponse(resp,
                                 sceneController.getController(SceneName.MAIN),
                                 () -> fetch(resp));
-                    } catch (NullPointerException ignored){
-
-                    }
+                    } catch (NullPointerException ignored){}
                 },1, 2, TimeUnit.SECONDS);
     }
 }

@@ -15,6 +15,7 @@ public class SceneController {
     private final HashMap<SceneName, ClientWindow> sceneMap;
     private final Scene main;
 
+
     private SceneController(Scene main){
         this.main = main;
         sceneMap = new HashMap<>();
@@ -23,6 +24,8 @@ public class SceneController {
     public static SceneController getInstance(Scene main){
         return new SceneController(main);
     }
+
+
     public Controller getController(SceneName name){
         return sceneMap.get(name).controller();
     }
@@ -35,7 +38,6 @@ public class SceneController {
         sceneMap.put(name, new ClientWindow(loader.load(), loader.getController()));
     }
 
-    //switcher of current scene
     public void switchTo(SceneName name){
         main.setRoot(sceneMap.get(name).pane());
     }

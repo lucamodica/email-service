@@ -16,6 +16,7 @@ public class LogManager {
     private final ObservableList<String> logContent;
     private final String serverName;
 
+
     private LogManager (){
         this.logContent = FXCollections.observableList(Collections.
                 synchronizedList(new LinkedList<>()));
@@ -24,17 +25,20 @@ public class LogManager {
 
         this.serverName = "server";
     }
+
     public static LogManager getInstance(){
         return new LogManager();
     }
+
 
     public ListProperty<String> logProperty() {
         return log;
     }
 
-    public void printNewLine(){
+    public synchronized void printNewLine(){
         logContent.add("");
     }
+
     public synchronized void printLog(String logText){
         logContent.add('[' + CommonUtil.formatDate(new Date()) + "] "
                 + serverName + "> " + logText);

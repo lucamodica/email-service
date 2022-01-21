@@ -18,6 +18,7 @@ public class ServerApp extends Application {
     public static Model model;
     private static ExecutorService appFX;
 
+
     @Override
     public void start(Stage stage) throws IOException {
 
@@ -28,7 +29,6 @@ public class ServerApp extends Application {
         stage.setScene(scene);
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.show();
-
     }
 
     @Override
@@ -36,9 +36,11 @@ public class ServerApp extends Application {
         model.getLogManager().printNewLine();
         model.getLogManager().
                 printLog("Server shutting down...");
+
         server.interrupt();
         appFX.shutdown();
     }
+
 
     public static void main(String[] args) {
         model = Model.getInstance();
@@ -48,5 +50,4 @@ public class ServerApp extends Application {
         appFX.execute(Application::launch);
         ((Thread) server).start();
     }
-
 }

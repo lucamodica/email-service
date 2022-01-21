@@ -10,44 +10,53 @@
 <?import javafx.scene.text.TextFlow?>
 <?import javafx.scene.web.HTMLEditor?>
 
-<AnchorPane prefHeight="615.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projprogiii.clientmail.controller.ComposeController">
-    <children>
-        <Label layoutX="9.0" layoutY="23.0" text="Sender:" AnchorPane.leftAnchor="4.0" />
-        <Label layoutX="4.0" layoutY="65.0" text="Recipient:" AnchorPane.leftAnchor="4.0" />
-        <Label layoutX="12.0" layoutY="111.0" prefHeight="17.0" prefWidth="46.0" text="Object:" AnchorPane.leftAnchor="4.0" />
-        <TextField fx:id="senderTextField" layoutX="63.0" layoutY="18.0" prefHeight="25.0" prefWidth="540.0" AnchorPane.leftAnchor="62.0" AnchorPane.rightAnchor="13.0" />
-        <TextField fx:id="recipientsTextField" layoutX="62.0" layoutY="61.0" prefHeight="25.0" prefWidth="540.0" AnchorPane.leftAnchor="62.0" AnchorPane.rightAnchor="13.0" />
-        <TextField fx:id="objectTextField" layoutX="62.0" layoutY="107.0" prefHeight="25.0" prefWidth="540.0" AnchorPane.leftAnchor="62.0" AnchorPane.rightAnchor="13.0" />
-        <HTMLEditor fx:id="messageEditor" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body                         contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" layoutX="10.0" layoutY="149.0" prefHeight="440.0" prefWidth="602.0" AnchorPane.bottomAnchor="103.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="149.0" />
-        <Button fx:id="cancelBtn" layoutX="14.0" layoutY="637.0" mnemonicParsing="false" onMouseClicked="#onCancelButtonClick" prefHeight="41.0" prefWidth="72.0" text="Cancel" AnchorPane.bottomAnchor="10.0">
-            <styleClass>
-                <String fx:value="btn" />
-                <String fx:value="btn-danger" />
-                <String fx:value="btn-lg btn-icon" />
-            </styleClass>
-            <tooltip>
-                <Tooltip styleClass="tooltip-danger" text="Cancel and back to the main screen" />
-            </tooltip>
-        </Button>
-        <Button fx:id="sendBtn" layoutX="111.0" layoutY="637.0" mnemonicParsing="false" onMouseClicked="#onSendButtonClick" prefHeight="41.0" prefWidth="72.0" text="Send" AnchorPane.bottomAnchor="10.0">
-            <styleClass>
-                <String fx:value="btn" />
-                <String fx:value="btn-success" />
-                <String fx:value="btn-lg btn-icon" />
-            </styleClass>
-            <tooltip>
-                <Tooltip styleClass="tooltip-success" text="Send email" />
-            </tooltip>
-        </Button>
+<AnchorPane prefHeight="615.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projprogiii.clientmail.controller.ComposeController">
+    <Label layoutX="9.0" layoutY="23.0" text="Sender:" AnchorPane.leftAnchor="4.0"/>
+    <Label layoutX="4.0" layoutY="65.0" text="Recipient:" AnchorPane.leftAnchor="4.0"/>
+    <Label layoutX="12.0" layoutY="111.0" prefHeight="17.0" prefWidth="46.0" text="Object:"
+           AnchorPane.leftAnchor="4.0"/>
+    <TextField fx:id="senderTextField" layoutX="63.0" layoutY="18.0" prefHeight="25.0" prefWidth="540.0"
+               AnchorPane.leftAnchor="62.0" AnchorPane.rightAnchor="13.0"/>
+    <TextField fx:id="recipientsTextField" layoutX="62.0" layoutY="61.0" prefHeight="25.0" prefWidth="540.0"
+               AnchorPane.leftAnchor="62.0" AnchorPane.rightAnchor="13.0"/>
+    <TextField fx:id="objectTextField" layoutX="62.0" layoutY="107.0" prefHeight="25.0" prefWidth="540.0"
+               AnchorPane.leftAnchor="62.0" AnchorPane.rightAnchor="13.0"/>
+    <HTMLEditor fx:id="messageEditor"
+                htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body                         contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;"
+                layoutX="10.0" layoutY="149.0" prefHeight="440.0" prefWidth="602.0" AnchorPane.bottomAnchor="103.0"
+                AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="149.0"/>
+    <Button fx:id="cancelBtn" layoutX="14.0" layoutY="637.0" mnemonicParsing="false"
+            onMouseClicked="#onCancelButtonClick" prefHeight="41.0" prefWidth="72.0" text="Cancel"
+            AnchorPane.bottomAnchor="10.0">
+        <styleClass>
+            <String fx:value="btn"/>
+            <String fx:value="btn-danger"/>
+            <String fx:value="btn-lg btn-icon"/>
+        </styleClass>
+        <tooltip>
+            <Tooltip styleClass="tooltip-danger" text="Cancel and back to the main screen"/>
+        </tooltip>
+    </Button>
+    <Button fx:id="sendBtn" layoutX="111.0" layoutY="637.0" mnemonicParsing="false" onMouseClicked="#onSendButtonClick"
+            prefHeight="41.0" prefWidth="72.0" text="Send" AnchorPane.bottomAnchor="10.0">
+        <styleClass>
+            <String fx:value="btn"/>
+            <String fx:value="btn-success"/>
+            <String fx:value="btn-lg btn-icon"/>
+        </styleClass>
+        <tooltip>
+            <Tooltip styleClass="tooltip-success" text="Send email"/>
+        </tooltip>
+    </Button>
 
-        <TextFlow fx:id="dangerAlert" layoutX="830.0" layoutY="660.0" prefHeight="43.0" prefWidth="243.0" visible="false" styleClass="alert, alert-danger" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
-            <Text text="" wrappingWidth="249.82421875" />
-        </TextFlow>
-        <TextFlow fx:id="successAlert" visible="false" styleClass="alert alert-success" layoutX="250.0" layoutY="190.0" prefHeight="40.0" prefWidth="205.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
-            <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Message sent with success" />
-            </children>
-        </TextFlow>
+    <TextFlow fx:id="dangerAlert" layoutX="830.0" layoutY="660.0" prefHeight="43.0" prefWidth="243.0" visible="false"
+              styleClass="alert, alert-danger" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+        <Text text="" wrappingWidth="249.82421875"/>
+    </TextFlow>
+    <TextFlow fx:id="successAlert" visible="false" styleClass="alert alert-success" layoutX="250.0" layoutY="190.0"
+              prefHeight="40.0" prefWidth="205.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Message sent with success"/>
+    </TextFlow>
 
-    </children>
 </AnchorPane>

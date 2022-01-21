@@ -161,7 +161,7 @@ public class MainController extends Controller {
 
                 setOnMouseClicked((click) -> {
                     Email selectedEmail = emailsLst.getSelectionModel().getSelectedItem();
-                    if (selectedEmail != null) {
+                    if (selectedEmail != null && selectedEmail.isToRead()) {
                         //client-side markAsRead
                         selectedEmail.setToRead(false);
                         setStyle(null);

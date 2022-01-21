@@ -26,7 +26,7 @@ public class ConfigManager {
     }
 
     private void createPropertiesFile(File path) throws IOException {
-        prop.setProperty("server.timeout", "5");
+        prop.setProperty("server.timeout", "2000");
         prop.setProperty("server.threads_number", "5");
         prop.setProperty("server.server_port", "42069");
 

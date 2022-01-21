@@ -42,17 +42,6 @@ public class Server extends Thread {
         return new Server();
     }
 
-    private void printLogInit(){
-        logManager.printLog("Configuration loaded.");
-        logManager.printLog("Max thread in thread pool: " +
-                threadsNumber + ".");
-        logManager.printLog("Timeout to accept a new connection: " +
-                timeout + " ms.");
-        logManager.printLog("Server port: " + serverPort + ".");
-        logManager.printNewLine();
-        logManager.printLog("Hello!");
-    }
-
 
     @Override
     public void start() {
@@ -78,11 +67,22 @@ public class Server extends Thread {
         }
     }
 
-
     @Override
     public void interrupt() {
         super.interrupt();
         shutdown();
+    }
+
+
+    private void printLogInit(){
+        logManager.printLog("Configuration loaded.");
+        logManager.printLog("Max thread in thread pool: " +
+                threadsNumber + ".");
+        logManager.printLog("Timeout to accept a new connection: " +
+                timeout + " ms.");
+        logManager.printLog("Server port: " + serverPort + ".");
+        logManager.printNewLine();
+        logManager.printLog("Hello!");
     }
 
     public void shutdown(){

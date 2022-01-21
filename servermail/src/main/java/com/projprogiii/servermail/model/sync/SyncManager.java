@@ -5,7 +5,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class SyncManager {
 
-    private ConcurrentHashMap<String, ReentrantReadWriteLock> locks;
+    private final ConcurrentHashMap<String, ReentrantReadWriteLock> locks;
 
     private SyncManager(){
         locks = new ConcurrentHashMap<>();

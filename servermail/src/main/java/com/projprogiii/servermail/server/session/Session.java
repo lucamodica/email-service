@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 public class Session implements Runnable{
 
@@ -58,6 +59,7 @@ public class Session implements Runnable{
         }
     }
 
+
     private void closeStreams() {
         try {
             if(inputStream != null) { inputStream.close(); }
@@ -66,6 +68,7 @@ public class Session implements Runnable{
             e.printStackTrace();
         }
     }
+
     public Command createCommand(CommandName cmdName){
         switch(cmdName){
             case FETCH_EMAIL -> {
@@ -83,6 +86,7 @@ public class Session implements Runnable{
             default -> throw new IllegalStateException("Unexpected value: " + cmdName);
         }
     }
+
     private void checkAuth(String auth){
         if (ServerApp.model.getDbManager().addUser(auth)){
             System.out.println("User " + auth + " registered");
