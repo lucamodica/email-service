@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -98,6 +99,8 @@ public class Client {
                 outputStream.close();
                 inputStream.close();
                 currentSocket.close();
+            } catch (SocketException ignored) {
+                //connection was already closed by server, caused by timeout
             } catch (IOException e) {
                 e.printStackTrace();
             }

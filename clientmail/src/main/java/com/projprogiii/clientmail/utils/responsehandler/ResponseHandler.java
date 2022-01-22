@@ -15,11 +15,13 @@ public class ResponseHandler {
                                       Object successArg){
 
         if (resp == null) {
+            //no connection available
             AlertManager.showAlert(
                     controller.getDangerAlert(),
                     AlertText.NO_CONNECTION);
         }
         else {
+            //connection is now available
             AlertManager.hideAlert(ClientApp.sceneController
                     .getController(SceneName.MAIN)
                     .getDangerAlert(), 1);
@@ -27,12 +29,12 @@ public class ResponseHandler {
                     .getController(SceneName.COMPOSE)
                     .getDangerAlert(), 1);
 
+            //handle of all response cases
             switch (resp.responseName()){
                 case SUCCESS -> successHandler.handle(
                         successArg != null ?
                                 successArg :
-                                resp
-                );
+                                resp);
                 case ILLEGAL_PARAMS -> AlertManager.showTemporizedAlert(
                         controller.getDangerAlert(),
                         AlertText.ILLEGAL_PARAMS,
