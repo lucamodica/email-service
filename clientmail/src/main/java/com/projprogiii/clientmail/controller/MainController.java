@@ -137,7 +137,9 @@ public class MainController extends Controller {
         ClientApp.sceneController.switchTo(SceneName.COMPOSE);
     }
 
-    //Used to automatically set textfields in reply/replyAll and forward cases
+    /**
+     * Used to automatically set textfields in reply/replyAll and forward cases
+     */
     @FXML
     private void composeFieldsSetter(String receivers, String object, String htmltext){
         ClientApp.sceneController.switchTo(SceneName.COMPOSE);
@@ -149,7 +151,10 @@ public class MainController extends Controller {
         controller.getObjectTextField().setText(object);
         controller.getMessageEditor().setHtmlText(htmltext);
     }
-    //anonymous class used to manage bold text in function of Email's isToRead state
+
+    /**
+     * Anonymous class used to manage bold text in function of Email's isToRead state
+     */
     private void setListViewCellsListeners(ListView<Email> emailsLst){
         emailsLst.setCellFactory(cell -> new ListCell<>() {
             @Override

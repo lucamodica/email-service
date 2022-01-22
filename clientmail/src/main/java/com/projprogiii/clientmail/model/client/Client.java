@@ -3,6 +3,7 @@ package com.projprogiii.clientmail.model.client;
 import com.projprogiii.clientmail.model.client.config.ConfigManager;
 import com.projprogiii.lib.enums.CommandName;
 import com.projprogiii.lib.objects.ClientRequest;
+import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.lib.utils.CommonUtil;
 
@@ -22,7 +23,6 @@ public class Client {
     Socket currentSocket;
     ObjectOutputStream outputStream;
     ObjectInputStream inputStream;
-
 
     private Client() {
         ConfigManager configManager = ConfigManager.getInstance();
@@ -46,10 +46,11 @@ public class Client {
     public static Client getInstance(){
         return new Client();
     }
-
     public String getUser(){ return user; }
 
-    //receive response from inputStream, called after sending a command
+    /**
+     * receive response from inputStream, called after sending a command
+     */
     private ServerResponse getServerResponse(ClientRequest req) {
 
         ServerResponse resp = null;
@@ -89,10 +90,12 @@ public class Client {
         }
     }
 
-    //sent command consist of a ClientRequest object, packing:
-    //- the commandName used from server to repack a response
-    //- the Object (Date or Email) passed to the server
-    public ServerResponse sendCmd(CommandName command, Object arg){
+    /**
+     * Sent command consist of a ClientRequest object, packing:
+     * the commandName used from server to repack a response,
+     * the Object (Date or Email) passed to the server
+     */
+    public ServerResponse sendCmd(CommandName command, Email arg){
         ClientRequest req = new ClientRequest(user, command, arg);
         return getServerResponse(req);
     }

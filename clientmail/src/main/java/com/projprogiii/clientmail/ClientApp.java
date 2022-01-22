@@ -57,9 +57,10 @@ public class ClientApp extends Application {
         }
     }
 
-    //filters possible duplicates and new emails by date, then adds them to the ObservableList
+    /**
+     * filters possible duplicates and new emails by date, then adds them to the ObservableList
+     */
     private static void fetch(ServerResponse resp){
-        checkDeletedEmail(resp);
         List<Email> l = resp.args()
                 .stream()
                 .filter(email -> !model.getInboxContent().contains(email))
@@ -83,11 +84,10 @@ public class ClientApp extends Application {
         appFX.execute(Application::launch);
 
         //Start the fetch email thread; operation repeated at fixed rate for constant fetching
-
         fetchEmails.scheduleAtFixedRate(
                 () -> {
                     ServerResponse resp = client.sendCmd(CommandName.FETCH_EMAIL,
-                            lastFetch);
+                            null);
 
                     if (sceneController != null) {
                         ResponseHandler.handleResponse(resp,
@@ -95,9 +95,5 @@ public class ClientApp extends Application {
                                 () -> fetch(resp));
                     }
                 },1, 5, TimeUnit.SECONDS);
-    }
-
-    private void checkDeletedEmail(ServerResponse resp){
-
     }
 }
