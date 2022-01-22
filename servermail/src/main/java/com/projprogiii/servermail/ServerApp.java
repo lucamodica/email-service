@@ -33,12 +33,15 @@ public class ServerApp extends Application {
 
     @Override
     public void stop(){
-        model.getLogManager().printNewLine();
-        model.getLogManager().
-                printLog("Server shutting down...");
 
         server.interrupt();
-        appFX.shutdown();
+        try {
+            server.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            appFX.shutdown();
+        }
     }
 
 

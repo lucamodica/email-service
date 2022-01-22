@@ -1,7 +1,9 @@
 package com.projprogiii.servermail.controller;
 
 import com.projprogiii.servermail.ServerApp;
+import com.projprogiii.servermail.model.log.Log;
 import com.projprogiii.servermail.model.log.LogManager;
+import com.projprogiii.servermail.model.log.LogType;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -9,7 +11,7 @@ import javafx.scene.control.ListView;
 public class ServerController {
 
     @FXML
-    private ListView<String> logLst;
+    private ListView<Log> logLst;
 
     public void initialize(){
         LogManager logManager = ServerApp.model.getLogManager();
@@ -17,11 +19,17 @@ public class ServerController {
         logLst.itemsProperty().bind(logManager.logProperty());
         logLst.setCellFactory(cell -> new ListCell<>() {
             @Override
-            protected void updateItem(String logItem, boolean empty) {
+            protected void updateItem(Log logItem, boolean empty) {
                 super.updateItem(logItem, empty);
 
-                setText((!empty && logItem != null) ? logItem : null);
-                getStyleClass().add("single_log");
+                setText((!empty && logItem != null) ? logItem.toString() : null);
+                if (logItem != null) {
+                    getStyleClass().add(logItem.type().equals(LogType.NORMAL) ?
+                            "normal_log" :
+                            "error_log");
+                }
+
+                getStyleClass().add("log");
                 logLst.scrollTo(logManager.logProperty().size());
             }
         });
