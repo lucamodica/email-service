@@ -3,8 +3,6 @@ package com.projprogiii.servermail.model.db;
 import com.projprogiii.lib.objects.Email;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +13,6 @@ import static java.lang.System.exit;
 public class DbManager {
 
     private final String dbPath;
-
 
     private DbManager(){
         dbPath = new File("").getAbsolutePath() + "/servermail/src/main/data/";

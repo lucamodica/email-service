@@ -5,7 +5,7 @@ import com.projprogiii.lib.enums.CommandName;
 import java.io.Serializable;
 
 public record ClientRequest(String auth, CommandName cmdName,
-                            Object arg) implements Serializable {
+                            Email arg) implements Serializable {
 
     @Override
     public String toString() {

@@ -59,6 +59,7 @@ public class ClientApp extends Application {
 
     //filters possible duplicates and new emails by date, then adds them to the ObservableList
     private static void fetch(ServerResponse resp){
+        checkDeletedEmail(resp);
         List<Email> l = resp.args()
                 .stream()
                 .filter(email -> !model.getInboxContent().contains(email))
@@ -94,5 +95,9 @@ public class ClientApp extends Application {
                                 () -> fetch(resp));
                     }
                 },1, 5, TimeUnit.SECONDS);
+    }
+
+    private void checkDeletedEmail(ServerResponse resp){
+
     }
 }

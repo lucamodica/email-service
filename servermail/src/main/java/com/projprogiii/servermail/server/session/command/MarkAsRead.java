@@ -12,7 +12,7 @@ public class MarkAsRead extends Command {
 
     @Override
     public ServerResponse handle(ClientRequest req) {
-        Email email = (Email) req.arg();
+        Email email = req.arg();
         ServerResponseName name;
         ReentrantReadWriteLock.WriteLock writeLock =
                 syncManager.getLock(req.auth()).writeLock();
