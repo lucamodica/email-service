@@ -22,28 +22,23 @@ public class DeleteEmail extends Command {
 
         if (email == null){
             name = ServerResponseName.ILLEGAL_PARAMS;
-            printCommandLog(req, name);
         }
         else {
             writeLock.lock();
             try {
-                if (ServerApp.model.getDbManager()
-                        .deleteEmail(email, req.auth())) {
-                    name = ServerResponseName.SUCCESS;
-                    printCommandLog(req, name);
-                }
-                else {
-                    name = ServerResponseName.OP_ERROR;
-                    printCommandLog(req, name);
-                }
+                name = (ServerApp.model.getDbManager()
+                        .deleteEmail(email, req.auth())) ?
+                        ServerResponseName.SUCCESS :
+                        ServerResponseName.OP_ERROR;
+
             } catch (FileNotFoundException e) {
                 //email was already deleted from the db but not yet synced to client
                 name = ServerResponseName.SUCCESS;
-                printCommandLog(req, name);
             }
             writeLock.unlock();
         }
 
+        printCommandLog(req, name);
         return new ServerResponse(name, null);
     }
 
@@ -52,9 +47,11 @@ public class DeleteEmail extends Command {
             case ILLEGAL_PARAMS -> Platform.runLater(() -> logManager.printError(
                     "ERROR (" + req.cmdName().toString() + " for "
                             + req.auth() + "): illegal params passed!"));
+
             case SUCCESS -> Platform.runLater(() -> logManager.printLog(
                     "Email (" + req.arg().getId() + ".txt) for " +
                             req.auth() + " successfully deleted!", LogType.NORMAL));
+
             case OP_ERROR -> Platform.runLater(() -> logManager.printError(
                     "ERROR (" + req.cmdName().toString() + " for "
                             + req.auth() + "): operation failed!"));

@@ -19,5 +19,5 @@ public abstract class Command {
             .getLogManager();
 
     public abstract ServerResponse handle(ClientRequest req);
-    protected  abstract void printCommandLog(ClientRequest req, ServerResponseName name);
-    }
+    protected abstract void printCommandLog(ClientRequest req, ServerResponseName name);
+}
