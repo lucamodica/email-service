@@ -1,6 +1,9 @@
 package com.projprogiii.clientmail.model.client;
 
+import com.projprogiii.clientmail.controller.Controller;
 import com.projprogiii.clientmail.model.client.config.ConfigManager;
+import com.projprogiii.clientmail.utils.responsehandler.ResponseHandler;
+import com.projprogiii.clientmail.utils.responsehandler.SuccessHandler;
 import com.projprogiii.lib.enums.CommandName;
 import com.projprogiii.lib.objects.ClientRequest;
 import com.projprogiii.lib.objects.Email;
@@ -11,20 +14,22 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-
-import static java.lang.System.exit;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Client {
 
+    private static final int threadsNumber = 3;
     private String user;
     private String serverHost;
     private int serverPort;
     private int fetchPeriod;
 
-
-    Socket currentSocket;
-    ObjectOutputStream outputStream;
-    ObjectInputStream inputStream;
+    private ExecutorService operationPool;
+    private Socket currentSocket;
+    private ObjectOutputStream outputStream;
+    private ObjectInputStream inputStream;
 
     private Client() {
         ConfigManager configManager = ConfigManager.getInstance();
@@ -40,9 +45,11 @@ public class Client {
             serverPort = Integer.parseInt(configManager.readProperty("user.server_port"));
             fetchPeriod = Integer.parseInt(configManager.readProperty("user.fetch_period_s"));
 
+            operationPool = Executors.newFixedThreadPool(threadsNumber);
+
         } catch (IllegalArgumentException e){
             System.out.println("Illegal emailAddress value! Change it in user.properties file.");
-            exit(1);
+            System.exit(1);
         }
     }
 
@@ -102,8 +109,27 @@ public class Client {
      * the commandName used from server to repack a response,
      * the Object (Date or Email) passed to the server
      */
-    public ServerResponse sendCmd(CommandName command, Email arg){
+    public void sendCmd(CommandName command, Email arg,
+                                  Controller controller,
+                                  SuccessHandler successHandler,
+                                  Object successArg){
+
         ClientRequest req = new ClientRequest(user, command, arg);
-        return getServerResponse(req);
+        operationPool.execute(() -> {
+            ServerResponse resp = getServerResponse(req);
+            ResponseHandler.handleResponse(resp, controller,
+                    successHandler, successArg);
+        });
+    }
+
+    public void shutdown(){
+        operationPool.shutdown();
+        try {
+            System.out.println(operationPool.awaitTermination((2L *
+                    threadsNumber) + 1, TimeUnit.SECONDS) ?
+                    "" : "Timeout elapsed before operationPool thread pool termination.");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -4,11 +4,10 @@ import com.projprogiii.clientmail.ClientApp;
 import com.projprogiii.clientmail.scene.SceneName;
 import com.projprogiii.clientmail.utils.alert.AlertManager;
 import com.projprogiii.clientmail.utils.alert.AlertText;
-import com.projprogiii.clientmail.utils.responsehandler.ResponseHandler;
 import com.projprogiii.lib.enums.CommandName;
 import com.projprogiii.lib.objects.Email;
-import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.lib.utils.CommonUtil;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -89,18 +88,17 @@ public class MainController extends Controller {
     }
 
     private void delete(){
-        //server-side delete
-        ServerResponse response = model.getClient()
-                .sendCmd(CommandName.DELETE_EMAIL, selectedEmail);
-        ResponseHandler.handleResponse(response,
-                ClientApp.sceneController.getController(SceneName.MAIN),
-                () -> {
-                    //client-side delete
-                    model.deleteEmail(selectedEmail);
-                    updateDetailView(emptyEmail);
-                    AlertManager.showTemporizedAlert(dangerAlert,
-                            AlertText.MESSAGE_DELETED, 2);
-                });
+        model.getClient()
+                .sendCmd(CommandName.DELETE_EMAIL, selectedEmail,
+                        ClientApp.sceneController.getController(SceneName.MAIN),
+                        (obj) -> {
+                            Platform.runLater(() -> {
+                                model.deleteEmail((Email) obj);
+                                updateDetailView(emptyEmail);
+                            });
+                            AlertManager.showTemporizedAlert(dangerAlert,
+                                    AlertText.MESSAGE_DELETED, 2);
+                        }, selectedEmail);
         selectedEmail = emptyEmail;
     }
 
@@ -178,12 +176,9 @@ public class MainController extends Controller {
                         selectedEmail.setToRead(false);
                         setStyle(null);
 
-                        //server-side markAsRead
-                        ServerResponse response = model.getClient().sendCmd(CommandName.MARK_AS_READ, selectedEmail);
-                        ResponseHandler.handleResponse(response,
+                        model.getClient().sendCmd(CommandName.MARK_AS_READ, selectedEmail,
                                 ClientApp.sceneController.getController(SceneName.MAIN),
-                                () -> {}
-                                );
+                                (obj) -> {}, null);
                     }
                     MainController.this.selectedEmail = selectedEmail;
                     updateDetailView(selectedEmail);

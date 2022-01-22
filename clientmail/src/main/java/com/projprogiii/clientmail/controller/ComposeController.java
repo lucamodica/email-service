@@ -10,14 +10,13 @@ import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.lib.utils.CommonUtil;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.text.TextFlow;
 import javafx.scene.web.HTMLEditor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+
+import java.util.*;
 
 public class ComposeController extends Controller {
 
@@ -83,17 +82,17 @@ public class ComposeController extends Controller {
                     new ArrayList<>(List.of(recipientsArray)),
                     objectTextField.getText(), messageEditor.getHtmlText());
 
-            ServerResponse response = model.getClient().sendCmd(CommandName.SEND_EMAIL, email);
-            ResponseHandler.handleResponse(response, ClientApp.sceneController.getController(SceneName.COMPOSE),
-                    () -> send(email));
+            model.getClient().sendCmd(CommandName.SEND_EMAIL, email,
+                    ClientApp.sceneController.getController(SceneName.COMPOSE),
+                    (obj) -> Platform.runLater( () -> send(obj)), email);
         } else {
             AlertManager.showTemporizedAlert(dangerAlert, AlertText.INVALID_RECIPIENTS, 2);
         }
     }
 
 
-    private void send(Email email){
-        model.addEmails(Collections.singletonList(email));
+    private void send(Object email){
+        model.addEmails(Collections.singletonList((Email) email));
         //clearing all fields
         recipientsTextField.clear();
         objectTextField.clear();

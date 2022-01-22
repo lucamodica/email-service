@@ -11,7 +11,8 @@ public class ResponseHandler {
 
     public static void handleResponse(ServerResponse resp,
                                       Controller controller,
-                                      SuccessHandler successHandler){
+                                      SuccessHandler successHandler,
+                                      Object successArg){
 
         if (resp == null) {
             AlertManager.showAlert(
@@ -19,13 +20,19 @@ public class ResponseHandler {
                     AlertText.NO_CONNECTION);
         }
         else {
-            AlertManager.hideAlert(ClientApp.sceneController.getController(SceneName.MAIN)
+            AlertManager.hideAlert(ClientApp.sceneController
+                    .getController(SceneName.MAIN)
                     .getDangerAlert(), 1);
-            AlertManager.hideAlert(ClientApp.sceneController.getController(SceneName.COMPOSE)
+            AlertManager.hideAlert(ClientApp.sceneController
+                    .getController(SceneName.COMPOSE)
                     .getDangerAlert(), 1);
 
             switch (resp.responseName()){
-                case SUCCESS -> successHandler.handle();
+                case SUCCESS -> successHandler.handle(
+                        successArg != null ?
+                                successArg :
+                                resp
+                );
                 case ILLEGAL_PARAMS -> AlertManager.showTemporizedAlert(
                         controller.getDangerAlert(),
                         AlertText.ILLEGAL_PARAMS,

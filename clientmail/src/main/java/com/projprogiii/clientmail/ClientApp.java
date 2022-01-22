@@ -20,6 +20,7 @@ import org.kordamp.bootstrapfx.BootstrapFX;
 import java.io.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.*;
 
 public class ClientApp extends Application {
@@ -48,6 +49,7 @@ public class ClientApp extends Application {
     @Override
     public void stop(){
         appFX.shutdown();
+        model.getClient().shutdown();
         fetchEmails.shutdown();
         try {
             System.out.println(fetchEmails.awaitTermination(1, TimeUnit.SECONDS) ?
@@ -60,7 +62,10 @@ public class ClientApp extends Application {
     /**
      * filters possible duplicates and new emails by date, then adds them to the ObservableList
      */
-    private static void fetch(ServerResponse resp){
+    private static void fetch(Object obj){
+
+        ServerResponse resp = (ServerResponse) obj;
+
         List<Email> l = resp.args()
                 .stream()
                 .filter(email -> !model.getInboxContent().contains(email))
@@ -86,13 +91,10 @@ public class ClientApp extends Application {
         //Start the fetch email thread; operation repeated at fixed rate for constant fetching
         fetchEmails.scheduleAtFixedRate(
                 () -> {
-                    ServerResponse resp = client.sendCmd(CommandName.FETCH_EMAIL,
-                            null);
-
                     if (sceneController != null) {
-                        ResponseHandler.handleResponse(resp,
+                        client.sendCmd(CommandName.FETCH_EMAIL, null,
                                 sceneController.getController(SceneName.MAIN),
-                                () -> fetch(resp));
+                                ClientApp::fetch, null);
                     }
                 },1, model.getClient().getFetchPeriod(), TimeUnit.SECONDS);
     }

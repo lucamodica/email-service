@@ -35,7 +35,7 @@ public class DeleteEmail extends Command {
                     name = ServerResponseName.SUCCESS;
                     Platform.runLater(() -> logManager.printLog(
                             "Email (" + req.arg().getId() + ".txt) for " +
-                                    req.auth() + "successfully deleted!", LogType.NORMAL)
+                                    req.auth() + " successfully deleted!", LogType.NORMAL)
                     );
                 }
                 else {

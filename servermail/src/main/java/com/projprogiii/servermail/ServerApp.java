@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+
 public class ServerApp extends Application {
 
     public static Server server;
@@ -42,6 +43,8 @@ public class ServerApp extends Application {
         } finally {
             appFX.shutdown();
         }
+
+        System.exit(0);
     }
 
 
