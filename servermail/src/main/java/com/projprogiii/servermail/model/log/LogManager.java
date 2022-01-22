@@ -16,7 +16,9 @@ public class LogManager {
     private final ObservableList<Log> logContent;
     private final String serverName;
 
-
+    /**
+     * logContent as synchronizedList for multiple threads concurrency
+     */
     private LogManager (){
         this.logContent = FXCollections.observableList(Collections.
                 synchronizedList(new LinkedList<>()));
@@ -40,21 +42,20 @@ public class LogManager {
         return '[' + CommonUtil.formatDate(new Date()) + "] ";
     }
 
-
+    /**
+     * Set of print methods used to print logs by encapsulating proper outputs into a log object
+     */
     public synchronized void printNewLine(){
         logContent.add(new Log(LogType.NORMAL, ""));
     }
-
     public synchronized void printLog(String logText, LogType logType){
         logContent.add(new Log(logType,
                 getTimestamp() + serverName + " >> " + logText));
     }
-
     public synchronized void printSysLog(String logText){
         logContent.add(new Log(LogType.SYSOP,
                 getTimestamp() + serverName + " << " + logText));
     }
-
     public synchronized void printError(String logText) {
         logContent.add(new Log(LogType.ERROR,
                 getTimestamp() + logText));

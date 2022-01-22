@@ -33,7 +33,6 @@ public class Session implements Runnable{
     @Override
     public void run() {
         try {
-
             outputStream = new ObjectOutputStream(socket.getOutputStream());
             inputStream = new ObjectInputStream(socket.getInputStream());
 
@@ -67,7 +66,6 @@ public class Session implements Runnable{
             closeStreams();
         }
     }
-
 
     private void closeStreams() {
         try {

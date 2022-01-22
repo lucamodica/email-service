@@ -21,32 +21,36 @@ public class MarkAsRead extends Command {
 
         if (email == null){
             name = ServerResponseName.ILLEGAL_PARAMS;
-            Platform.runLater(() -> logManager.printError(
-                    "ERROR (" + req.cmdName().toString() + " for "
-                            + req.auth() + "): illegal params passed!")
-            );
+            printCommandLog(req, name);
         }
         else {
             writeLock.lock();
             if (ServerApp.model.getDbManager()
                     .markAsReadEmail(email, req.auth())) {
                 name = ServerResponseName.SUCCESS;
-                Platform.runLater(() -> logManager.printLog(
-                        "Email (" + req.arg().getId() + ".txt) for " +
-                                req.auth() + "successfully marked as read!", LogType.NORMAL)
-                );
+                printCommandLog(req, name);
             }
             else {
                 name = ServerResponseName.OP_ERROR;
-                Platform.runLater(() -> logManager.printError(
-                        "ERROR (" + req.cmdName().toString() + " for "
-                                + req.auth() + "): operation failed!")
-                );
+                printCommandLog(req, name);
             }
             writeLock.unlock();
         }
 
-
         return new ServerResponse(name, null);
+    }
+
+    protected void printCommandLog(ClientRequest req, ServerResponseName name){
+        switch(name){
+            case ILLEGAL_PARAMS ->  Platform.runLater(() -> logManager.printError(
+                    "ERROR (" + req.cmdName().toString() + " for "
+                            + req.auth() + "): illegal params passed!"));
+            case SUCCESS -> Platform.runLater(() -> logManager.printLog(
+                    "Email (" + req.arg().getId() + ".txt) for " +
+                            req.auth() + " successfully marked as read!", LogType.NORMAL));
+            case OP_ERROR -> Platform.runLater(() -> logManager.printError(
+                    "ERROR (" + req.cmdName().toString() + " for "
+                            + req.auth() + "): operation failed!"));
+        }
     }
 }

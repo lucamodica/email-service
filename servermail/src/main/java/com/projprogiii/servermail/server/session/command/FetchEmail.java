@@ -20,7 +20,6 @@ public class FetchEmail extends Command{
         ReentrantReadWriteLock.ReadLock readLock =
                 syncManager.getLock(req.auth()).readLock();
 
-
         readLock.lock();
         emails = ServerApp.model.getDbManager()
                 .retrieveEmails(req.auth())
@@ -30,20 +29,24 @@ public class FetchEmail extends Command{
 
         if (emails != null) {
             name = ServerResponseName.SUCCESS;
-            Platform.runLater(() -> logManager.printLog(
-                    "Email for " + req.auth() +
-                            " successfully fetched!", LogType.SYSOP)
-            );
+            printCommandLog(req, name);
         }
         else {
             name = ServerResponseName.OP_ERROR;
-            Platform.runLater(() -> logManager.printError(
-                    "ERROR (" + req.cmdName().toString() + " for "
-                            + req.auth() + "): operation failed!")
-            );
+            printCommandLog(req, name);
         }
 
-
         return new ServerResponse(name, emails);
+    }
+
+    protected void printCommandLog(ClientRequest req, ServerResponseName name){
+        switch(name){
+            case SUCCESS -> Platform.runLater(() -> logManager.printLog(
+                    "Email for " + req.auth() +
+                            " successfully fetched!", LogType.SYSOP));
+            case OP_ERROR -> Platform.runLater(() -> logManager.printError(
+                    "ERROR (" + req.cmdName().toString() + " for "
+                            + req.auth() + "): operation failed!"));
+        }
     }
 }

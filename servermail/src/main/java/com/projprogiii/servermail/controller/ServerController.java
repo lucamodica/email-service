@@ -13,15 +13,17 @@ public class ServerController {
     @FXML
     private ListView<Log> logLst;
 
+    /**
+     * Binding for logLst content and handler of log type/colour
+      */
     public void initialize(){
         LogManager logManager = ServerApp.model.getLogManager();
-
         logLst.itemsProperty().bind(logManager.logProperty());
         logLst.setCellFactory(cell -> new ListCell<>() {
             @Override
             protected void updateItem(Log logItem, boolean empty) {
                 super.updateItem(logItem, empty);
-
+                //controlling log colors
                 setText((!empty && logItem != null) ? logItem.toString() : null);
                 if (logItem != null) {
                     if (logItem.type().equals(LogType.NORMAL)){

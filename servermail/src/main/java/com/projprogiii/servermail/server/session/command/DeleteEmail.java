@@ -22,10 +22,7 @@ public class DeleteEmail extends Command {
 
         if (email == null){
             name = ServerResponseName.ILLEGAL_PARAMS;
-            Platform.runLater(() -> logManager.printError(
-                    "ERROR (" + req.cmdName().toString() + " for "
-                            + req.auth() + "): illegal params passed!")
-            );
+            printCommandLog(req, name);
         }
         else {
             writeLock.lock();
@@ -33,28 +30,34 @@ public class DeleteEmail extends Command {
                 if (ServerApp.model.getDbManager()
                         .deleteEmail(email, req.auth())) {
                     name = ServerResponseName.SUCCESS;
-                    Platform.runLater(() -> logManager.printLog(
-                            "Email (" + req.arg().getId() + ".txt) for " +
-                                    req.auth() + " successfully deleted!", LogType.NORMAL)
-                    );
+                    printCommandLog(req, name);
                 }
                 else {
                     name = ServerResponseName.OP_ERROR;
-                    Platform.runLater(() -> logManager.printError(
-                            "ERROR (" + req.cmdName().toString() + " for "
-                                    + req.auth() + "): operation failed!")
-                    );
+                    printCommandLog(req, name);
                 }
             } catch (FileNotFoundException e) {
+                //email was already deleted from the db but not yet synced to client
                 name = ServerResponseName.SUCCESS;
-                Platform.runLater(() -> logManager.printLog(
-                        "Email (" + req.arg().getId() + ".txt) for " +
-                                req.auth() + "successfully deleted!", LogType.NORMAL)
-                );
+                printCommandLog(req, name);
             }
             writeLock.unlock();
         }
 
         return new ServerResponse(name, null);
+    }
+
+    protected void printCommandLog(ClientRequest req, ServerResponseName name){
+        switch(name){
+            case ILLEGAL_PARAMS -> Platform.runLater(() -> logManager.printError(
+                    "ERROR (" + req.cmdName().toString() + " for "
+                            + req.auth() + "): illegal params passed!"));
+            case SUCCESS -> Platform.runLater(() -> logManager.printLog(
+                    "Email (" + req.arg().getId() + ".txt) for " +
+                            req.auth() + " successfully deleted!", LogType.NORMAL));
+            case OP_ERROR -> Platform.runLater(() -> logManager.printError(
+                    "ERROR (" + req.cmdName().toString() + " for "
+                            + req.auth() + "): operation failed!"));
+        }
     }
 }
