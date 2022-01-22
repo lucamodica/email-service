@@ -1,9 +1,16 @@
 
 .server_log_view,
-.single_log,
-.single_log:cell-selection,
-.single_log:selected,
-.single_log:focused {
+.log,
+.log:cell-selection,
+.log:selected,
+.log:focused {
     -fx-background-color: black;
+}
+
+.normal_log {
     -fx-text-fill: white;
+}
+
+.error_log {
+    -fx-text-fill: red;
 }

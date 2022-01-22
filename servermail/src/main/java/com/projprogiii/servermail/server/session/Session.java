@@ -38,7 +38,8 @@ public class Session implements Runnable{
             inputStream = new ObjectInputStream(socket.getInputStream());
 
             ClientRequest req = (ClientRequest) inputStream.readObject();
-            Platform.runLater(() -> logManager.printLog(req.toString()));
+            Platform.runLater(() -> logManager.printLog("New user connected! " +
+                    req.toString()));
 
             //OP block
             Command command = createCommand(req.cmdName());

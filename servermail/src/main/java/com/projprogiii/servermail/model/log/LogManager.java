@@ -12,8 +12,8 @@ import java.util.LinkedList;
 
 public class LogManager {
 
-    private final ListProperty<String> log;
-    private final ObservableList<String> logContent;
+    private final ListProperty<Log> log;
+    private final ObservableList<Log> logContent;
     private final String serverName;
 
 
@@ -31,16 +31,31 @@ public class LogManager {
     }
 
 
-    public ListProperty<String> logProperty() {
+    public ListProperty<Log> logProperty() {
         return log;
     }
 
+
+    private synchronized String getTimestamp(){
+        return '[' + CommonUtil.formatDate(new Date()) + "] ";
+    }
+
     public synchronized void printNewLine(){
-        logContent.add("");
+        logContent.add(new Log(LogType.NORMAL, ""));
     }
 
     public synchronized void printLog(String logText){
-        logContent.add('[' + CommonUtil.formatDate(new Date()) + "] "
-                + serverName + "> " + logText);
+        logContent.add(new Log(LogType.NORMAL,
+                getTimestamp() + serverName + " >> " + logText));
+    }
+
+    public synchronized void printSysLog(String logText){
+        logContent.add(new Log(LogType.NORMAL,
+                getTimestamp() + serverName + " << " + logText));
+    }
+
+    public synchronized void printError(String logText) {
+        logContent.add(new Log(LogType.ERROR,
+                getTimestamp() + "ERROR: " + logText));
     }
 }

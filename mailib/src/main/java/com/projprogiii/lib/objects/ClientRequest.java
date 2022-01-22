@@ -9,10 +9,7 @@ public record ClientRequest(String auth, CommandName cmdName,
 
     @Override
     public String toString() {
-        return "ClientRequest{" +
-                "auth='" + auth + '\'' +
-                ", cmdName=" + cmdName +
-                ", args=" + arg +
-                '}';
+        return "user: " + arg + ", operation: " + cmdName.toString()
+                + ", arg = " + arg.getId() + " email.";
     }
 }
