@@ -56,6 +56,6 @@ public class LogManager {
 
     public synchronized void printError(String logText) {
         logContent.add(new Log(LogType.ERROR,
-                getTimestamp() + "ERROR: " + logText));
+                getTimestamp() + logText));
     }
 }

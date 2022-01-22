@@ -5,6 +5,7 @@ import com.projprogiii.lib.objects.ClientRequest;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.servermail.ServerApp;
+import javafx.application.Platform;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -20,10 +21,19 @@ public class SendEmail extends Command{
 
         if (email == null){
             name = ServerResponseName.ILLEGAL_PARAMS;
+            Platform.runLater(() -> logManager.printError(
+                    "ERROR (" + req.cmdName().toString() + " for "
+                            + req.auth() + "): illegal params passed!")
+            );
         }
         else if (!email.getReceivers().stream().allMatch(receiver ->
                     ServerApp.model.getDbManager().checkUser(receiver))){
             name = ServerResponseName.INVALID_RECIPIENTS;
+            Platform.runLater(() -> logManager.printError(
+                    "ERROR (" + req.cmdName().toString() + " for "
+                            + req.auth() + "): some of the receivers does " +
+                            "not exists in the database!")
+            );
         }
         else {
 
@@ -34,6 +44,11 @@ public class SendEmail extends Command{
 
             if (!result){
                 name = ServerResponseName.OP_ERROR;
+                Platform.runLater(() -> logManager.printError(
+                        "ERROR (" + req.cmdName().toString() + " for "
+                                + req.auth() + "): operation for sender " +
+                                "failed!")
+                );
             }
             else {
                 email.setToRead(true);
@@ -53,9 +68,21 @@ public class SendEmail extends Command{
                     syncManager.removeLockEntry(receiver);
                 }
 
-                name = (allSends) ?
-                        ServerResponseName.SUCCESS :
-                        ServerResponseName.OP_ERROR;
+                if (allSends) {
+                    name = ServerResponseName.SUCCESS;
+                    Platform.runLater(() -> logManager.printLog(
+                            "Email for " + req.auth() +
+                                    "successfully sent!")
+                    );
+                }
+                else {
+                    name = ServerResponseName.OP_ERROR;
+                    Platform.runLater(() -> logManager.printError(
+                            "ERROR (" + req.cmdName().toString() + " for "
+                                    + req.auth() + "): operation for a receiver " +
+                                    "failed!")
+                    );
+                }
             }
         }
 

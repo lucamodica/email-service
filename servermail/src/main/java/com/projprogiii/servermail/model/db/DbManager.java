@@ -69,6 +69,10 @@ public class DbManager {
             FileOutputStream fout;
             fout = new FileOutputStream(path);
             ObjectOutputStream out = new ObjectOutputStream(fout);
+            if (email.getReceivers().contains(email.getSender())
+                && email.getSender().equals(user)) {
+                email.setToRead(false);
+            }
 
             out.writeObject(email);
             out.flush();

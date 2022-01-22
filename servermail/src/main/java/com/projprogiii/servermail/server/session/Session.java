@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 
 public class Session implements Runnable{
 
@@ -38,7 +37,7 @@ public class Session implements Runnable{
             inputStream = new ObjectInputStream(socket.getInputStream());
 
             ClientRequest req = (ClientRequest) inputStream.readObject();
-            Platform.runLater(() -> logManager.printLog("New user connected! " +
+            Platform.runLater(() -> logManager.printLog("User connected! " +
                     req.toString()));
 
             //OP block
@@ -53,9 +52,13 @@ public class Session implements Runnable{
             outputStream.writeObject(response);
             outputStream.flush();
 
-        } catch (IOException ignored) {
+            Platform.runLater(() -> logManager.printLog("User " + req.auth()
+                    + " disconnected! "));
+        } catch (IOException e) {
             //Case where the client close the connection or
             //the server timeout elapsed
+            Platform.runLater(() -> logManager.printError("WARNING: " +
+                    e.getMessage()));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -93,7 +96,8 @@ public class Session implements Runnable{
 
     private void checkAuth(String auth){
         if (ServerApp.model.getDbManager().addUser(auth)){
-            System.out.println("User " + auth + " registered");
+            Platform.runLater(() ->
+                    logManager.printLog("New user " + auth + " registered"));
         }
     }
 }
