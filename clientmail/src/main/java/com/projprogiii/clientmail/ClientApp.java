@@ -57,6 +57,8 @@ public class ClientApp extends Application {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        System.exit(0);
     }
 
     /**
