@@ -5,8 +5,11 @@ import com.projprogiii.lib.objects.ClientRequest;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.servermail.ServerApp;
+import com.projprogiii.servermail.model.log.LogType;
 import javafx.application.Platform;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class SendEmail extends Command{
@@ -55,8 +58,9 @@ public class SendEmail extends Command{
                 boolean allSends = true;
 
                 for (String receiver : email.getReceivers()) {
-                    syncManager.addLockEntry(receiver);
-                    writeLock = syncManager.getLock(receiver).writeLock();
+                    if (!Objects.equals(receiver, req.auth())){
+                        syncManager.addLockEntry(receiver);
+                        writeLock = syncManager.getLock(receiver).writeLock();
 
                     writeLock.lock();
                     if (!ServerApp.model.getDbManager()
@@ -65,14 +69,15 @@ public class SendEmail extends Command{
                     }
                     writeLock.unlock();
 
-                    syncManager.removeLockEntry(receiver);
+                        syncManager.removeLockEntry(receiver);
+                    }
                 }
 
                 if (allSends) {
                     name = ServerResponseName.SUCCESS;
                     Platform.runLater(() -> logManager.printLog(
                             "Email for " + req.auth() +
-                                    "successfully sent!")
+                                    "successfully sent!", LogType.NORMAL)
                     );
                 }
                 else {

@@ -28,6 +28,7 @@ public class ConfigManager {
     private void createPropertiesFile(File path) throws IOException {
         prop.setProperty("user.emailAddress", "CHANGE_ME");
         prop.setProperty("user.server_host", "127.0.0.1");
+        prop.setProperty("user.fetch_period_s", "5");
         prop.setProperty("user.server_port", "42069");
 
         prop.store(new FileOutputStream(path),  null);

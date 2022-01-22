@@ -5,8 +5,10 @@ import com.projprogiii.lib.objects.ClientRequest;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.servermail.ServerApp;
+import com.projprogiii.servermail.model.log.LogType;
 import javafx.application.Platform;
 
+import java.io.FileNotFoundException;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class DeleteEmail extends Command {
@@ -27,19 +29,27 @@ public class DeleteEmail extends Command {
         }
         else {
             writeLock.lock();
-            if (ServerApp.model.getDbManager()
-                    .deleteEmail(email, req.auth())) {
+            try {
+                if (ServerApp.model.getDbManager()
+                        .deleteEmail(email, req.auth())) {
+                    name = ServerResponseName.SUCCESS;
+                    Platform.runLater(() -> logManager.printLog(
+                            "Email (" + req.arg().getId() + ".txt) for " +
+                                    req.auth() + "successfully deleted!", LogType.NORMAL)
+                    );
+                }
+                else {
+                    name = ServerResponseName.OP_ERROR;
+                    Platform.runLater(() -> logManager.printError(
+                            "ERROR (" + req.cmdName().toString() + " for "
+                                    + req.auth() + "): operation failed!")
+                    );
+                }
+            } catch (FileNotFoundException e) {
                 name = ServerResponseName.SUCCESS;
                 Platform.runLater(() -> logManager.printLog(
                         "Email (" + req.arg().getId() + ".txt) for " +
-                                req.auth() + "successfully deleted!")
-                );
-            }
-            else {
-                name = ServerResponseName.OP_ERROR;
-                Platform.runLater(() -> logManager.printError(
-                        "ERROR (" + req.cmdName().toString() + " for "
-                                + req.auth() + "): operation failed!")
+                                req.auth() + "successfully deleted!", LogType.NORMAL)
                 );
             }
             writeLock.unlock();

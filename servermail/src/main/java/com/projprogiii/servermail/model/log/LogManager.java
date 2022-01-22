@@ -40,17 +40,18 @@ public class LogManager {
         return '[' + CommonUtil.formatDate(new Date()) + "] ";
     }
 
+
     public synchronized void printNewLine(){
         logContent.add(new Log(LogType.NORMAL, ""));
     }
 
-    public synchronized void printLog(String logText){
-        logContent.add(new Log(LogType.NORMAL,
+    public synchronized void printLog(String logText, LogType logType){
+        logContent.add(new Log(logType,
                 getTimestamp() + serverName + " >> " + logText));
     }
 
     public synchronized void printSysLog(String logText){
-        logContent.add(new Log(LogType.NORMAL,
+        logContent.add(new Log(LogType.SYSOP,
                 getTimestamp() + serverName + " << " + logText));
     }
 

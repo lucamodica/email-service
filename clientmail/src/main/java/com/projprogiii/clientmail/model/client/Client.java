@@ -19,6 +19,8 @@ public class Client {
     private String user;
     private String serverHost;
     private int serverPort;
+    private int fetchPeriod;
+
 
     Socket currentSocket;
     ObjectOutputStream outputStream;
@@ -36,6 +38,7 @@ public class Client {
             }
             serverHost = configManager.readProperty("user.server_host");
             serverPort = Integer.parseInt(configManager.readProperty("user.server_port"));
+            fetchPeriod = Integer.parseInt(configManager.readProperty("user.fetch_period_s"));
 
         } catch (IllegalArgumentException e){
             System.out.println("Illegal emailAddress value! Change it in user.properties file.");
@@ -47,6 +50,10 @@ public class Client {
         return new Client();
     }
     public String getUser(){ return user; }
+
+    public int getFetchPeriod() {
+        return fetchPeriod;
+    }
 
     /**
      * receive response from inputStream, called after sending a command

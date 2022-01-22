@@ -5,6 +5,7 @@ import com.projprogiii.lib.objects.ClientRequest;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.servermail.ServerApp;
+import com.projprogiii.servermail.model.log.LogType;
 import javafx.application.Platform;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -32,7 +33,7 @@ public class MarkAsRead extends Command {
                 name = ServerResponseName.SUCCESS;
                 Platform.runLater(() -> logManager.printLog(
                         "Email (" + req.arg().getId() + ".txt) for " +
-                                req.auth() + "successfully marked as read!")
+                                req.auth() + "successfully marked as read!", LogType.NORMAL)
                 );
             }
             else {

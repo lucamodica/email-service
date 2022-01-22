@@ -94,6 +94,6 @@ public class ClientApp extends Application {
                                 sceneController.getController(SceneName.MAIN),
                                 () -> fetch(resp));
                     }
-                },1, 5, TimeUnit.SECONDS);
+                },1, model.getClient().getFetchPeriod(), TimeUnit.SECONDS);
     }
 }

@@ -11,6 +11,10 @@
     -fx-text-fill: white;
 }
 
+.sysop_log {
+    -fx-text-fill: green;
+}
+
 .error_log {
     -fx-text-fill: red;
 }

@@ -5,6 +5,7 @@ import com.projprogiii.lib.objects.ClientRequest;
 import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.servermail.ServerApp;
 import com.projprogiii.servermail.model.log.LogManager;
+import com.projprogiii.servermail.model.log.LogType;
 import com.projprogiii.servermail.model.sync.SyncManager;
 import com.projprogiii.servermail.server.session.command.*;
 import javafx.application.Platform;
@@ -37,8 +38,9 @@ public class Session implements Runnable{
             inputStream = new ObjectInputStream(socket.getInputStream());
 
             ClientRequest req = (ClientRequest) inputStream.readObject();
+
             Platform.runLater(() -> logManager.printLog("User connected! " +
-                    req.toString()));
+                    req.toString(), LogType.SYSOP));
 
             //OP block
             Command command = createCommand(req.cmdName());
@@ -53,7 +55,7 @@ public class Session implements Runnable{
             outputStream.flush();
 
             Platform.runLater(() -> logManager.printLog("User " + req.auth()
-                    + " disconnected! "));
+                    + " disconnected! ", LogType.SYSOP));
         } catch (IOException e) {
             //Case where the client close the connection or
             //the server timeout elapsed
@@ -97,7 +99,7 @@ public class Session implements Runnable{
     private void checkAuth(String auth){
         if (ServerApp.model.getDbManager().addUser(auth)){
             Platform.runLater(() ->
-                    logManager.printLog("New user " + auth + " registered"));
+                    logManager.printLog("New user " + auth + " registered", LogType.NORMAL));
         }
     }
 }

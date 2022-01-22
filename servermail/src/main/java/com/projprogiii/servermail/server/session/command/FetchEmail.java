@@ -5,6 +5,7 @@ import com.projprogiii.lib.objects.ClientRequest;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.servermail.ServerApp;
+import com.projprogiii.servermail.model.log.LogType;
 import javafx.application.Platform;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class FetchEmail extends Command{
             name = ServerResponseName.SUCCESS;
             Platform.runLater(() -> logManager.printLog(
                     "Email for " + req.auth() +
-                            " successfully fetched!")
+                            " successfully fetched!", LogType.SYSOP)
             );
         }
         else {

@@ -24,9 +24,13 @@ public class ServerController {
 
                 setText((!empty && logItem != null) ? logItem.toString() : null);
                 if (logItem != null) {
-                    getStyleClass().add(logItem.type().equals(LogType.NORMAL) ?
-                            "normal_log" :
-                            "error_log");
+                    if (logItem.type().equals(LogType.NORMAL)){
+                        getStyleClass().add("normal_log");
+                    } else if (logItem.type().equals(LogType.SYSOP)){
+                        getStyleClass().add("sysop_log");
+                    } else {
+                        getStyleClass().add("error_log");
+                    }
                 }
 
                 getStyleClass().add("log");

@@ -69,10 +69,6 @@ public class DbManager {
             FileOutputStream fout;
             fout = new FileOutputStream(path);
             ObjectOutputStream out = new ObjectOutputStream(fout);
-            if (email.getReceivers().contains(email.getSender())
-                && email.getSender().equals(user)) {
-                email.setToRead(false);
-            }
 
             out.writeObject(email);
             out.flush();
@@ -118,10 +114,13 @@ public class DbManager {
 
     /** Delete a specific email (so, the file), of a
      *  specific user. */
-    public boolean deleteEmail(Email email, String user){
+    public boolean deleteEmail (Email email, String user) throws FileNotFoundException {
         String path = findEmailPath(email, user);
         File f = new File(path);
 
+        if (!f.exists()) {
+            throw new FileNotFoundException();
+        }
         return f.delete();
     }
 
