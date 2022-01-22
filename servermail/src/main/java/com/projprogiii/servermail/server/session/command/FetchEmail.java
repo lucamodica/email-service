@@ -27,15 +27,11 @@ public class FetchEmail extends Command{
                 .toList();
         readLock.unlock();
 
-        if (emails != null) {
-            name = ServerResponseName.SUCCESS;
-            printCommandLog(req, name);
-        }
-        else {
-            name = ServerResponseName.OP_ERROR;
-            printCommandLog(req, name);
-        }
+        name = (emails != null) ?
+                ServerResponseName.SUCCESS :
+                ServerResponseName.OP_ERROR;
 
+        printCommandLog(req, name);
         return new ServerResponse(name, emails);
     }
 
@@ -44,6 +40,7 @@ public class FetchEmail extends Command{
             case SUCCESS -> Platform.runLater(() -> logManager.printLog(
                     "Email for " + req.auth() +
                             " successfully fetched!", LogType.SYSOP));
+
             case OP_ERROR -> Platform.runLater(() -> logManager.printError(
                     "ERROR (" + req.cmdName().toString() + " for "
                             + req.auth() + "): operation failed!"));

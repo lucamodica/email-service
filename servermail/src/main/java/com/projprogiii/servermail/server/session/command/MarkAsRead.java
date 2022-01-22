@@ -21,22 +21,19 @@ public class MarkAsRead extends Command {
 
         if (email == null){
             name = ServerResponseName.ILLEGAL_PARAMS;
-            printCommandLog(req, name);
         }
         else {
             writeLock.lock();
-            if (ServerApp.model.getDbManager()
-                    .markAsReadEmail(email, req.auth())) {
-                name = ServerResponseName.SUCCESS;
-                printCommandLog(req, name);
-            }
-            else {
-                name = ServerResponseName.OP_ERROR;
-                printCommandLog(req, name);
-            }
+
+            name = (ServerApp.model.getDbManager()
+                    .markAsReadEmail(email, req.auth())) ?
+                    ServerResponseName.SUCCESS :
+                    ServerResponseName.OP_ERROR;
+
             writeLock.unlock();
         }
 
+        printCommandLog(req, name);
         return new ServerResponse(name, null);
     }
 

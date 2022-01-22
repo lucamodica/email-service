@@ -23,12 +23,10 @@ public class SendEmail extends Command{
         //check for null object or if the recipients of the email actually exist.
         if (email == null){
             name = ServerResponseName.ILLEGAL_PARAMS;
-            printCommandLog(req, name);
         }
         else if (!email.getReceivers().stream().allMatch(receiver ->
                     ServerApp.model.getDbManager().checkUser(receiver))){
             name = ServerResponseName.INVALID_RECIPIENTS;
-            printCommandLog(req, name);
         }
         else {
 
@@ -39,7 +37,6 @@ public class SendEmail extends Command{
 
             if (!result){
                 name = ServerResponseName.OP_ERROR;
-                printCommandLog(req, name);
             }
             else {
                 email.setToRead(true);
@@ -49,29 +46,25 @@ public class SendEmail extends Command{
                     if (!Objects.equals(receiver, req.auth())){
                         syncManager.addLockEntry(receiver);
                         writeLock = syncManager.getLock(receiver).writeLock();
-                        writeLock.lock();
 
+                        writeLock.lock();
                         if (!ServerApp.model.getDbManager()
                                 .saveEmail(email, receiver)) {
                             allSends = false;
                         }
-
                         writeLock.unlock();
+
                         syncManager.removeLockEntry(receiver);
                     }
                 }
 
-                if (allSends) {
-                    name = ServerResponseName.SUCCESS;
-                    printCommandLog(req, name);
-                }
-                else {
-                    name = ServerResponseName.OP_ERROR;
-                    printCommandLog(req, name);
-                }
+                name = (allSends) ?
+                        ServerResponseName.SUCCESS :
+                        ServerResponseName.OP_ERROR;
             }
         }
 
+        printCommandLog(req, name);
         return new ServerResponse(name, null);
     }
 
@@ -80,13 +73,16 @@ public class SendEmail extends Command{
             case ILLEGAL_PARAMS ->  Platform.runLater(() -> logManager.printError(
                     "ERROR (" + req.cmdName().toString() + " for "
                             + req.auth() + "): illegal params passed!"));
+
             case INVALID_RECIPIENTS -> Platform.runLater(() -> logManager.printError(
                     "ERROR (" + req.cmdName().toString() + " for "
                             + req.auth() + "): some of the receivers does " +
                             "not exists in the database!"));
+
             case SUCCESS -> Platform.runLater(() -> logManager.printLog(
                     "Email for " + req.auth() +
                             " successfully sent!", LogType.NORMAL));
+
             case OP_ERROR -> Platform.runLater(() -> logManager.printError(
                     "ERROR (" + req.cmdName().toString() + " for "
                             + req.auth() + "): operation for sender " +
