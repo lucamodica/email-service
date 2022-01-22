@@ -55,13 +55,15 @@ public class Server extends Thread {
                 serverThreads.execute(new Session(currentSocket));
             }
         } catch (IOException ignored) {
-
+            //For server timeout elapsed or
+            //server socket suddenly closed
         } finally {
             if (currentSocket != null) {
                 try {
                     currentSocket.close();
                 } catch (IOException ignored) {
-
+                    //For a sudden client socket close
+                    //connected with this specific socket
                 }
             }
         }

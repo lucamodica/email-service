@@ -60,7 +60,8 @@ public class Client {
             outputStream.flush();
             resp = (ServerResponse) inputStream.readObject();
         } catch (IOException ignored) {
-
+            //When user suddenly close the connection
+            //and cannot write on the socket stream
         } catch (ClassNotFoundException e){
             e.printStackTrace();
         } finally {
