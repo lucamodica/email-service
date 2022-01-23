@@ -151,7 +151,7 @@ public class MainController extends Controller {
     }
 
     /**
-     * Anonymous class used to manage bold text in function of Email's isToRead state
+     * Used to manage bold text in function of Email's isToRead state
      */
     private void setListViewCellsListeners(ListView<Email> emailsLst){
         emailsLst.setCellFactory(cell -> new ListCell<>() {
