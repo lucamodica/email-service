@@ -110,7 +110,7 @@ public class Client {
     /**
      * Sent command consist of a ClientRequest object, packing:
      * the commandName used from server to repack a response,
-     * the Object (Date or Email) passed to the server
+     * the Object  passed to the server
      */
     public void sendCmd(CommandName command, Email arg,
                                   Controller controller,

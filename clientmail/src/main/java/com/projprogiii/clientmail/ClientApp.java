@@ -6,7 +6,6 @@ import com.projprogiii.clientmail.scene.SceneController;
 import com.projprogiii.clientmail.scene.SceneName;
 import com.projprogiii.clientmail.utils.alert.AlertManager;
 import com.projprogiii.clientmail.utils.alert.AlertText;
-import com.projprogiii.clientmail.utils.responsehandler.ResponseHandler;
 import com.projprogiii.lib.enums.CommandName;
 import com.projprogiii.lib.objects.Email;
 import com.projprogiii.lib.objects.ServerResponse;
@@ -20,7 +19,6 @@ import org.kordamp.bootstrapfx.BootstrapFX;
 import java.io.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.*;
 
 public class ClientApp extends Application {

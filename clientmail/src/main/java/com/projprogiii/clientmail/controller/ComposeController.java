@@ -4,10 +4,8 @@ import com.projprogiii.clientmail.ClientApp;
 import com.projprogiii.clientmail.scene.SceneName;
 import com.projprogiii.clientmail.utils.alert.AlertManager;
 import com.projprogiii.clientmail.utils.alert.AlertText;
-import com.projprogiii.clientmail.utils.responsehandler.ResponseHandler;
 import com.projprogiii.lib.enums.CommandName;
 import com.projprogiii.lib.objects.Email;
-import com.projprogiii.lib.objects.ServerResponse;
 import com.projprogiii.lib.utils.CommonUtil;
 
 import javafx.application.Platform;

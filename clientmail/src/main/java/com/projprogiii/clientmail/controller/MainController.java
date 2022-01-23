@@ -152,7 +152,7 @@ public class MainController extends Controller {
 
     /**
      * Used to manage bold text in function of Email's isToRead state
-     * updateItem is never called, Override implementatio is used in Cell Factory to style cells
+     * updateItem is never called, Override implementation is used in Cell Factory to style cells
      */
     private void setListViewCellsListeners(ListView<Email> emailsLst){
         emailsLst.setCellFactory(cell -> new ListCell<>() {
