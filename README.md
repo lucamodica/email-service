@@ -6,4 +6,4 @@ The client program support the basic email operation like send an email, reply (
 
 Both the server and client side are built following the MVC architecture based on the Observer-Observable pattern, with thread/threadPools to handle the multiple operation (serve multiple client from server, updating client UI), Socket to build the connections between between the 2 hosts and Synchronized data structure/lock for concurrent operations (writing reading on the email server database).
 
-> This project was made by me and [@OscarNaretto](https://github.com/OscarNaretto) ✨,based on the 3rd year (2021/2022) of the bachelor degree on computer science (University of Turin, esame di Programmazione 3).
+> This project was made by me and [@OscarNaretto](https://github.com/OscarNaretto) ✨,based on the 3rd year (2021/2022) of the bachelor degree in computer science (University of Turin, esame di Programmazione 3).
