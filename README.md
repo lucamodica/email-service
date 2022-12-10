@@ -1,4 +1,4 @@
-# EmailService
+# Email Service
 
 **A Java Client-Server application to implement an email service, built with JavaFX and with support for multiple instances (you can open multiple windows for the same user).**
 
